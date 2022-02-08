@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Sait2022.Models
 {
-    public class Quastions
+    public class Questions
     {
 
     }
