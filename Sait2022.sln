@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sait2022", "Sait2022\Sait2022.csproj", "{1A463A3F-D8E0-4869-B364-DF8E5538D55A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A463A3F-D8E0-4869-B364-DF8E5538D55A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A463A3F-D8E0-4869-B364-DF8E5538D55A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A463A3F-D8E0-4869-B364-DF8E5538D55A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A463A3F-D8E0-4869-B364-DF8E5538D55A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {586DA8CA-8657-4C1B-83B9-CFD4E9B3CD47}
+	EndGlobalSection
+EndGlobal
