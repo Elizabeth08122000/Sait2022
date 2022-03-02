@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace Sait2022.Domain.Model
     public class Users: IdentityUser<int>
     {
         /// <summary>
-        /// Профиль пользователя
+        /// Профиль ученика
         /// </summary>
         public Employee Employee { get; set; }
 

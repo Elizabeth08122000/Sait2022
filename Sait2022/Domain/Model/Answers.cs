@@ -18,11 +18,6 @@ namespace Sait2022.Domain.Model
         /// </summary>
         public string ValueAnswer { get; set; }
 
-        /// <summary>
-        /// Ранг ответа
-        /// </summary>
-        public char RangAnswer { get; set; }
-
         public List<Questions> Questions { get; set; }
         public Answers()
         {

@@ -21,22 +21,15 @@ namespace Sait2022.Domain.Model
         public int QuestionsId { get; set; } //внешний ключ вопросов
         public Questions Questions { get; set; } //навигационное свойство
 
-
         /// <summary>
         /// Ответ ученика
         /// </summary>
         public string ValueAnswer { get; set; }
 
         /// <summary>
-        /// Ранг ответа
-        /// </summary>
-        public char RangAnswer { get; set; }
-
-        /// <summary>
         /// Проверка ответа
         /// </summary>
         public Boolean CheckAnswer { get; set; }
-
 
         public List<LogsAnswers> LogsAnswers { get; set; }
         public MainOut()
