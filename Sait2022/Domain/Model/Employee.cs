@@ -1,6 +1,7 @@
 ﻿using Sait2022.Domain.Model.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -57,5 +58,11 @@ namespace Sait2022.Domain.Model
         [ForeignKey("TeacherId")]
         public int TeacherId { get; set; } //внешний ключ справочника Пользователей
         public Employee Employees { get; set; } //навигационное свойство
+
+        public List<Employee> Employeess { get; set; }
+        public Employee()
+        {
+            Employeess = new List <Employee>();
+        }
     }
 }

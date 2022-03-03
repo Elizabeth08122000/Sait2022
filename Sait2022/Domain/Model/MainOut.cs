@@ -29,7 +29,7 @@ namespace Sait2022.Domain.Model
         /// <summary>
         /// Проверка ответа
         /// </summary>
-        public Boolean CheckAnswer { get; set; }
+        public bool CheckAnswer { get; set; }
 
         public List<LogsAnswers> LogsAnswers { get; set; }
         public MainOut()
