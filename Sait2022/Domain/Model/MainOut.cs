@@ -18,7 +18,7 @@ namespace Sait2022.Domain.Model
         /// Внешний ключ таблицы Questions
         /// </summary>
         [ForeignKey("QuestionsId")]
-        public int QuestionsId { get; set; } //внешний ключ вопросов
+        public long QuestionsId { get; set; } //внешний ключ вопросов
         public Questions Questions { get; set; } //навигационное свойство
 
         /// <summary>

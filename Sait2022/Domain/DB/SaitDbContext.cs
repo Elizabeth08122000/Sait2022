@@ -105,7 +105,7 @@ namespace Sait2022.Domain.DB
                     .IsRequired(true);
                 b.HasOne(t => t.EmployeesNavig)
                     .WithMany(y => y.Employeess)
-                    .HasForeignKey(x => x.EmployeesNavig.TeacherId);
+                    .HasForeignKey(t => t.TeacherId);
                 b.HasIndex("TeacherId").IsUnique(true);
             });
             #endregion

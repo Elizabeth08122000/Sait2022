@@ -20,7 +20,7 @@ namespace Sait2022.Domain.Model
         /// Внешний ключ таблицы MainOut
         /// </summary>
         [ForeignKey("MainOutId")]
-        public int MainOutId { get; set; } //внешний ключ справочника ответов ученика
+        public long MainOutId { get; set; } //внешний ключ справочника ответов ученика
         public MainOut MainOut { get; set; } //навигационное свойство
     }
 }

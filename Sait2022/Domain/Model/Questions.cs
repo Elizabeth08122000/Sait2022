@@ -13,7 +13,7 @@ namespace Sait2022.Domain.Model
         /// Внешний ключ таблицы QuestionsTopic
         /// </summary>
         [ForeignKey("QuestionsTopicId")]
-        public int QuestionsTopicId { get; set; } //внешний ключ справочника вопросов
+        public long QuestionsTopicId { get; set; } //внешний ключ справочника вопросов
         public QuestionsTopic QuestionsTopic { get; set; } //навигационное свойство
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Sait2022.Domain.Model
         /// Внешний ключ таблицы Rangs
         /// </summary>
         [ForeignKey("RangsId")]
-        public int RangsId { get; set; } //внешний ключ справочника рангов
+        public long RangsId { get; set; } //внешний ключ справочника рангов
         public Rangs Rangs { get; set; } //навигационное свойство
 
 
@@ -38,7 +38,7 @@ namespace Sait2022.Domain.Model
         /// Внешний ключ таблицы Answers
         /// </summary>
         [ForeignKey("AnswersId")]
-        public int AnswersId { get; set; } //внешний ключ справочника ответов
+        public long AnswersId { get; set; } //внешний ключ справочника ответов
         public Answers Answers { get; set; } //навигационное свойство
 
         public List<MainOut> Main_out { get; set; }
