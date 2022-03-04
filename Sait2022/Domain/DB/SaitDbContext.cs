@@ -52,7 +52,12 @@ namespace Sait2022.Domain.DB
         /// <summary>
         /// Ответы ученика
         /// </summary>
-        public DbSet<MainOut> Main_Outs { get; set; }
+        public DbSet<MainOut> MainOuts { get; set; }
+
+        /// <summary>
+        /// Логи прохождения тестов ученика
+        /// </summary>
+        public DbSet<LogsAnswers> LogsAnswers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -98,9 +103,9 @@ namespace Sait2022.Domain.DB
                 b.Property(x => x.IsAdministrator)
                     .HasColumnName("IsAdministrator")
                     .IsRequired(true);
-                b.HasOne(t => t.Employees)
+                b.HasOne(t => t.EmployeesNavig)
                     .WithMany(y => y.Employeess)
-                    .HasForeignKey(x => x.Employees.TeacherId);
+                    .HasForeignKey(x => x.EmployeesNavig.TeacherId);
                 b.HasIndex("TeacherId").IsUnique(true);
             });
             #endregion

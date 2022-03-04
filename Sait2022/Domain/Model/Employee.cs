@@ -57,7 +57,7 @@ namespace Sait2022.Domain.Model
 
         [ForeignKey("TeacherId")]
         public int TeacherId { get; set; } //внешний ключ справочника Пользователей
-        public Employee Employees { get; set; } //навигационное свойство
+        public Employee EmployeesNavig { get; set; } //навигационное свойство
 
         public List<Employee> Employeess { get; set; }
         public Employee()

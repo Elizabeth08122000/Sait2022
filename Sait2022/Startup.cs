@@ -30,7 +30,7 @@ namespace Sait2022
             services.AddControllersWithViews();
 
             services.AddDbContext<SaitDbContext>(options =>
-                options.UseNpgsql("Username=postgres;Database=sait;Password=Stellka1;Host=localhost"));
+                options.UseNpgsql("Username=postgres;Database=postgres;Password=Stellka1;Host=localhost"));
 
             services.AddIdentity<Users, IdentityRole<int>>(options =>
             {
