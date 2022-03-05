@@ -80,29 +80,29 @@ namespace Sait2022.Domain.DB
                 EntityId(b);
                 b.Property(x => x.Surname)
                     .HasColumnName("Surname")
-                    .IsRequired(true);
+                    .IsRequired();
                 b.Property(x => x.FirstName)
                     .HasColumnName("FirstName")
-                    .IsRequired(true);
+                    .IsRequired();
                 b.Property(x => x.Patronym)
                     .HasColumnName("Patronym")
                     .IsRequired();
                 b.Property(x => x.PhoneNumber)
                     .HasColumnName("PhoneNumber")
-                    .IsRequired(true);
+                    .IsRequired();
                 b.Property(x => x.Address)
                     .HasColumnName("Address")
                     .IsRequired();
                 b.Ignore(x => x.FullName);
                 b.Property(x => x.EmailAddress)
                     .HasColumnName("EmailAddress")
-                    .IsRequired(true);
+                    .IsRequired();
                 b.Property(x => x.IsTeacher)
                     .HasColumnName("IsTeacher")
-                    .IsRequired(true);
+                    .IsRequired();
                 b.Property(x => x.IsAdministrator)
                     .HasColumnName("IsAdministrator")
-                    .IsRequired(true);
+                    .IsRequired();
                 b.HasOne(t => t.EmployeesNavig)
                     .WithMany(y => y.Employeess)
                     .HasForeignKey(t => t.TeacherId);
@@ -139,10 +139,10 @@ namespace Sait2022.Domain.DB
                 EntityId(b);
                 b.Property(x => x.NumberAnswer)
                     .HasColumnName("NumberAnswer")
-                    .IsRequired(true);
+                    .IsRequired();
                 b.Property(x => x.ValueAnswer)
                     .HasColumnName("ValueAnswer")
-                    .IsRequired(true);
+                    .IsRequired();
             });
             #endregion
 
@@ -154,23 +154,23 @@ namespace Sait2022.Domain.DB
                 b.HasOne(y => y.QuestionsTopic)
                     .WithMany(y => y.Questions)
                     .HasForeignKey(x => x.QuestionsTopicId)
-                    .IsRequired(true);
+                    .IsRequired();
                 b.HasIndex("QuestionsTopicId").IsUnique(true);
                 b.Property(x => x.NumberQuest)
                     .HasColumnName("NumberQuest")
-                    .IsRequired(true);
+                    .IsRequired();
                 b.Property(x => x.ValueQuest)
                     .HasColumnName("ValueQuest")
-                    .IsRequired(true);               
+                    .IsRequired();               
                 b.HasOne(y => y.Rangs)
                     .WithMany(y => y.Questions)
                     .HasForeignKey(x => x.RangsId)
-                    .IsRequired(true);
+                    .IsRequired();
                 b.HasIndex("RangsId").IsUnique(true);
                 b.HasOne(y => y.Answers)
                     .WithMany(y => y.Questions)
                     .HasForeignKey(x => x.AnswersId)
-                    .IsRequired(true);
+                    .IsRequired();
                 b.HasIndex("AnswersId").IsUnique(true);
             });
             #endregion
@@ -182,18 +182,18 @@ namespace Sait2022.Domain.DB
                 EntityId(b);
                 b.Property(x => x.NumberAnswer)
                     .HasColumnName("NumberAnswer")
-                    .IsRequired(true);
+                    .IsRequired();
                 b.HasOne(t => t.Questions)
                     .WithMany(y => y.Main_out)
                     .HasForeignKey(x => x.QuestionsId)
-                    .IsRequired(true);
+                    .IsRequired();
                 b.HasIndex("QuestionsId").IsUnique(true);
                 b.Property(x => x.ValueAnswer)
                     .HasColumnName("ValueAnswer")
-                    .IsRequired(true);
+                    .IsRequired();
                 b.Property(x => x.CheckAnswer)
                     .HasColumnName("CheckAnswer")
-                    .IsRequired(true);
+                    .IsRequired();
             });
             #endregion
 
