@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sait2022.Domain.DB;
@@ -9,9 +10,10 @@ using Sait2022.Domain.DB;
 namespace Sait2022.Migrations
 {
     [DbContext(typeof(SaitDbContext))]
-    partial class SaitDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220306111338_add_sait")]
+    partial class add_sait
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

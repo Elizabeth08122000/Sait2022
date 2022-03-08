@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Sait2022.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,20 +48,19 @@ namespace Sait2022.Migrations
                     Patronym = table.Column<string>(nullable: false),
                     PhoneNumber = table.Column<string>(nullable: false),
                     Address = table.Column<string>(nullable: false),
-                    EmailAddress = table.Column<string>(nullable: false),
                     IsTeacher = table.Column<bool>(nullable: false),
                     IsAdministrator = table.Column<bool>(nullable: false),
-                    TeacherId = table.Column<long>(nullable: false)
+                    EmployeeId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Employees_Employees_TeacherId",
-                        column: x => x.TeacherId,
+                        name: "FK_Employees_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -356,10 +355,9 @@ namespace Sait2022.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employees_TeacherId",
+                name: "IX_Employees_EmployeeId",
                 table: "Employees",
-                column: "TeacherId",
-                unique: true);
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LogsAnswers_MainOutId",

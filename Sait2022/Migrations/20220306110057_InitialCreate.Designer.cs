@@ -10,8 +10,8 @@ using Sait2022.Domain.DB;
 namespace Sait2022.Migrations
 {
     [DbContext(typeof(SaitDbContext))]
-    [Migration("20220304131823_Initial")]
-    partial class Initial
+    [Migration("20220306110057_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -186,10 +186,8 @@ namespace Sait2022.Migrations
                         .HasColumnName("Address")
                         .HasColumnType("text");
 
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnName("EmailAddress")
-                        .HasColumnType("text");
+                    b.Property<long?>("EmployeeId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -219,14 +217,10 @@ namespace Sait2022.Migrations
                         .HasColumnName("Surname")
                         .HasColumnType("text");
 
-                    b.Property<long>("TeacherId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id")
                         .HasAnnotation("Npgsql:Serial", true);
 
-                    b.HasIndex("TeacherId")
-                        .IsUnique();
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Employees");
                 });
@@ -493,11 +487,9 @@ namespace Sait2022.Migrations
 
             modelBuilder.Entity("Sait2022.Domain.Model.Employee", b =>
                 {
-                    b.HasOne("Sait2022.Domain.Model.Employee", "EmployeesNavig")
+                    b.HasOne("Sait2022.Domain.Model.Employee", null)
                         .WithMany("Employeess")
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EmployeeId");
                 });
 
             modelBuilder.Entity("Sait2022.Domain.Model.LogsAnswers", b =>

@@ -94,9 +94,6 @@ namespace Sait2022.Domain.DB
                     .HasColumnName("Address")
                     .IsRequired();
                 b.Ignore(x => x.FullName);
-                b.Property(x => x.EmailAddress)
-                    .HasColumnName("EmailAddress")
-                    .IsRequired();
                 b.Property(x => x.IsTeacher)
                     .HasColumnName("IsTeacher")
                     .IsRequired();

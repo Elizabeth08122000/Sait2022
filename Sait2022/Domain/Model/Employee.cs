@@ -46,16 +46,11 @@ namespace Sait2022.Domain.Model
             get => FirstName + " " + Surname + " " + Patronym;
         }
 
-        /// <summary>
-        /// Email пользователя
-        /// </summary>
-        public string EmailAddress { get; set; }
-
         public bool IsTeacher { get; set; }
 
         public bool IsAdministrator { get; set; }
 
-        [ForeignKey("TeacherId")]
+       [ForeignKey("TeacherId")]
         public long TeacherId { get; set; } //внешний ключ справочника Пользователей
         public Employee EmployeesNavig { get; set; } //навигационное свойство
 

@@ -15,17 +15,17 @@ namespace Sait2022.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<Users> _userManager;
-        private readonly SaitDbContext _blogDbContext;
+        private readonly SaitDbContext _saitDbContext;
 
         /// <summary>
         /// Конструктор класса <see cref="AccountController"/>
         /// </summary>
         /// <param name="userManager">Менеджер пользователей</param>
-        /// <param name="blogDbContext">Контекст базы данных</param>
-        public AccountController(UserManager<Users> userManager, SaitDbContext blogDbContext)
+        /// <param name="_saitDbContext">Контекст базы данных</param>
+        public AccountController(UserManager<Users> userManager, SaitDbContext _saitDbContext)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _blogDbContext = blogDbContext ?? throw new ArgumentNullException(nameof(blogDbContext));
+            _saitDbContext = _saitDbContext ?? throw new ArgumentNullException(nameof(_saitDbContext));
         }
 
         /// <summary>
@@ -130,9 +130,9 @@ namespace Sait2022.Controllers
             }
 
             await _userManager.AddToRoleAsync(user, SecurityConstants.AdminRole);
-            _blogDbContext.SaveChanges();
+            _saitDbContext.SaveChanges();
 
-            return RedirectToAction("Index", "Blog");
+            return RedirectToAction("Index", "Privacy");
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace Sait2022.Controllers
             await signInManager.SignOutAsync();
 
 
-            return RedirectToAction("Index", "Blog");
+            return RedirectToAction("Index", "Privacy");
         }
 
         /// <summary>
