@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Sait2022.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -50,14 +50,14 @@ namespace Sait2022.Migrations
                     Address = table.Column<string>(nullable: false),
                     IsTeacher = table.Column<bool>(nullable: false),
                     IsAdministrator = table.Column<bool>(nullable: false),
-                    EmployeeId = table.Column<long>(nullable: true)
+                    TeacherId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Employees_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
+                        name: "FK_Employees_Employees_TeacherId",
+                        column: x => x.TeacherId,
                         principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -152,8 +152,8 @@ namespace Sait2022.Migrations
                     QuestionsTopicId = table.Column<long>(nullable: false),
                     NumberQuest = table.Column<int>(nullable: false),
                     ValueQuest = table.Column<string>(nullable: false),
-                    RangsId = table.Column<long>(nullable: false),
-                    AnswersId = table.Column<long>(nullable: false)
+                    RangsId = table.Column<long>(nullable: true),
+                    AnswersId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -163,7 +163,7 @@ namespace Sait2022.Migrations
                         column: x => x.AnswersId,
                         principalTable: "Answers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Questions_QuestionsTopic_QuestionsTopicId",
                         column: x => x.QuestionsTopicId,
@@ -175,7 +175,7 @@ namespace Sait2022.Migrations
                         column: x => x.RangsId,
                         principalTable: "Rangs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -355,9 +355,10 @@ namespace Sait2022.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employees_EmployeeId",
+                name: "IX_Employees_TeacherId",
                 table: "Employees",
-                column: "EmployeeId");
+                column: "TeacherId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_LogsAnswers_MainOutId",
@@ -392,8 +393,7 @@ namespace Sait2022.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Questions_RangsId",
                 table: "Questions",
-                column: "RangsId",
-                unique: true);
+                column: "RangsId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

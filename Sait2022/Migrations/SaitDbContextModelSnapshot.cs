@@ -291,7 +291,7 @@ namespace Sait2022.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<long>("AnswersId")
+                    b.Property<long?>("AnswersId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("NumberQuest")
@@ -301,7 +301,7 @@ namespace Sait2022.Migrations
                     b.Property<long>("QuestionsTopicId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("RangsId")
+                    b.Property<long?>("RangsId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("ValueQuest")
@@ -318,8 +318,7 @@ namespace Sait2022.Migrations
                     b.HasIndex("QuestionsTopicId")
                         .IsUnique();
 
-                    b.HasIndex("RangsId")
-                        .IsUnique();
+                    b.HasIndex("RangsId");
 
                     b.ToTable("Questions");
                 });
@@ -488,9 +487,7 @@ namespace Sait2022.Migrations
                 {
                     b.HasOne("Sait2022.Domain.Model.Employee", "EmployeesNavig")
                         .WithMany("Employeess")
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TeacherId");
                 });
 
             modelBuilder.Entity("Sait2022.Domain.Model.LogsAnswers", b =>
@@ -521,9 +518,7 @@ namespace Sait2022.Migrations
                 {
                     b.HasOne("Sait2022.Domain.Model.Answers", "Answers")
                         .WithMany("Questions")
-                        .HasForeignKey("AnswersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AnswersId");
 
                     b.HasOne("Sait2022.Domain.Model.QuestionsTopic", "QuestionsTopic")
                         .WithMany("Questions")
@@ -533,9 +528,7 @@ namespace Sait2022.Migrations
 
                     b.HasOne("Sait2022.Domain.Model.Rangs", "Rangs")
                         .WithMany("Questions")
-                        .HasForeignKey("RangsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RangsId");
                 });
 
             modelBuilder.Entity("Sait2022.Domain.Model.Users", b =>

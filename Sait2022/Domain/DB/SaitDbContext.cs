@@ -102,7 +102,8 @@ namespace Sait2022.Domain.DB
                     .IsRequired();
                 b.HasOne(t => t.EmployeesNavig)
                     .WithMany(y => y.Employeess)
-                    .HasForeignKey(t => t.TeacherId);
+                    .HasForeignKey(t => t.TeacherId)
+                    .IsRequired(false);
                 b.HasIndex("TeacherId").IsUnique(true);
             });
             #endregion
@@ -151,23 +152,22 @@ namespace Sait2022.Domain.DB
                 b.HasOne(y => y.QuestionsTopic)
                     .WithMany(y => y.Questions)
                     .HasForeignKey(x => x.QuestionsTopicId)
-                    .IsRequired();
+                    .IsRequired(false);
                 b.HasIndex("QuestionsTopicId").IsUnique(true);
                 b.Property(x => x.NumberQuest)
                     .HasColumnName("NumberQuest")
                     .IsRequired();
                 b.Property(x => x.ValueQuest)
                     .HasColumnName("ValueQuest")
-                    .IsRequired();               
+                    .IsRequired();
                 b.HasOne(y => y.Rangs)
                     .WithMany(y => y.Questions)
                     .HasForeignKey(x => x.RangsId)
-                    .IsRequired();
-                b.HasIndex("RangsId").IsUnique(true);
+                    .IsRequired(false);
                 b.HasOne(y => y.Answers)
                     .WithMany(y => y.Questions)
                     .HasForeignKey(x => x.AnswersId)
-                    .IsRequired();
+                    .IsRequired(false);
                 b.HasIndex("AnswersId").IsUnique(true);
             });
             #endregion

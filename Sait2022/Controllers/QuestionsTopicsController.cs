@@ -11,18 +11,17 @@ namespace Sait2022.Controllers
     [Controller]
     public class QuestionsTopicsController:Controller
     {
-        private readonly SaitDbContext _saitDbContext;
+        private readonly SaitDbContext db;
 
-        public QuestionsTopicsController(SaitDbContext _saitDbContext)
+        public QuestionsTopicsController(SaitDbContext context)
         {
-            _saitDbContext = _saitDbContext ?? throw new ArgumentNullException(nameof(_saitDbContext));
+            db = context;
         }
 
+        [HttpGet]
         public IActionResult QuestionsTopics()
         {
-            QuestionsTopic qTopics = new QuestionsTopic();
-            ViewBag.Message = qTopics.Topic;
-            return View();
+            return View(db.QuestionsTopics.ToList());
         }
     }
 }

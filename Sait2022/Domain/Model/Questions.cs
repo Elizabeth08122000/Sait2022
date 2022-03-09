@@ -29,16 +29,16 @@ namespace Sait2022.Domain.Model
         /// <summary>
         /// Внешний ключ таблицы Rangs
         /// </summary>
-        [ForeignKey("RangsId")]
-        public long RangsId { get; set; } //внешний ключ справочника рангов
+
+        public long? RangsId { get; set; } //внешний ключ справочника рангов
         public Rangs Rangs { get; set; } //навигационное свойство
 
 
         /// <summary>
         /// Внешний ключ таблицы Answers
         /// </summary>
-        [ForeignKey("AnswersId")]
-        public long AnswersId { get; set; } //внешний ключ справочника ответов
+
+        public long? AnswersId { get; set; } //внешний ключ справочника ответов
         public Answers Answers { get; set; } //навигационное свойство
 
         public List<MainOut> Main_out { get; set; }

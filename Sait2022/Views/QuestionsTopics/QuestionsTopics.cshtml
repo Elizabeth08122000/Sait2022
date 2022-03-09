@@ -1,4 +1,4 @@
-﻿@model QuestionsTopic
+﻿@model IEnumerable<Sait2022.Domain.Model.QuestionsTopic>
 
 @{
     ViewData["Title"] = "Темы вопросов";
@@ -6,4 +6,9 @@
 
 <h1>Hello Worlds!</h1>
 
-<h3>@ViewBag.Message</h3>
+<table class="table">
+    @foreach (var item in Model)
+{
+    <tr><td>@item.Topic</td></tr>
+}
+</table>
