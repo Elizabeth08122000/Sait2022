@@ -22,10 +22,10 @@ namespace Sait2022.Controllers
         /// </summary>
         /// <param name="userManager">Менеджер пользователей</param>
         /// <param name="_saitDbContext">Контекст базы данных</param>
-        public AccountController(UserManager<Users> userManager, SaitDbContext _saitDbContext)
+        public AccountController(UserManager<Users> userManager, SaitDbContext saitDbContext)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _saitDbContext = _saitDbContext ?? throw new ArgumentNullException(nameof(_saitDbContext));
+            _saitDbContext = saitDbContext ?? throw new ArgumentNullException(nameof(_saitDbContext));
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace Sait2022.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Blog");
+                return RedirectToAction("Index", "Index");
             }
         }
 

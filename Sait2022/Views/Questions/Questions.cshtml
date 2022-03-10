@@ -1,21 +1,20 @@
-﻿@*@model IEnumerable<Sait2022.Domain.Model.Questions>*@
-@model IEnumerable<Sait2022.Domain.Model.Rangs>
+﻿@model IEnumerable<Sait2022.Domain.Model.Questions>
 
 @{
     ViewData["Title"] = "Темы вопросов";
 }
 
-<h1>Hello Worlds!</h1>
+<title>Вариант 1</title>
 
 <table class="table">
     @foreach (var item in Model)
 {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Questions)
+            @item.NumberQuest
         </td>
         <td>
-            @item.RangQuest
+            @item.ValueQuest
         </td>
     </tr>
     }

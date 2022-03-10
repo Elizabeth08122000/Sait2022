@@ -86,7 +86,7 @@ namespace Sait2022.Domain.DB
                     .IsRequired();
                 b.Property(x => x.Patronym)
                     .HasColumnName("Patronym")
-                    .IsRequired();
+                    .IsRequired(false);
                 b.Property(x => x.PhoneNumber)
                     .HasColumnName("PhoneNumber")
                     .IsRequired();
@@ -153,7 +153,6 @@ namespace Sait2022.Domain.DB
                     .WithMany(y => y.Questions)
                     .HasForeignKey(x => x.QuestionsTopicId)
                     .IsRequired(false);
-                b.HasIndex("QuestionsTopicId").IsUnique(true);
                 b.Property(x => x.NumberQuest)
                     .HasColumnName("NumberQuest")
                     .IsRequired();

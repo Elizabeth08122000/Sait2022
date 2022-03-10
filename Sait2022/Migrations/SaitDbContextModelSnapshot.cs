@@ -198,7 +198,6 @@ namespace Sait2022.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Patronym")
-                        .IsRequired()
                         .HasColumnName("Patronym")
                         .HasColumnType("text");
 
@@ -298,7 +297,7 @@ namespace Sait2022.Migrations
                         .HasColumnName("NumberQuest")
                         .HasColumnType("integer");
 
-                    b.Property<long>("QuestionsTopicId")
+                    b.Property<long?>("QuestionsTopicId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("RangsId")
@@ -315,8 +314,7 @@ namespace Sait2022.Migrations
                     b.HasIndex("AnswersId")
                         .IsUnique();
 
-                    b.HasIndex("QuestionsTopicId")
-                        .IsUnique();
+                    b.HasIndex("QuestionsTopicId");
 
                     b.HasIndex("RangsId");
 
@@ -522,9 +520,7 @@ namespace Sait2022.Migrations
 
                     b.HasOne("Sait2022.Domain.Model.QuestionsTopic", "QuestionsTopic")
                         .WithMany("Questions")
-                        .HasForeignKey("QuestionsTopicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("QuestionsTopicId");
 
                     b.HasOne("Sait2022.Domain.Model.Rangs", "Rangs")
                         .WithMany("Questions")

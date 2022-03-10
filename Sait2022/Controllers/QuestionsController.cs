@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sait2022.Domain.DB;
+using Sait2022.Domain.Model;
 using System;
 using System.Linq;
 
@@ -17,19 +18,19 @@ namespace Sait2022.Controllers
         [HttpGet]
         public IActionResult Questions()
         {
-            var question = from q in db.Questions
-                           join r in db.Rangs on q.Id equals r.Id
-                          // join qt in db.QuestionsTopics on q.Id equals qt.Id
-                         //  join a in db.Answers on q.Id equals a.Id
-                           select new
-                           {
-                               q.NumberQuest,
-                               q.ValueQuest,
-                               r.RangQuest
-                           };
-            Console.WriteLine(question);
+            var question = db.Questions.Select(x => new
+            {
+                x.NumberQuest,
+                x.ValueQuest
+            });
+            Questions result = new Questions();
+            foreach(var item in question)
+            {
+                result.NumberQuest = item.NumberQuest;
+                result.ValueQuest = item.ValueQuest;
+            }
 
-            return View(question.ToList());
+            return View("Questions",(object)result.ToString());
         }
     }
 }

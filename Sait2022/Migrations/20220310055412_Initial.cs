@@ -45,7 +45,7 @@ namespace Sait2022.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FirstName = table.Column<string>(nullable: false),
                     Surname = table.Column<string>(nullable: false),
-                    Patronym = table.Column<string>(nullable: false),
+                    Patronym = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: false),
                     Address = table.Column<string>(nullable: false),
                     IsTeacher = table.Column<bool>(nullable: false),
@@ -149,7 +149,7 @@ namespace Sait2022.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    QuestionsTopicId = table.Column<long>(nullable: false),
+                    QuestionsTopicId = table.Column<long>(nullable: true),
                     NumberQuest = table.Column<int>(nullable: false),
                     ValueQuest = table.Column<string>(nullable: false),
                     RangsId = table.Column<long>(nullable: true),
@@ -169,7 +169,7 @@ namespace Sait2022.Migrations
                         column: x => x.QuestionsTopicId,
                         principalTable: "QuestionsTopic",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Questions_Rangs_RangsId",
                         column: x => x.RangsId,
@@ -387,8 +387,7 @@ namespace Sait2022.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Questions_QuestionsTopicId",
                 table: "Questions",
-                column: "QuestionsTopicId",
-                unique: true);
+                column: "QuestionsTopicId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Questions_RangsId",
