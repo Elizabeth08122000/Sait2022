@@ -16,21 +16,9 @@ namespace Sait2022.Controllers
         }
 
         [HttpGet]
-        public IActionResult Questions()
-        {
-            var question = db.Questions.Select(x => new
-            {
-                x.NumberQuest,
-                x.ValueQuest
-            });
-            Questions result = new Questions();
-            foreach(var item in question)
-            {
-                result.NumberQuest = item.NumberQuest;
-                result.ValueQuest = item.ValueQuest;
-            }
-
-            return View("Questions",(object)result.ToString());
+        public IActionResult QuestionsGet()
+        { 
+            return View("Questions", db.Questions.OrderBy(x=>x.Id).ToList());
         }
     }
 }
