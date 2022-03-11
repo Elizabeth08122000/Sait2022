@@ -1,21 +1,30 @@
-﻿@model IEnumerable<Sait2022.Domain.Model.Questions>
+﻿@using Sait2022.Models
+@model ICollection<QuestionsViewModel>
 
 @{
-    ViewData["Title"] = "Темы вопросов";
+    ViewData["Title"] = "Тест";
 }
 
-<title>Вариант 1</title>
 
-<table class="table">
-    @foreach (var item in Model)
-{
-    <tr>
-        <td>
-            @item.NumberQuest
-        </td>
-        <td>
-            @item.ValueQuest
-        </td>
-    </tr>
-    }
-</table>
+<title>Тест</title>
+
+<body>
+
+    <div class="container text-center">
+
+        <div class="text-center">
+
+            @if (Model != null)
+            {
+                @foreach (var item in Model)
+                {
+                    <p>@item.Rangs</p>
+                    <p> @item.ValueQuest </p>
+                    <p></p>
+                }
+            }
+        </div>
+
+    </div>
+
+</body>

@@ -1,0 +1,22 @@
+﻿@using Sait2022.Domain.Model
+@model IEnumerable<MainOut>
+
+@{
+    ViewData["Title"] = "Ответы";
+}
+
+<title>Вариант 1</title>
+
+<table class="table">
+    @foreach (var item in ViewBag.MainOut)
+{
+    <tr>
+        <td>
+            @item.ValueAnswer;
+        </td>
+        <td>
+            @item.CheckAnswer;
+        </td>
+    </tr>
+}
+</table>
