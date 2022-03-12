@@ -10,10 +10,16 @@ namespace Sait2022.Domain.Model
     public class Questions:Entity
     {
         /// <summary>
-        /// Внешний ключ таблицы QuestionsTopic
+        /// Внешний ключ
         /// </summary>
-        public long? QuestionsTopicId { get; set; } //внешний ключ справочника вопросов
-        public QuestionsTopic QuestionsTopic { get; set; } //навигационное свойство
+        public long QuestionTopcId { get; set; }
+        public QuestionsTopic QuestionsTopic { get; set; } // навигационное свойство
+
+        /// <summary>
+        /// Внешний ключ
+        /// </summary>
+        public long RangsId { get; set; }
+        public Rangs Rangs { get; set; } // навигационное свойство
 
         /// <summary>
         /// Внутренний ключ вопроса среди одного ранга
@@ -25,25 +31,17 @@ namespace Sait2022.Domain.Model
         /// </summary>
         public string ValueQuest { get; set; }
 
-        /// <summary>
-        /// Внешний ключ таблицы Rangs
-        /// </summary>
-
-        public long? RangsId { get; set; } //внешний ключ справочника рангов
-        public Rangs Rangs { get; set; } //навигационное свойство
-
-
-        /// <summary>
-        /// Внешний ключ таблицы Answers
-        /// </summary>
-
-        public long? AnswersId { get; set; } //внешний ключ справочника ответов
         public Answers Answers { get; set; } //навигационное свойство
 
-        public List<MainOut> Main_out { get; set; }
+        /// <summary>
+        /// Проверка на пройденность вопроса
+        /// </summary>
+        public bool IsUsed { get; set; } = false;
+
+        public virtual ICollection<Users> Users { get; set; }
         public Questions()
         {
-            Main_out = new List<MainOut>();
+            Users = new List<Users>();
         }
     }
 }

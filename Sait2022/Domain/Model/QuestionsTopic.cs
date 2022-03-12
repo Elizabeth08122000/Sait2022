@@ -13,7 +13,7 @@ namespace Sait2022.Domain.Model
         /// </summary>
         public string Topic { get; set; }
 
-        public List<Questions> Questions { get; set; }
+        public ICollection<Questions> Questions { get; set; }
         public QuestionsTopic()
         {
             Questions = new List<Questions>();

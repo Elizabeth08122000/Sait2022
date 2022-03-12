@@ -26,7 +26,7 @@ namespace Sait2022.Domain.Model
         /// <summary>
         /// Отчество пользователя
         /// </summary>
-        public string Patronym { get; set; }
+        public string? Patronym { get; set; }
 
         /// <summary>
         /// Номер телефона пользователя
@@ -51,10 +51,10 @@ namespace Sait2022.Domain.Model
         public bool IsAdministrator { get; set; }
 
        [ForeignKey("TeacherId")]
-        public long TeacherId { get; set; } //внешний ключ справочника Пользователей
+        public long? TeacherId { get; set; } //внешний ключ справочника Пользователей
         public Employee EmployeesNavig { get; set; } //навигационное свойство
 
-        public List<Employee> Employeess { get; set; }
+        public ICollection<Employee> Employeess { get; set; }
         public Employee()
         {
             Employeess = new List <Employee>();

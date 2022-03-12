@@ -17,10 +17,11 @@ namespace Sait2022.Domain.Model
         /// </summary>
         public Employee Employee { get; set; }
 
-        public List<LogsAnswers> LogsAnswers { get; set; }
+        public virtual ICollection<Questions> Questions { get; set; }
         public Users()
         {
-            LogsAnswers = new List<LogsAnswers>();
+            Questions = new List<Questions>();
         }
+
     }
 }

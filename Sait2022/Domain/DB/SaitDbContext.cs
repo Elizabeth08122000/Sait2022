@@ -49,15 +49,6 @@ namespace Sait2022.Domain.DB
         /// </summary>
         public DbSet<Answers> Answers { get; set; }
 
-        /// <summary>
-        /// Ответы ученика
-        /// </summary>
-        public DbSet<MainOut> MainOuts { get; set; }
-
-        /// <summary>
-        /// Логи прохождения тестов ученика
-        /// </summary>
-        public DbSet<LogsAnswers> LogsAnswers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -141,6 +132,10 @@ namespace Sait2022.Domain.DB
                 b.Property(x => x.ValueAnswer)
                     .HasColumnName("ValueAnswer")
                     .IsRequired();
+                b.Property(x => x.StudentAnswer)
+                    .HasColumnName("StudentAnswer");
+                b.Property(x => x.CheckAnswer)
+                    .HasColumnName("CheckAnswer");
             });
             #endregion
 
@@ -149,69 +144,28 @@ namespace Sait2022.Domain.DB
             {
                 b.ToTable("Questions");
                 EntityId(b);
-                b.HasOne(y => y.QuestionsTopic)
+                b.HasOne(u => u.QuestionsTopic)
+                    .WithMany(t => t.Questions)
+                    .HasForeignKey(p => p.QuestionTopcId);
+                b.HasOne(u => u.Rangs)
                     .WithMany(y => y.Questions)
-                    .HasForeignKey(x => x.QuestionsTopicId)
-                    .IsRequired(false);
+                    .HasForeignKey(r => r.RangsId);
                 b.Property(x => x.NumberQuest)
                     .HasColumnName("NumberQuest")
                     .IsRequired();
                 b.Property(x => x.ValueQuest)
                     .HasColumnName("ValueQuest")
                     .IsRequired();
-                b.HasOne(y => y.Rangs)
-                    .WithMany(y => y.Questions)
-                    .HasForeignKey(x => x.RangsId)
-                    .IsRequired(false);
-                b.HasOne(y => y.Answers)
-                    .WithMany(y => y.Questions)
-                    .HasForeignKey(x => x.AnswersId)
-                    .IsRequired(false);
-                b.HasIndex("AnswersId").IsUnique(true);
+                b.Property(x => x.IsUsed)
+                    .HasColumnName("IsUsed")
+                    .IsRequired();
+                b.HasOne(u => u.Answers)
+                    .WithOne(p => p.Questions)
+                    .HasForeignKey<Answers>(p => p.QuestionId);
             });
             #endregion
 
-            #region MainOut
-            builder.Entity<MainOut>(b =>
-            {
-                b.ToTable("MainOut");
-                EntityId(b);
-                b.Property(x => x.NumberAnswer)
-                    .HasColumnName("NumberAnswer")
-                    .IsRequired();
-                b.HasOne(t => t.Questions)
-                    .WithMany(y => y.Main_out)
-                    .HasForeignKey(x => x.QuestionsId)
-                    .IsRequired();
-                b.HasIndex("QuestionsId").IsUnique(true);
-                b.Property(x => x.ValueAnswer)
-                    .HasColumnName("ValueAnswer")
-                    .IsRequired();
-                b.Property(x => x.CheckAnswer)
-                    .HasColumnName("CheckAnswer")
-                    .IsRequired();
-            });
-            #endregion
-
-            #region LogsAnswers
-            builder.Entity<LogsAnswers>(b =>
-            {
-                b.ToTable("LogsAnswers");
-                EntityId(b);
-                //отношение многие ко многим
-                b.HasOne(t => t.Users)
-                    .WithMany(y => y.LogsAnswers)
-                    .HasForeignKey(x => x.UsersId)
-                    .IsRequired(true);
-                b.HasIndex("UsersId").IsUnique(true);
-
-                b.HasOne(t => t.MainOut)
-                    .WithMany(y => y.LogsAnswers)
-                    .HasForeignKey(x => x.MainOutId)
-                    .IsRequired(true);
-                b.HasIndex("MainOutId").IsUnique(true);
-            });
-            #endregion
+            
         }
 
         /// <summary>
