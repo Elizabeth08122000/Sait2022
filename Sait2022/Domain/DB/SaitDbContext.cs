@@ -162,10 +162,14 @@ namespace Sait2022.Domain.DB
                 b.HasOne(u => u.Answers)
                     .WithOne(p => p.Questions)
                     .HasForeignKey<Answers>(p => p.QuestionId);
+                b.HasMany(b => b.Users)
+                    .WithMany(b => b.Questions)
+                    .UsingEntity(j => j.ToTable("LogsAnswers")); //настроена промежуточная таблица
             });
             #endregion
 
-            
+
+
         }
 
         /// <summary>

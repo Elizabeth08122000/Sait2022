@@ -20,5 +20,11 @@ namespace Sait2022.Controllers
         { 
             return View("Questions", db.Questions.OrderBy(x=>x.Id).ToList());
         }
+
+        [HttpPost]
+        public IActionResult CheckAnswer()
+        {
+            return View();
+        }
     }
 }

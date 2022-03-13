@@ -9,6 +9,7 @@ namespace Sait2022.Domain.Model
 {
     public class Questions:Entity
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         /// <summary>
         /// Внешний ключ
         /// </summary>
