@@ -4,8 +4,10 @@
     ViewData["Title"] = "Темы вопросов";
 }
 
-<title>Вариант 1</title>
+<head><title>Вариант 1</title></head>
 
+
+<body>
 <table class="table">
     @foreach (var item in Model)
 {
@@ -19,6 +21,15 @@
         <td>
             @item.ValueQuest
         </td>
+        <td>
+            @using (Html.BeginForm("CheckAnswer", "Questions", FormMethod.Post))
+            {
+                <b>Ответ </b> @Html.TextBox("valueAnsw")     
+            }
+        </td>
     </tr>
     }
 </table>
+<button class="btn btn-info" type="submit">Сохранить</button>
+
+</body>
