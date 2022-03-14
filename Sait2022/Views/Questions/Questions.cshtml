@@ -24,7 +24,8 @@
         <td>
             @using (Html.BeginForm("CheckAnswer", "Questions", FormMethod.Post))
             {
-                <b>Ответ </b> @Html.TextBox("valueAnsw")     
+                @Html.TextBox("valueAnsw")
+                <input type="submit" value="CheckAnswer" />
             }
         </td>
     </tr>
