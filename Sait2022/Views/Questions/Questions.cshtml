@@ -1,36 +1,40 @@
-﻿@model IEnumerable<Sait2022.Domain.Model.Questions>
+﻿@model IEnumerable<Sait2022.ViewModels.Question.QuestionsViewModel>
 
 @{
-    ViewData["Title"] = "Темы вопросов";
+    ViewData["Title"] = "Вопросы";
 }
+<!DOCTYPE html>
 
-<head><title>Вариант 1</title></head>
-
+<html>
+<head>
+    <meta name="viewport" content="width=device-width"/>
+    <title>Вариант 1</title>
+</head>
 
 <body>
-<table class="table">
-    @foreach (var item in Model)
-{
-    <tr>
-        <td>
-            @item.QuestionTopcId
-        </td>
-        <td>
-            @item.NumberQuest
-        </td>
-        <td>
-            @item.ValueQuest
-        </td>
-        <td>
-            @using (Html.BeginForm("CheckAnswer", "Questions", FormMethod.Post))
-            {
-                @Html.TextBox("valueAnsw")
-                <input type="submit" value="CheckAnswer" />
-            }
-        </td>
-    </tr>
-    }
-</table>
-<button class="btn btn-info" type="submit">Сохранить</button>
+  <table cellspacing="5px;">
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberQuest)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValueQuest)
+                </td>
+                @using (Html.BeginForm("CheckAnswer", "Questions", FormMethod.Post))
+                {
+                <td>
+                    @Html.EditorFor(modelItem => item.StudentAnswer)
+                    <input type="submit" value="Сохранить" class="btn btn-primary" />
+                </td>
+                
+                }
+            </tr>
+          }
+    </table>
 
+
+    
 </body>
+</html>

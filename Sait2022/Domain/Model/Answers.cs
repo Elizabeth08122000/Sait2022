@@ -25,7 +25,7 @@ namespace Sait2022.Domain.Model
         /// Ответ ученика
         /// </summary>
         [Required(ErrorMessage ="Укажите ответ на вопрос")]
-        public string? StudentAnswer { get; set; }
+        public string StudentAnswer { get; set; }
 
         /// <summary>
         /// Проверка ответа
