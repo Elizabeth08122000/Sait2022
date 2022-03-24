@@ -1,7 +1,8 @@
-﻿@model IEnumerable<Sait2022.ViewModels.Question.QuestionsViewModel>
+﻿@model QuestionsViewModel
 
 @{
     ViewData["Title"] = "Вопросы";
+    Layout = "_LoginLayout";
 }
 <!DOCTYPE html>
 
@@ -11,30 +12,22 @@
     <title>Вариант 1</title>
 </head>
 
-<body>
-  <table cellspacing="5px;">
-        @foreach(var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NumberQuest)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ValueQuest)
-                </td>
-                @using (Html.BeginForm("CheckAnswer", "Questions", FormMethod.Post))
-                {
-                <td>
-                    @Html.EditorFor(modelItem => item.StudentAnswer)
-                    <input type="submit" value="Сохранить" class="btn btn-primary" />
-                </td>
-                
-                }
-            </tr>
-          }
-    </table>
-
-
-    
-</body>
+<div>
+    <h4>Answers</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ValueQuest)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ValueQuest)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentAnswer)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StudentAnswer)
+        </dd>
+    </dl>
+</div>
 </html>

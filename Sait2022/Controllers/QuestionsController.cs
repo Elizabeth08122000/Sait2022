@@ -20,50 +20,57 @@ namespace Sait2022.Controllers
             db = context;
         }
 
+
+
         [HttpGet]
-        public IActionResult QuestionsGet()
+        public async Task<IActionResult> QuestionsGet(string returnUrl = null)
         {
-            List<QuestionsViewModel> QuestionsVMList = new List<QuestionsViewModel>();
-            var question = (from Quest in db.Questions
-                            join Answ in db.Answers on Quest.Id equals Answ.QuestionId
-                            join QTopic in db.QuestionsTopics on Quest.QuestionTopcId equals QTopic.Id
-                            select new
-                            {
-                                QTopic.Topic,
-                                Quest.NumberQuest,
-                                Quest.ValueQuest,
-                                Answ.NumberAnswer,
-                                Answ.ValueAnswer,
-                                Answ.CheckAnswer
-                            }).ToList();
-            foreach (var item in question)
-            {
-                QuestionsViewModel qvm = new QuestionsViewModel();
-                qvm.ValueQuest = item.ValueQuest;
-                qvm.NumberQuest = item.NumberQuest;
-                qvm.ValueAnswer = item.ValueAnswer;
-                qvm.CheckAnswer = item.CheckAnswer;
-                QuestionsVMList.Add(qvm);
-            }
-            /*var question = db.Questions.Select(x => new
-                            {
-                                Id = x.QuestionTopcId,
-                                NumberQuest = x.NumberQuest,
-                                ValueQuest = x.ValueQuest
-                            }).AsEnumerable().GroupBy(x => x.Id);
 
-            List<Questions> quest_list = new List<Questions>();
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+            //использовать join 
+            /* List<QuestionsViewModel> QuestionsVMList = new List<QuestionsViewModel>();
+             var question = (from Quest in db.Questions
+                             join Answ in db.Answers on Quest.Id equals Answ.QuestionId
+                             select new
+                             {
+                                 Quest.QuestionTopcId,
+                                 Quest.NumberQuest,
+                                 Quest.ValueQuest,
+                                 Answ.NumberAnswer,
+                                 Answ.ValueAnswer,
+                                 Answ.CheckAnswer
+                             }).AsEnumerable().GroupBy(x => x.QuestionTopcId);
+             foreach (var item in question)
+             {
+                 QuestionsViewModel qvm = new QuestionsViewModel();
+                 qvm.ValueQuest = item.First().ValueQuest;
+                 qvm.NumberQuest = item.First().NumberQuest;
+                 qvm.ValueAnswer = item.First().ValueAnswer;
+                 qvm.CheckAnswer = item.First().CheckAnswer;
+                 QuestionsVMList.Add(qvm);
+             }
+             return View("Questions", QuestionsVMList);
 
-            foreach (var item in question)
-            {
-                Questions quest = new Questions();
-                quest.QuestionTopcId = item.ToList()[0].Id;
-                quest.NumberQuest = item.Select(c => c.NumberQuest).First();
-                quest.ValueQuest = item.Select(c => c.ValueQuest).First();
-                quest_list.Add(quest);
-            }*/
+             /*var question = db.Questions.Select(x => new
+                             {
+                                 Id = x.QuestionTopcId,
+                                 NumberQuest = x.NumberQuest,
+                                 ValueQuest = x.ValueQuest
+                             }).AsEnumerable().GroupBy(x => x.Id);
 
-            return View("Questions", QuestionsVMList);
+             List<Questions> quest_list = new List<Questions>();
+
+             foreach (var item in question)
+             {
+                 Questions quest = new Questions();
+                 quest.QuestionTopcId = item.ToList()[0].Id;
+                 quest.NumberQuest = item.Select(c => c.NumberQuest).First();
+                 quest.ValueQuest = item.Select(c => c.ValueQuest).First();
+                 quest_list.Add(quest);
+             }*/
+
+
         }
 
         /// <summary>
@@ -71,7 +78,7 @@ namespace Sait2022.Controllers
         /// </summary>
         /// <returns></returns>
 
-        [HttpPost]
+
         /*public ActionResult CheckAnswer(long id, [Bind("StudentAnswer")] Answers answers)
         {
             if (id != answers.Id)
@@ -101,11 +108,32 @@ namespace Sait2022.Controllers
             }
             ViewData["QuestionId"] = new SelectList(db.Questions, "Id", "ValueQuest", answers.QuestionId);
             return View(answers);
-        }*/
-        public ActionResult CheckAnswer(QuestionsViewModel model)
+        }
+
+
+        [HttpGet("CheckAnswer/{Id}")]
+        public IActionResult CheckAnswer(long Id)
         {
-            //db.Entry(model).State = EntityState.Modified;
-            db.SaveChanges();
+            ViewBag.Id = Id;
+            return View();
+        }*/
+
+        [HttpPost]       
+        public IActionResult CheckAnswer(QuestionsViewModel model)
+        {
+            if(!ModelState.IsValid)
+                return View(model);
+
+                    var answ = db.Answers
+                                 .Where(x => x.QuestionId == model.Id)
+                                 .Select(x =>
+                    new Answers
+                    {
+                        StudentAnswer = model.StudentAnswer
+                    }).AsEnumerable();
+                    db.UpdateRange(answ);
+                    db.SaveChanges();
+   
             return RedirectToAction("Index");
             /*  return View("Questions");
 
