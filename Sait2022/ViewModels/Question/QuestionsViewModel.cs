@@ -1,5 +1,4 @@
-﻿using Sait2022.Domain.Model;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Sait2022.ViewModels.Question
 {

@@ -21,7 +21,7 @@ namespace Sait2022.Controllers
         }
 
         [HttpGet]
-        public IActionResult QuestionsGet()
+        public IActionResult CheckAnswer()
         {
             List<QuestionsViewModel> QuestionsVMList = new List<QuestionsViewModel>();
             var question = (from Quest in db.Questions
@@ -63,7 +63,7 @@ namespace Sait2022.Controllers
                 quest_list.Add(quest);
             }*/
 
-            return View("Questions", QuestionsVMList);
+            return View("Questions", QuestionsVMList.AsEnumerable());
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Sait2022.Controllers
         /// </summary>
         /// <returns></returns>
 
-        [HttpPost]
+
         /*public ActionResult CheckAnswer(long id, [Bind("StudentAnswer")] Answers answers)
         {
             if (id != answers.Id)
@@ -102,14 +102,30 @@ namespace Sait2022.Controllers
             ViewData["QuestionId"] = new SelectList(db.Questions, "Id", "ValueQuest", answers.QuestionId);
             return View(answers);
         }*/
-        public ActionResult CheckAnswer(QuestionsViewModel model)
+        [HttpPost]
+        public IActionResult CheckAnswer(QuestionsViewModel text)
         {
-            //db.Entry(model).State = EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToAction("Index");
-            /*  return View("Questions");
+            if (!ModelState.IsValid)
+                return View();
 
-             if(!ModelState.IsValid)
+            if (ModelState.IsValid)
+            {
+
+                    Answers dataModel = db.Answers.Where(x => x.QuestionId == text.Id).FirstOrDefault();
+                    dataModel.StudentAnswer = text.StudentAnswer;
+                    db.SaveChanges();
+
+               // QuestionsViewModel questionsView = new QuestionsViewModel();
+               // questionsView.StudentAnswer = text.StudentAnswer;
+                
+              //  db.SaveChanges();
+                //return RedirectToAction("Questions");
+            }
+            
+            
+            return View("Questions",text);
+
+          /*   if(!ModelState.IsValid)
                   return View();
 
               Questions questions = null;

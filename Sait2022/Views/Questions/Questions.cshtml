@@ -12,28 +12,33 @@
 </head>
 
 <body>
+@using (Html.BeginForm("CheckAnswer", "Questions", FormMethod.Post))
+                {
   <table cellspacing="5px;">
-        @foreach(var item in Model)
-        {
+      @foreach (var item in Model)
+     {
+         
+     
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.NumberQuest)
+                    @Html.DisplayFor(model => item.NumberQuest)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ValueQuest)
+                    @Html.DisplayFor(model => item.ValueQuest)
                 </td>
-                @using (Html.BeginForm("CheckAnswer", "Questions", FormMethod.Post))
-                {
+
                 <td>
-                    @Html.EditorFor(modelItem => item.StudentAnswer)
-                    <input type="submit" value="Сохранить" class="btn btn-primary" />
+                    <input type="text" name="StudentAnswer" />
+                    
                 </td>
                 
-                }
+                
             </tr>
-          }
+     }
     </table>
-
+      <input type="submit" value="Сохранить" class="btn btn-primary" />
+                }
+  
 
     
 </body>
