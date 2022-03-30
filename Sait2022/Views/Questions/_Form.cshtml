@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Sait2022.ViewModels.Question.QuestionsViewModel>
+
+@foreach(var item in Model)
+{
+    @Html.HiddenFor(m => item.Id)
+
+<div class="editor-label">
+    @Html.DisplayFor(m => item.NumberQuest)
+</div>
+
+<div class="editor-label">
+    @Html.DisplayFor(m => item.ValueQuest)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(m => item.StudentAnswer)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(m => item.StudentAnswer)
+    @Html.ValidationMessageFor(m => item.StudentAnswer)
+</div>
+}
+
