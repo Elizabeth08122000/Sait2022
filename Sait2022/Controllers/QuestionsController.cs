@@ -40,7 +40,7 @@ namespace Sait2022.Controllers
                 quest.QuestionTopcId = item.ToList()[0].IdTopic;
                 quest.NumberQuest = item.Select(c => c.NumberQuest).First();
                 quest.ValueQuest = item.Select(c => c.ValueQuest).First();
-                quest.RangsId = item.Select(c => c.RandId).First();
+                quest.RangsId = item.ToList()[0].RandId;
                 quest_list.Add(quest);
             }
             return View(quest_list);
