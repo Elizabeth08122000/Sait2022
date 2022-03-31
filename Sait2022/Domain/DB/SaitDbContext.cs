@@ -132,10 +132,6 @@ namespace Sait2022.Domain.DB
                 b.Property(x => x.ValueAnswer)
                     .HasColumnName("ValueAnswer")
                     .IsRequired();
-                b.Property(x => x.StudentAnswer)
-                    .HasColumnName("StudentAnswer");
-                b.Property(x => x.CheckAnswer)
-                    .HasColumnName("CheckAnswer");
             });
             #endregion
 
@@ -156,6 +152,10 @@ namespace Sait2022.Domain.DB
                 b.Property(x => x.ValueQuest)
                     .HasColumnName("ValueQuest")
                     .IsRequired();
+                b.Property(x => x.StudentAnswer)
+                    .HasColumnName("StudentAnswer");
+                b.Property(x => x.CheckAnswer)
+                    .HasColumnName("CheckAnswer");
                 b.Property(x => x.IsUsed)
                     .HasColumnName("IsUsed")
                     .IsRequired();
@@ -167,7 +167,6 @@ namespace Sait2022.Domain.DB
                     .UsingEntity(j => j.ToTable("LogsAnswers")); //настроена промежуточная таблица
             });
             #endregion
-
 
 
         }

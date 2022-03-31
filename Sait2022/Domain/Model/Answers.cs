@@ -22,17 +22,6 @@ namespace Sait2022.Domain.Model
         public string ValueAnswer { get; set; }
 
         /// <summary>
-        /// Ответ ученика
-        /// </summary>
-        [Required(ErrorMessage ="Укажите ответ на вопрос")]
-        public string StudentAnswer { get; set; }
-
-        /// <summary>
-        /// Проверка ответа
-        /// </summary>
-        public bool? CheckAnswer { get; set; }
-
-        /// <summary>
         /// внешний ключ таблицы Questions
         /// </summary>
         [ForeignKey("QuestionId")]

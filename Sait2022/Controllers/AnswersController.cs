@@ -57,7 +57,7 @@ namespace Sait2022.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("NumberAnswer,ValueAnswer,StudentAnswer,CheckAnswer,QuestionId,Id")] Answers answers)
+        public async Task<IActionResult> Create([Bind("NumberAnswer,ValueAnswer,QuestionId,Id")] Answers answers)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace Sait2022.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("NumberAnswer,ValueAnswer,StudentAnswer,CheckAnswer,QuestionId,Id")] Answers answers)
+        public async Task<IActionResult> Edit(long id, [Bind("NumberAnswer,ValueAnswer,QuestionId,Id")] Answers answers)
         {
             if (id != answers.Id)
             {

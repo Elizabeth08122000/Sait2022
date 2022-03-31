@@ -21,60 +21,54 @@ namespace Sait2022.Controllers
         }
 
         [HttpGet]
-        public IActionResult CheckAnswer()
+        public async Task<IActionResult> Index()
         {
-            List<QuestionsViewModel> QuestionsVMList = new List<QuestionsViewModel>();
-            var question = (from Quest in db.Questions
-                            join Answ in db.Answers on Quest.Id equals Answ.QuestionId
-                            join QTopic in db.QuestionsTopics on Quest.QuestionTopcId equals QTopic.Id
-                            select new
-                            {
-                                QTopic.Topic,
-                                Quest.NumberQuest,
-                                Quest.ValueQuest,
-                                Answ.NumberAnswer,
-                                Answ.ValueAnswer,
-                                Answ.CheckAnswer
-                            }).ToList();
-            foreach (var item in question)
+            var question = db.Questions.Where(r => r.IsUsed == false).Select(x => new
             {
-                QuestionsViewModel qvm = new QuestionsViewModel();
-                qvm.ValueQuest = item.ValueQuest;
-                qvm.NumberQuest = item.NumberQuest;
-                qvm.ValueAnswer = item.ValueAnswer;
-                qvm.CheckAnswer = item.CheckAnswer;
-                QuestionsVMList.Add(qvm);
-            }
-            /*var question = db.Questions.Select(x => new
-                            {
-                                Id = x.QuestionTopcId,
-                                NumberQuest = x.NumberQuest,
-                                ValueQuest = x.ValueQuest
-                            }).AsEnumerable().GroupBy(x => x.Id);
-
+                id = x.Id,
+                IdTopic = x.QuestionTopcId,
+                NumberQuest = x.NumberQuest,
+                ValueQuest = x.ValueQuest,
+                IsUsed = x.IsUsed,
+                RandId = x.RangsId
+            }).AsEnumerable().GroupBy(x => x.IdTopic);
             List<Questions> quest_list = new List<Questions>();
-
             foreach (var item in question)
             {
                 Questions quest = new Questions();
-                quest.QuestionTopcId = item.ToList()[0].Id;
+                quest.Id = item.ToList()[0].id;
+                quest.QuestionTopcId = item.ToList()[0].IdTopic;
                 quest.NumberQuest = item.Select(c => c.NumberQuest).First();
                 quest.ValueQuest = item.Select(c => c.ValueQuest).First();
+                quest.RangsId = item.Select(c => c.RandId).First();
                 quest_list.Add(quest);
-            }*/
-
-            return View("Questions", QuestionsVMList.AsEnumerable());
+            }
+            return View(quest_list);
         }
 
-        /// <summary>
-        /// Добавление ответа в бд и его проверка
-        /// </summary>
-        /// <returns></returns>
-
-
-        /*public ActionResult CheckAnswer(long id, [Bind("StudentAnswer")] Answers answers)
+        public async Task<IActionResult> Edit(long? id)
         {
-            if (id != answers.Id)
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var quest = await db.Questions.FindAsync(id);
+            if (quest == null)
+            {
+                return NotFound();
+            }
+            return View(quest);
+        }
+
+        // POST: Answers/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(long id, [Bind("StudentAnswer,IsUsed,Id")] Questions quest)
+        {
+            if (id != quest.Id)
             {
                 return NotFound();
             }
@@ -83,12 +77,23 @@ namespace Sait2022.Controllers
             {
                 try
                 {
-                    db.Update(answers);
-                    db.SaveChanges();
+                    Answers answ = db.Answers.Where(x => x.QuestionId == quest.Id).FirstOrDefault();
+                    Questions dataModel = db.Questions.Where(x => x.Id == quest.Id).FirstOrDefault();
+                    dataModel.StudentAnswer = quest.StudentAnswer;
+                    dataModel.IsUsed = true;
+                    if (answ.ValueAnswer == dataModel.StudentAnswer)
+                    {
+                        dataModel.CheckAnswer = true;
+                    }
+                    else
+                    {
+                        dataModel.CheckAnswer = false;
+                    }
+                    await db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AnswersExists(answers.Id))
+                    if (!QuestionsExists(quest.Id))
                     {
                         return NotFound();
                     }
@@ -99,72 +104,15 @@ namespace Sait2022.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["QuestionId"] = new SelectList(db.Questions, "Id", "ValueQuest", answers.QuestionId);
-            return View(answers);
-        }*/
-        [HttpPost]
-        public IActionResult CheckAnswer(QuestionsViewModel text)
-        {
-            if (!ModelState.IsValid)
-                return View();
-
-            if (ModelState.IsValid)
-            {
-
-                    Answers dataModel = db.Answers.Where(x => x.QuestionId == text.Id).FirstOrDefault();
-                    dataModel.StudentAnswer = text.StudentAnswer;
-                    db.SaveChanges();
-
-               // QuestionsViewModel questionsView = new QuestionsViewModel();
-               // questionsView.StudentAnswer = text.StudentAnswer;
-                
-              //  db.SaveChanges();
-                //return RedirectToAction("Questions");
-            }
-            
-            
-            return View("Questions",text);
-
-          /*   if(!ModelState.IsValid)
-                  return View();
-
-              Questions questions = null;
-
-              foreach(Questions q in db.Questions)
-              {
-                  if(q.Id == model.Id)
-                  {
-                      questions = q;
-                  }
-              }
-
-              var quest = db.Questions
-                                .Include(a => a.Answers)
-                                .Include(r => r.Rangs)
-                                .Include(qt => qt.QuestionsTopic)
-                                .Include(u => u.Users)
-                                .Where(a => a.Id == idQuestion)
-                                .Select(r => new QuestionsViewModel
-                                {
-                                    Id = r.Id,
-                                    NumberQuest = r.NumberQuest,
-                                    ValueQuest = r.ValueQuest,
-                                    Rangs = (ICollection<Rangs>)r.Rangs,
-                                    Answers = (ICollection<Answers>)r.Answers,
-                                    QuestionsTopic = (ICollection<QuestionsTopic>)r.QuestionsTopic,
-                                    Users = r.Users,
-                                    IsUsed = r.IsUsed
-                                }).FirstOrDefault();
-
-              db.Answers.Add(new Answers { StudentAnswer = valueAnsw });
-              db.SaveChanges();
-
-              return RedirectToAction("Index");*/
-            /*  private bool AnswersExists(long id)
-              {
-                  return db.Answers.Any(e => e.Id == id);
-              }*/
+            return View(quest);
         }
 
+        private bool QuestionsExists(long id)
+        {
+            return db.Questions.Any(e => e.Id == id);
+        }
+    
     }
+
 }
+

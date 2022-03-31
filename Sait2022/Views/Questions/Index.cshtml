@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Sait2022.ViewModels.Question.QuestionsViewModel>
+﻿@model IEnumerable<Sait2022.Domain.Model.Questions>
 
 @{
     ViewData["Title"] = "Вопросы";
@@ -12,8 +12,6 @@
 </head>
 
 <body>
-@using (Html.BeginForm("CheckAnswer", "Questions", FormMethod.Post))
-                {
   <table cellspacing="5px;">
       @foreach (var item in Model)
      {
@@ -28,18 +26,12 @@
                 </td>
 
                 <td>
-                    <input type="text" name="StudentAnswer" />
-                    
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>                
                 </td>
                 
                 
             </tr>
      }
     </table>
-      <input type="submit" value="Сохранить" class="btn btn-primary" />
-                }
-  
-
-    
 </body>
 </html>

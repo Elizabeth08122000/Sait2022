@@ -171,21 +171,12 @@ namespace Sait2022.Migrations
                         .HasColumnName("Id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<bool?>("CheckAnswer")
-                        .HasColumnType("boolean")
-                        .HasColumnName("CheckAnswer");
-
                     b.Property<int>("NumberAnswer")
                         .HasColumnType("integer")
                         .HasColumnName("NumberAnswer");
 
                     b.Property<long>("QuestionId")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("StudentAnswer")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("StudentAnswer");
 
                     b.Property<string>("ValueAnswer")
                         .IsRequired()
@@ -261,6 +252,10 @@ namespace Sait2022.Migrations
                         .HasColumnName("Id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<bool?>("CheckAnswer")
+                        .HasColumnType("boolean")
+                        .HasColumnName("CheckAnswer");
+
                     b.Property<bool>("IsUsed")
                         .HasColumnType("boolean")
                         .HasColumnName("IsUsed");
@@ -275,6 +270,11 @@ namespace Sait2022.Migrations
 
                     b.Property<long>("RangsId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("StudentAnswer")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("StudentAnswer");
 
                     b.Property<string>("ValueQuest")
                         .IsRequired()

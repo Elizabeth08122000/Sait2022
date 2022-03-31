@@ -139,6 +139,8 @@ namespace Sait2022.Migrations
                     RangsId = table.Column<long>(type: "bigint", nullable: false),
                     NumberQuest = table.Column<int>(type: "integer", nullable: false),
                     ValueQuest = table.Column<string>(type: "text", nullable: false),
+                    StudentAnswer = table.Column<string>(type: "text", nullable: false),
+                    CheckAnswer = table.Column<bool>(type: "boolean", nullable: true),
                     IsUsed = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -251,8 +253,6 @@ namespace Sait2022.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     NumberAnswer = table.Column<int>(type: "integer", nullable: false),
                     ValueAnswer = table.Column<string>(type: "text", nullable: false),
-                    StudentAnswer = table.Column<string>(type: "text", nullable: false),
-                    CheckAnswer = table.Column<bool>(type: "boolean", nullable: true),
                     QuestionId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
