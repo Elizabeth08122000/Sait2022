@@ -20,6 +20,10 @@ namespace Sait2022.Controllers
             db = context;
         }
 
+        /// <summary>
+        /// Вывод вопросов
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -31,7 +35,7 @@ namespace Sait2022.Controllers
                 ValueQuest = x.ValueQuest,
                 IsUsed = x.IsUsed,
                 RandId = x.RangsId
-            }).AsEnumerable().GroupBy(x => x.IdTopic);
+            }).AsEnumerable().OrderBy(c => c.id).GroupBy(x => x.IdTopic);
             List<Questions> quest_list = new List<Questions>();
             foreach (var item in question)
             {
@@ -84,10 +88,12 @@ namespace Sait2022.Controllers
                     if (answ.ValueAnswer == dataModel.StudentAnswer)
                     {
                         dataModel.CheckAnswer = true;
+                        dataModel.RangsId += 1;
                     }
                     else
                     {
                         dataModel.CheckAnswer = false;
+                        dataModel.NumberQuest += 1;
                     }
                     await db.SaveChangesAsync();
                 }

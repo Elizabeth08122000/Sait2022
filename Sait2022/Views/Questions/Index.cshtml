@@ -14,23 +14,17 @@
 <body>
   <table cellspacing="5px;">
       @foreach (var item in Model)
-     {
-         
-     
-            <tr>
+     {     <tr>
                 <td>
                     @Html.DisplayFor(model => item.NumberQuest)
                 </td>
                 <td>
                     @Html.DisplayFor(model => item.ValueQuest)
                 </td>
-
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>                
-                </td>
-                
-                
-            </tr>
+                </td>           
+           </tr>
      }
     </table>
 </body>
