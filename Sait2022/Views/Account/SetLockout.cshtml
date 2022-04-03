@@ -1,0 +1,21 @@
+﻿@model LockoutUsersViewModel
+@{
+    ViewBag.Title = "Заблокировать пользователя";
+}
+<h2>Временная блокировка пользователя @Model.Email</h2>
+<form asp-action="SetLockout" asp-controller="Account">
+    <div asp-validation-summary="All" class="text-danger"></div>
+ 
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="Email" />
+     
+    <div class="form-group bmd-form-group">
+        <label asp-for="TimeLockout" class="bmd-label-floating">Время блокирования</label>
+        <input type="datetime-local" asp-for="TimeLockout" class="form-control">
+        <span asp-validation-for="TimeLockout" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Сохранить" class="btn btn-outline-dark" />
+    </div>
+</form>

@@ -45,6 +45,36 @@
             <input asp-for="Surname" class="form-control" placeholder="Фамилия">
             <span asp-validation-for="Surname" class="text-danger"></span>
         </div>
+        <div class="form-group bmd-form-group">
+            <label asp-for="Patronym" class="bmd-label-floating"></label>
+            <input asp-for="Patronym" class="form-control" placeholder="Отчество">
+            <span asp-validation-for="Patronym" class="text-danger"></span>
+        </div>
+        <div class="form-group bmd-form-group">
+            <label asp-for="PhoneNumber" class="bmd-label-floating"></label>
+            <input asp-for="PhoneNumber" class="form-control" placeholder="Телефон">
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group bmd-form-group">
+            <label asp-for="Address" class="bmd-label-floating"></label>
+            <input asp-for="Address" class="form-control" placeholder="Адрес">
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="form-group bmd-form-group">
+            <label asp-for="TeacherId" class="bmd-label-floating"></label>
+            <input asp-for="TeacherId" class="form-control" placeholder="Учитель">
+            <span asp-validation-for="TeacherId" class="text-danger"></span>
+        </div>
+        <div class="form-group bmd-form-group">
+            <label asp-for="IsTeacher" class="bmd-label-floating"></label>
+            <input type="checkbox" asp-for="IsTeacher" class="form-control" placeholder="Является учителем?">
+            <span asp-validation-for="TeacherId" class="text-danger"></span>
+        </div>
+        <div class="form-group bmd-form-group">
+            <label asp-for="IsAdministrator" class="bmd-label-floating"></label>
+            <input type="checkbox" asp-for="IsAdministrator" class="form-control" placeholder="Является администратором?">
+            <span asp-validation-for="IsAdministrator" class="text-danger"></span>
+        </div>
     </div>
 
     <div class="card-footer justify-content-center">
