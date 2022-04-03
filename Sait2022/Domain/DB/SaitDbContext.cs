@@ -86,15 +86,12 @@ namespace Sait2022.Domain.DB
                     .IsRequired();
                 b.Ignore(x => x.FullName);
                 b.Property(x => x.IsTeacher)
-                    .HasColumnName("IsTeacher")
-                    .IsRequired();
+                    .HasColumnName("IsTeacher");
                 b.Property(x => x.IsAdministrator)
-                    .HasColumnName("IsAdministrator")
-                    .IsRequired();
+                    .HasColumnName("IsAdministrator");
                 b.HasOne(t => t.EmployeesNavig)
                     .WithMany(y => y.Employeess)
-                    .HasForeignKey(t => t.TeacherId)
-                    .IsRequired(false);
+                    .HasForeignKey(t => t.TeacherId);
                 b.HasIndex("TeacherId").IsUnique(true);
             });
             #endregion
