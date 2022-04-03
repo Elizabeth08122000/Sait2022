@@ -2,10 +2,9 @@
 @{
     ViewBag.Title = "Список пользователей";
 }
- @if (User.IsInRole("ADMIN"))
-    {
-        <a asp-action="RegistrationNewUser">Добавить пользователя</a>
-    }
+
+<a asp-action="RegistrationNewUser">Добавить пользователя</a>
+
 
 <table class="table">
     <tr><th>Email</th><th>Год</th><th></th></tr>
@@ -17,12 +16,10 @@
             <td>
                 <a class="btn btn-sm btn-primary" asp-action="ChangePassword" asp-route-id="@user.Id">Сменить пароль</a>
             </td>
-            @if (User.IsInRole("ADMIN"))
-            {
-               <td>
-                   <a class="btn btn-sm btn-primary" asp-action="SetLockout" asp-route-id="@user.Id">Заблокировать пользователя</a>
-               </td> 
-            }
+            <td>
+                <a class="btn btn-sm btn-primary" asp-action="SetLockout" asp-route-id="@user.Id">Заблокировать пользователя</a>
+            </td> 
+
             
         </tr>
     }
