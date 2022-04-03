@@ -22,22 +22,32 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
-
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        
+                        @if (SignInManager.IsSignedIn(User))
+                        {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="QuestionsTopics" asp-action="QuestionsTopics">Темы вопросов</a>
                             </li>
                              <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Questions" asp-action="Index">Вопросы</a>
                             </li>
+                            
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Answers" asp-action="Index">Ответы</a>
+                            </li>           
+                            
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index">Настройки пользователя</a>
                             </li>
+                            
+                        }
+                                                  
                         
                     </ul>
                 </div>
