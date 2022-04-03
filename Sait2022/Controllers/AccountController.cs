@@ -191,9 +191,16 @@ namespace Sait2022.Controllers
                 Users user = await _userManager.FindByIdAsync(model.Id.ToString());
                 if (user != null)
                 {
-                    user.LockoutEnd = model.TimeLockout;
-                    await _saitDbContext.SaveChangesAsync();
-                    return RedirectToAction("Index");
+                    if (user.LockoutEnd == null)
+                    {
+                        user.LockoutEnd = model.TimeLockout;
+                        await _saitDbContext.SaveChangesAsync();
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Пользователь уже заблокирован");
+                    }
                 }
 
             }
