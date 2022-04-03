@@ -41,11 +41,12 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Answers" asp-action="Index">Ответы</a>
                             </li>           
-                            
+                             @if (User.IsInRole("ADMIN"))
+                             {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index">Настройки пользователя</a>
                             </li>
-                            
+                             }
                         }
                                                   
                         
