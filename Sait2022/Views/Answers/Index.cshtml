@@ -5,7 +5,7 @@
 }
 
 <h1>Index</h1>
-@if (User.IsInRole("TEACHER"))
+@if (User.IsInRole("TEACHER") || User.IsInRole("ADMIN"))
 {
     <p>
     <a asp-action="Create">Create New</a>
@@ -38,7 +38,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Questions.ValueQuest)
             </td>
-                <td>@if (User.IsInRole("TEACHER"))
+                <td>@if (User.IsInRole("TEACHER") || User.IsInRole("ADMIN"))
                     {
                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
