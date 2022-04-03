@@ -183,34 +183,8 @@ namespace Sait2022.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SetLockout(LockoutUsersViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                Users user = await _userManager.FindByIdAsync(model.Id.ToString());
-                if (user != null)
-                {
-                    if (user.LockoutEnd == null)
-                    {
-                        user.LockoutEnd = model.TimeLockout;
-                        await _saitDbContext.SaveChangesAsync();
-                        return RedirectToAction("Index");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, "Пользователь уже заблокирован");
-                    }
-                }
-
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Пользователь не найден");
-            }
-            return View(model);
+            return RedirectToAction("Index", "Privacy");
         }
-
 
         /// <summary>
         /// Возвращение страницы в случае блокировки пользователя
