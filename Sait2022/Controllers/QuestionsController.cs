@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Sait2022.Domain.DB;
@@ -11,12 +13,15 @@ using System.Threading.Tasks;
 
 namespace Sait2022.Controllers
 {
+    [Authorize]
     public class QuestionsController : Controller
     {
         private readonly SaitDbContext db;
-
+        private long UserId { get; set; }
+        private List<Questions> quest_list;
         public QuestionsController(SaitDbContext context)
         {
+            UserId = (HttpContext.User.Identity as Users).Employee.Id;
             db = context;
         }
 
@@ -27,27 +32,20 @@ namespace Sait2022.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var question = db.Questions.Where(r => r.IsUsed == false).Select(x => new
+            
+
+            if (quest_list.Count == 0 || quest_list == null)
             {
-                id = x.Id,
-                IdTopic = x.QuestionTopcId,
-                NumberQuest = x.NumberQuest,
-                ValueQuest = x.ValueQuest,
-                IsUsed = x.IsUsed,
-                RandId = x.RangsId
-            }).AsEnumerable().OrderBy(c => c.id).GroupBy(x => x.IdTopic);
-            List<Questions> quest_list = new List<Questions>();
-            foreach (var item in question)
-            {
-                Questions quest = new Questions();
-                quest.Id = item.ToList()[0].id;
-                quest.QuestionTopcId = item.ToList()[0].IdTopic;
-                quest.NumberQuest = item.Select(c => c.NumberQuest).First();
-                quest.ValueQuest = item.Select(c => c.ValueQuest).First();
-                quest.RangsId = item.ToList()[0].RandId;
-                quest_list.Add(quest);
+                quest_list = GetQuestions();
             }
+            
             return View(quest_list);
+        }
+
+        public async Task<IActionResult> FinishTest()
+        {
+            quest_list.Clear();
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Edit(long? id)
@@ -81,20 +79,22 @@ namespace Sait2022.Controllers
             {
                 try
                 {
+                    StudentAnswer answer = new StudentAnswer();
+                    answer.QuestionId = quest.Id;
+                    answer.QuestionsTopicId = quest.QuestionTopcId;
+                    answer.RangId = quest.RangsId;
+                    answer.Answer = quest.StudentAnswer;
+                    answer.StudentId = UserId;
                     Answers answ = db.Answers.Where(x => x.QuestionId == quest.Id).FirstOrDefault();
-                    Questions dataModel = db.Questions.Where(x => x.Id == quest.Id).FirstOrDefault();
-                    dataModel.StudentAnswer = quest.StudentAnswer;
-                    dataModel.IsUsed = true;
-                    if (answ.ValueAnswer == dataModel.StudentAnswer)
+                    if (answ.ValueAnswer == answer.Answer)
                     {
-                        dataModel.CheckAnswer = true;
-                        dataModel.RangsId += 1;
+                        answer.IsCheck = true;
                     }
                     else
                     {
-                        dataModel.CheckAnswer = false;
-                        dataModel.NumberQuest += 1;
+                        answer.IsCheck = false;
                     }
+                    db.StudentAnswers.Add(answer);
                     await db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -111,6 +111,28 @@ namespace Sait2022.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(quest);
+        }
+
+        private List<Questions> GetQuestions()
+        {
+            var studentAnswers = db.StudentAnswers
+                .Where(x => x.StudentId == UserId).AsEnumerable()
+                .GroupBy(x => (x.QuestionsTopicId, x.RangId))
+                .OrderBy(x => (x.Key.QuestionsTopicId, x.Key.RangId))
+                .ToList();
+            List<Questions> questions = new List<Questions>();
+            foreach (var answer in studentAnswers)
+            {
+                if (answer.Any(x => x.IsCheck == true))
+                {
+                    questions.Add(db.Questions.Where(x => x.RangsId == answer.Key.RangId + 1 && x.QuestionTopcId == answer.Key.QuestionsTopicId).FirstOrDefault());
+                }
+                else
+                {
+                    questions.Add(db.Questions.Where(x => x.Id == answer.LastOrDefault().QuestionId && x.QuestionTopcId == answer.Key.QuestionsTopicId).FirstOrDefault());
+                }
+            }
+            return questions;
         }
 
         private bool QuestionsExists(long id)
