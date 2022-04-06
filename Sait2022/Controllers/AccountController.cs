@@ -28,6 +28,11 @@ namespace Sait2022.Controllers
             _saitDbContext = saitDbContext ?? throw new ArgumentNullException(nameof(_saitDbContext));
         }
 
+        public IActionResult Index()
+        {
+            return View(_userManager.Users.ToList());
+        }
+
         /// <summary>
         /// Форма входа в систему
         /// </summary>
@@ -48,7 +53,6 @@ namespace Sait2022.Controllers
         /// </summary>
         /// <param name="signInManager">Менеджер авторизации</param>
         /// <param name="model">Входные данные с формы</param>
-        /// <param name="returnUrl">Путь перехода после авторизации</param>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -64,13 +68,16 @@ namespace Sait2022.Controllers
                     return View(model);
                 }
 
-                var result = await signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: true);
 
                 if (result.Succeeded)
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Index", "Home");
 
                 if (result.IsLockedOut)
-                    return RedirectToAction(nameof(Lockout));
+                    {
+                        ModelState.AddModelError(string.Empty, "Ваш аккаунт заблокирован. Подождите минуту для разблокировки или обратитесь к администратору.");
+                        return View(model);
+                    }   
 
                 ModelState.AddModelError(string.Empty, "Неверный логин или пароль");
                 return View(model);
@@ -112,7 +119,13 @@ namespace Sait2022.Controllers
             var profile = new Employee
             {
                 FirstName = model.FirstName,
-                Surname = model.Surname
+                Surname = model.Surname,
+                Patronym = model.Patronym,
+                PhoneNumber = model.PhoneNumber,
+                Address = model.Address,
+                TeacherId = model.TeacherId,
+                IsAdministrator = model.IsAdministrator,
+                IsTeacher = model.IsTeacher
             };
 
             var user = new Users
@@ -129,10 +142,21 @@ namespace Sait2022.Controllers
                 return View(model);
             }
 
-            await _userManager.AddToRoleAsync(user, SecurityConstants.AdminRole);
+            if (model.IsAdministrator)
+            {
+                await _userManager.AddToRoleAsync(user, SecurityConstants.AdminRole);
+            }
+            if (model.IsTeacher)
+            {
+                await _userManager.AddToRoleAsync(user, SecurityConstants.TeacherRole);
+            }
+            else
+            {
+                await _userManager.AddToRoleAsync(user, SecurityConstants.StudentRole);
+            }
             _saitDbContext.SaveChanges();
 
-            return RedirectToAction("Index", "Privacy");
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
@@ -145,8 +169,48 @@ namespace Sait2022.Controllers
             await signInManager.SignOutAsync();
 
 
-            return RedirectToAction("Index", "Privacy");
+            return RedirectToAction("Index", "Home");
         }
+
+        public async Task<IActionResult> SetLockout(long id)
+        {
+            Users user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return NotFound();
+            }
+            LockoutUsersViewModel model = new LockoutUsersViewModel { Id = user.Id, Email = user.Email, TimeLockout = user.LockoutEnd };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SetLockout(LockoutUsersViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Users user = await _userManager.FindByIdAsync(model.Id.ToString());
+                if (user != null)
+                {
+                    if (user.LockoutEnd == null)
+                    {
+                        user.LockoutEnd = model.TimeLockout;
+                        await _saitDbContext.SaveChangesAsync();
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Пользователь уже заблокирован");
+                    }
+                }
+
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Пользователь не найден");
+            }
+            return View(model);
+        }
+
 
         /// <summary>
         /// Возвращение страницы в случае блокировки пользователя
@@ -177,6 +241,54 @@ namespace Sait2022.Controllers
             return View();
         }
 
+        public async Task<IActionResult> ChangePassword(long id)
+        {
+            Users user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return NotFound();
+            }
+            ChangePasswordViewModel model = new ChangePasswordViewModel { Id = user.Id, Email = user.Email };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Users user = await _userManager.FindByIdAsync(model.Id.ToString());
+                if (user != null)
+                {
+                    var _passwordValidator =
+                        HttpContext.RequestServices.GetService(typeof(IPasswordValidator<Users>)) as IPasswordValidator<Users>;
+                    var _passwordHasher =
+                        HttpContext.RequestServices.GetService(typeof(IPasswordHasher<Users>)) as IPasswordHasher<Users>;
+
+                    IdentityResult result =
+                        await _passwordValidator.ValidateAsync(_userManager, user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        user.PasswordHash = _passwordHasher.HashPassword(user, model.Password);
+                        await _userManager.UpdateAsync(user);
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Пользователь не найден");
+                }
+            }
+            return View(model);
+        }
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)
@@ -195,7 +307,7 @@ namespace Sait2022.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Index");
+                return RedirectToAction("Index", "Home");
             }
         }
 

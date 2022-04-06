@@ -27,5 +27,6 @@ namespace Sait2022.ViewModels.Account
         /// </summary>
         [Display(Name = "Запомнить?")]
         public bool RememberMe { get; set; }
+
     }
 }
