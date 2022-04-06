@@ -14,9 +14,11 @@ namespace Sait2022.Domain.Model
         public char RangQuest { get; set; }
 
         public ICollection<Questions> Questions { get; set; }
+        public ICollection<StudentAnswer> StudentAnswers { get; set; }
         public Rangs()
         {
             Questions = new List<Questions>();
+            StudentAnswers = new List<StudentAnswer>();
         }
     }
 }

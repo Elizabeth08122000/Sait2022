@@ -55,6 +55,8 @@ namespace Sait2022.Domain.Model
         public Questions()
         {
             Users = new List<Users>();
+            StudentAnswers = new List<StudentAnswer>();
         }
+        public ICollection<StudentAnswer> StudentAnswers { get; set; }
     }
 }
