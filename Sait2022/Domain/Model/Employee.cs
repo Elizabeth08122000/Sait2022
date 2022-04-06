@@ -54,9 +54,12 @@ namespace Sait2022.Domain.Model
         public Employee EmployeesNavig { get; set; } //навигационное свойство
 
         public ICollection<Employee> Employeess { get; set; }
+        public ICollection<StudentAnswer> StudentAnswers { get; set; }
         public Employee()
         {
             Employeess = new List <Employee>();
+            StudentAnswers = new List <StudentAnswer>();
         }
+        
     }
 }

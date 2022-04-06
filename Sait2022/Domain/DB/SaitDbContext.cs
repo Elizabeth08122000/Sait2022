@@ -49,6 +49,11 @@ namespace Sait2022.Domain.DB
         /// </summary>
         public DbSet<Answers> Answers { get; set; }
 
+        /// <summary>
+        /// База ответов студентов
+        /// </summary>
+        public DbSet<StudentAnswer> StudentAnswers { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -165,6 +170,42 @@ namespace Sait2022.Domain.DB
             });
             #endregion
 
+            #region StudentAnswers
+            builder.Entity<StudentAnswer>(b =>
+            {
+                b.ToTable("StudentAnswers");
+                EntityId(b);
+                b.HasOne(u => u.Student)
+                    .WithMany(x => x.StudentAnswers)
+                    .HasForeignKey(y => y.StudentId);
+                b.HasOne(u => u.Questions)
+                    .WithMany(x => x.StudentAnswers)
+                    .HasForeignKey(y => y.QuestionId);
+                b.HasOne(u => u.QuestionsTopic)
+                    .WithMany(x => x.StudentAnswers)
+                    .HasForeignKey(y => y.QuestionsTopicId);
+                b.HasOne(u => u.Rangs)
+                    .WithMany(x => x.StudentAnswers)
+                    .HasForeignKey(x => x.RangId);
+                b.Property(x => x.StudentId)
+                    .HasColumnName("StudentId")
+                    .IsRequired();
+                b.Property(x => x.QuestionId)
+                    .HasColumnName("QuestionId")
+                    .IsRequired();
+                b.Property(x => x.QuestionsTopicId)
+                    .HasColumnName("QuestionsTopicId")
+                    .IsRequired();
+                b.Property(x => x.RangId)
+                    .HasColumnName("RangId")
+                    .IsRequired();
+                b.Property(x => x.Answer)
+                    .HasColumnName("Answer");
+                b.Property(x => x.IsCheck)
+                    .HasColumnName("IsCheck")
+                    .IsRequired();
+            });
+            #endregion
 
         }
 
