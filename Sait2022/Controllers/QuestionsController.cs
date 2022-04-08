@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace Sait2022.Controllers
 {
-    [Authorize]
     public class QuestionsController : Controller
     {
         private readonly SaitDbContext db;
@@ -21,8 +20,12 @@ namespace Sait2022.Controllers
         private List<Questions> quest_list;
         public QuestionsController(SaitDbContext context)
         {
-            UserId = (HttpContext.User.Identity as Users).Employee.Id;
             db = context;
+            UserId = db.Users.First().Id;
+            var u = HttpContext;
+            var u2 = User;
+            var u3 = User.Identity;
+            int z = 0;
         }
 
         /// <summary>
@@ -32,11 +35,12 @@ namespace Sait2022.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            
-
-            if (quest_list.Count == 0 || quest_list == null)
+            if (quest_list == null)
             {
-                quest_list = GetQuestions();
+                if(quest_list.Count == 0)
+                {
+                    quest_list = GetQuestions();
+                }
             }
             
             return View(quest_list);
@@ -121,17 +125,28 @@ namespace Sait2022.Controllers
                 .OrderBy(x => (x.Key.QuestionsTopicId, x.Key.RangId))
                 .ToList();
             List<Questions> questions = new List<Questions>();
-            foreach (var answer in studentAnswers)
+            if(studentAnswers.Count > 0)
             {
-                if (answer.Any(x => x.IsCheck == true))
+                foreach (var answer in studentAnswers)
                 {
-                    questions.Add(db.Questions.Where(x => x.RangsId == answer.Key.RangId + 1 && x.QuestionTopcId == answer.Key.QuestionsTopicId).FirstOrDefault());
-                }
-                else
-                {
-                    questions.Add(db.Questions.Where(x => x.Id == answer.LastOrDefault().QuestionId && x.QuestionTopcId == answer.Key.QuestionsTopicId).FirstOrDefault());
+                    if (answer.Any(x => x.IsCheck == true))
+                    {
+                        questions.Add(db.Questions.Where(x => x.RangsId == answer.Key.RangId + 1 && x.QuestionTopcId == answer.Key.QuestionsTopicId).FirstOrDefault());
+                    }
+                    else
+                    {
+                        questions.Add(db.Questions.Where(x => x.Id == answer.LastOrDefault().QuestionId && x.QuestionTopcId == answer.Key.QuestionsTopicId).FirstOrDefault());
+                    }
                 }
             }
+            else
+            {
+                db.Questions
+                    .Where(x => x.RangsId == 1)
+                    .GroupBy(x => x.QuestionTopcId).ToList()
+                    .ForEach(y => questions.Add(y.FirstOrDefault()));
+            }
+
             return questions;
         }
 
