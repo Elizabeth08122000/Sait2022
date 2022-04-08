@@ -12,7 +12,9 @@
 </head>
  
 <body>
-  <table cellspacing="5px;">
+    @using(Html.BeginForm())
+    {
+        <table cellspacing="5px;">
       @foreach (var item in Model)
      {     <tr>
                 <td>
@@ -27,6 +29,8 @@
            </tr>
      }
     </table>
-    <input type="submit" onclick="FinishTest()" text="Пройти Тест"/>
+    <input type="submit" value="Save" name="submit" id="submit" class="btn btn-primary"/>
+    }
+  
 </body>
 </html>

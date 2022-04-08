@@ -1,4 +1,4 @@
-﻿@model Sait2022.Domain.Model.Questions
+﻿@model KeyValuePair<Sait2022.Domain.Model.Questions,Sait2022.Domain.Model.StudentAnswer>
 
 @{
     ViewData["Title"] = "Edit";
@@ -13,14 +13,14 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-              @Html.DisplayFor(modelItem => modelItem.ValueQuest)
+              @Html.DisplayFor(modelItem => modelItem.Key.ValueQuest)
             </div>
             <div class="form-group">
-                <label asp-for="StudentAnswer" class="control-label"></label>
-                <input asp-for="StudentAnswer" class="form-control" />
-                <span asp-validation-for="StudentAnswer" class="text-danger"></span>
+                <label asp-for="Value.Answer" class="control-label"></label>
+                <input asp-for="Value.Answer" class="form-control" />
+                <span asp-validation-for="Value.Answer" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Key.Id" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
