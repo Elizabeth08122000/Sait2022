@@ -90,13 +90,23 @@ namespace Sait2022.Controllers
             {
                 foreach (var answer in studentAnswers)
                 {
-                    if (answer.Any(x => x.IsCheck == true))
+                    if (studentAnswers.Any(x => x.Key.RangId > answer.Key.RangId))
                     {
-                        questions.Add(db.Questions.Where(x => x.RangsId > answer.Key.RangId && x.QuestionTopcId == answer.Key.QuestionsTopicId).FirstOrDefault());
-                    }
-                    else
-                    {
-                        questions.Add(db.Questions.Where(x => x.Id > answer.LastOrDefault().QuestionId && x.QuestionTopcId == answer.Key.QuestionsTopicId).FirstOrDefault());
+                        if (answer.LastOrDefault().IsCheck == true && studentAnswers.FirstOrDefault(x => x.Key.RangId > answer.Key.RangId && x.Key.QuestionsTopicId == answer.Key.QuestionsTopicId).All(x => x.IsCheck == false))
+                        {
+                            questions.Add(db.Questions.Where(x => x.RangsId > answer.Key.RangId && x.QuestionTopcId == answer.Key.QuestionsTopicId).FirstOrDefault());
+                        }
+                        else
+                        {
+                            if (db.Questions.Where(x => x.QuestionTopcId == answer.Key.QuestionsTopicId && x.Id == answer.Key.RangId).LastOrDefault().Id != answer.LastOrDefault().QuestionId)
+                            {
+                                questions.Add(db.Questions.Where(x => x.Id > answer.LastOrDefault().QuestionId && x.QuestionTopcId == answer.Key.QuestionsTopicId && x.RangsId == answer.Key.RangId).FirstOrDefault());
+                            }
+                            else
+                            {
+                                questions.Add(db.Questions.FirstOrDefault(x => x.Id == answer.FirstOrDefault().QuestionId));
+                            }
+                        }
                     }
                 }
             }
