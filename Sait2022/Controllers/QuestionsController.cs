@@ -80,14 +80,15 @@ namespace Sait2022.Controllers
 
         private void GetQuestionsAnswers(QuestAnswersViewModel model)
         {
-            var studentAnswers = db.StudentAnswers
-                .Where(x => x.StudentId == UserId).ToList()
+            var studentAnswersDb = db.StudentAnswers
+                .Where(x => x.StudentId == UserId).ToList();
+            List<Questions> questions = new List<Questions>();
+            if(studentAnswersDb.Count > 0)
+            {
+                var studentAnswers = studentAnswersDb
                 .GroupBy(x => (x.QuestionsTopicId, x.RangId))
                 .OrderBy(x => (x.Key.QuestionsTopicId, x.Key.RangId))
                 .ToList();
-            List<Questions> questions = new List<Questions>();
-            if(studentAnswers.Count > 0)
-            {
                 foreach (var answer in studentAnswers)
                 {
                     if (studentAnswers.Any(x => x.Key.RangId > answer.Key.RangId))
@@ -98,7 +99,7 @@ namespace Sait2022.Controllers
                         }
                         else
                         {
-                            if (db.Questions.Where(x => x.QuestionTopcId == answer.Key.QuestionsTopicId && x.Id == answer.Key.RangId).LastOrDefault().Id != answer.LastOrDefault().QuestionId)
+                            if (db.Questions.Where(x=>x.RangsId == answer.Key.RangId && x.QuestionTopcId == answer.Key.QuestionsTopicId).Any(x=>x.Id > answer.LastOrDefault().QuestionId))
                             {
                                 questions.Add(db.Questions.Where(x => x.Id > answer.LastOrDefault().QuestionId && x.QuestionTopcId == answer.Key.QuestionsTopicId && x.RangsId == answer.Key.RangId).FirstOrDefault());
                             }
