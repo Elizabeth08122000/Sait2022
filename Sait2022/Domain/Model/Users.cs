@@ -12,6 +12,7 @@ namespace Sait2022.Domain.Model
     /// </summary>
     public class Users: IdentityUser<int>
     {
+        public long EmployeeId { get; set; }
         /// <summary>
         /// Профиль ученика
         /// </summary>

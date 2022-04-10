@@ -63,7 +63,7 @@ namespace Sait2022.Domain.DB
             {
                 x.HasOne(y => y.Employee)
                 .WithOne()
-                .HasForeignKey<Users>("EmployeeId")
+                .HasForeignKey<Users>(b=>b.EmployeeId)
                 .IsRequired(true);
                 x.HasIndex("EmployeeId").IsUnique(true);
             });

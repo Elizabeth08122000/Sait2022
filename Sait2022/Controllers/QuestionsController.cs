@@ -17,13 +17,9 @@ namespace Sait2022.Controllers
     {
         private readonly SaitDbContext db;
         private long UserId { get; set; }
-        private List<Questions> quest_list;
-        private List<StudentAnswer> studentAnswers_list;
         public QuestionsController(SaitDbContext context)
         {
             db = context;
-            studentAnswers_list = new List<StudentAnswer>();
-            quest_list = new List<Questions>();
         }
 
         /// <summary>
@@ -33,105 +29,56 @@ namespace Sait2022.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            if (quest_list.Count == 0)
+            QuestAnswersViewModel questAnswers = new QuestAnswersViewModel();
+            if (questAnswers.QuestValues.Count == 0)
             {
-                UserId = long.Parse(User.Identity.GetUserId());
-                quest_list = GetQuestions();
+                UserId = db.Users.FirstOrDefault(x => x.Id == int.Parse(User.Identity.GetUserId())).EmployeeId;
+                GetQuestionsAnswers(questAnswers);
             }
 
-
-            return View(quest_list);
+            return View(questAnswers);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Index(string submit)
-        {
-            if(studentAnswers_list.Count > 0 && submit == "Save")
-            {
-                db.StudentAnswers.AddRange(studentAnswers_list);
-                db.SaveChanges();
-                studentAnswers_list.Clear();
-                quest_list.Clear();
-            }
-            return RedirectToAction("Index");
-        }
-
-        public async Task<IActionResult> Edit(long id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var quest = await db.Questions.FindAsync(id);
-            var studentAnswer = studentAnswers_list.Any(x => x.QuestionId == id) ? studentAnswers_list.LastOrDefault(x=>x.QuestionId == id) : new StudentAnswer() 
-            { 
-                QuestionId = quest.Id,
-                RangId = quest.RangsId,
-                QuestionsTopicId = quest.QuestionTopcId,
-                StudentId = UserId,
-                Answer = ""
-            };
-            if (quest == null)
-            {
-                return NotFound();
-            }
-            var questStudentAnswer = new KeyValuePair<Questions, StudentAnswer>(quest, studentAnswer); 
-            return View(questStudentAnswer);
-        }
-
-        // POST: Answers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, KeyValuePair<Questions,StudentAnswer> questStudentAnswer)
+        public async Task<IActionResult> Index(QuestAnswersViewModel questAnswersViewModel)
         {
-            if (id != questStudentAnswer.Key.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    Answers answ = db.Answers.Where(x => x.QuestionId == questStudentAnswer.Key.Id).FirstOrDefault();
-                    if (answ.ValueAnswer == questStudentAnswer.Value.Answer)
+                    UserId = db.Users.FirstOrDefault(x => x.Id == int.Parse(User.Identity.GetUserId())).EmployeeId;
+                    foreach (var studentAnswerValue in questAnswersViewModel.AnswerValues)
                     {
-                        questStudentAnswer.Value.IsCheck = true;
-                    }
-                    else
-                    {
-                        questStudentAnswer.Value.IsCheck = false;
-                    }
+                        var quest = await db.Questions.FindAsync(studentAnswerValue.Key);
+                        var studentAnswer = new StudentAnswer()
+                        {
+                            QuestionId = quest.Id,
+                            QuestionsTopicId = quest.QuestionTopcId,
+                            RangId = quest.RangsId,
+                            StudentId = UserId,
+                            Answer = studentAnswerValue.Value
+                        };
 
-                    if (studentAnswers_list.Any(x => x.QuestionId == questStudentAnswer.Key.Id))
-                    {
-                        studentAnswers_list.FirstOrDefault(x => x.QuestionId == questStudentAnswer.Key.Id).Answer = questStudentAnswer.Value.Answer;
+                        Answers answer = db.Answers.FirstOrDefault(x => x.QuestionId == quest.Id);
+                        if (answer.ValueAnswer == studentAnswer.Answer)
+                            studentAnswer.IsCheck = true;
+                        else
+                            studentAnswer.IsCheck = false;
+
+                        db.StudentAnswers.Add(studentAnswer);
                     }
-                    else
-                    {
-                        studentAnswers_list.Add(questStudentAnswer.Value);
-                    }
+                    await db.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch(DbUpdateException ex)
                 {
-                    if (!QuestionsExists(questStudentAnswer.Key.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    Console.WriteLine(ex.Message);
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(questStudentAnswer);
+            return RedirectToAction("Index");
         }
 
-        private List<Questions> GetQuestions()
+        private void GetQuestionsAnswers(QuestAnswersViewModel model)
         {
             var studentAnswers = db.StudentAnswers
                 .Where(x => x.StudentId == UserId).ToList()
@@ -161,7 +108,11 @@ namespace Sait2022.Controllers
                     .ForEach(y => questions.Add(y.FirstOrDefault()));
             }
 
-            return questions;
+            foreach (var quest in questions)
+            {
+                model.QuestValues.Add(quest.Id, quest.ValueQuest);
+                model.AnswerValues.Add(quest.Id, "");
+            }
         }
 
         private bool QuestionsExists(long id)
