@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Sait2022.Domain.Model.Questions>
+﻿@model Sait2022.ViewModels.Question.QuestAnswersViewModel
 
 @{
     ViewData["Title"] = "Вопросы";
@@ -14,23 +14,16 @@
 <body>
     @using(Html.BeginForm())
     {
-        <table cellspacing="5px;">
-      @foreach (var item in Model)
-     {     <tr>
-                <td>
-                    @Html.DisplayFor(model => item.NumberQuest)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.ValueQuest)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>                
-                </td>           
-           </tr>
-     }
-    </table>
-    <input type="submit" value="Save" name="submit" id="submit" class="btn btn-primary"/>
+        @foreach(var kvpair in Model.QuestValues)
+        {
+            <div class="col-md-10">
+                @Html.DisplayFor(m=>m.QuestValues[kvpair.Key])
+                @Html.EditorFor(m=>m.AnswerValues[kvpair.Key])
+            </div>
+        }
+        <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
     }
-  
 </body>
 </html>
