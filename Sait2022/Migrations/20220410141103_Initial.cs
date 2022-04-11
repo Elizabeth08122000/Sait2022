@@ -290,6 +290,48 @@ namespace Sait2022.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "StudentAnswers",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    StudentId = table.Column<long>(type: "bigint", nullable: false),
+                    QuestionId = table.Column<long>(type: "bigint", nullable: false),
+                    RangId = table.Column<long>(type: "bigint", nullable: false),
+                    QuestionsTopicId = table.Column<long>(type: "bigint", nullable: false),
+                    Answer = table.Column<string>(type: "text", nullable: true),
+                    IsCheck = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentAnswers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StudentAnswers_Employees_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentAnswers_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentAnswers_QuestionsTopic_QuestionsTopicId",
+                        column: x => x.QuestionsTopicId,
+                        principalTable: "QuestionsTopic",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentAnswers_Rangs_RangId",
+                        column: x => x.RangId,
+                        principalTable: "Rangs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Answers_QuestionId",
                 table: "Answers",
@@ -359,6 +401,26 @@ namespace Sait2022.Migrations
                 name: "IX_Questions_RangsId",
                 table: "Questions",
                 column: "RangsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentAnswers_QuestionId",
+                table: "StudentAnswers",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentAnswers_QuestionsTopicId",
+                table: "StudentAnswers",
+                column: "QuestionsTopicId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentAnswers_RangId",
+                table: "StudentAnswers",
+                column: "RangId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentAnswers_StudentId",
+                table: "StudentAnswers",
+                column: "StudentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -383,6 +445,9 @@ namespace Sait2022.Migrations
 
             migrationBuilder.DropTable(
                 name: "LogsAnswers");
+
+            migrationBuilder.DropTable(
+                name: "StudentAnswers");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
