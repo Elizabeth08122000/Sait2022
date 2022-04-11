@@ -1,0 +1,36 @@
+﻿@model Sait2022.Domain.Model.Answers
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Answers</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NumberAnswer)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NumberAnswer)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ValueAnswer)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ValueAnswer)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Questions)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Questions.ValueQuest)
+        </dd>
+    </dl>
+</div>
+<div>
+    @if (User.IsInRole("TEACHER")) {<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>}
+    <a asp-action="Index">Back to List</a>
+</div>

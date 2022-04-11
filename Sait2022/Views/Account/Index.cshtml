@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Sait2022.Domain.Model.Users>
+@{
+    ViewBag.Title = "Список пользователей";
+}
+
+<a asp-action="RegistrationNewUser">Добавить пользователя</a>
+
+
+
+<table class="table">
+    <tr><th>Логин</th><th>Email</th><th></th><th></th></tr>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@user.UserName</td>
+            <td>@user.Email</td>
+            <td>
+                <a class="btn btn-sm btn-primary" asp-action="ChangePassword" asp-route-id="@user.Id">Сменить пароль</a>
+            </td>
+            <td>
+                <a class="btn btn-sm btn-primary" asp-action="SetLockout" asp-route-id="@user.Id">Заблокировать пользователя</a>
+            </td> 
+
+            
+        </tr>
+    }
+</table>
