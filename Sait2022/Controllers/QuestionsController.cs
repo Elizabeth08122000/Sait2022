@@ -86,27 +86,38 @@ namespace Sait2022.Controllers
             if(studentAnswersDb.Count > 0)
             {
                 var studentAnswers = studentAnswersDb
-                .GroupBy(x => (x.QuestionsTopicId, x.RangId))
-                .OrderBy(x => (x.Key.QuestionsTopicId, x.Key.RangId))
+                .GroupBy(x => x.QuestionsTopicId)
+                .OrderBy(x => x.Key)
                 .ToList();
                 foreach (var answer in studentAnswers)
                 {
-                    if (studentAnswers.Any(x => x.Key.RangId > answer.Key.RangId))
+                    if(answer.LastOrDefault().IsCheck == true)
                     {
-                        if (answer.LastOrDefault().IsCheck == true && studentAnswers.FirstOrDefault(x => x.Key.RangId > answer.Key.RangId && x.Key.QuestionsTopicId == answer.Key.QuestionsTopicId).All(x => x.IsCheck == false))
+                        if(db.Questions.Any(x => x.RangsId > answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key))
                         {
-                            questions.Add(db.Questions.Where(x => x.RangsId > answer.Key.RangId && x.QuestionTopcId == answer.Key.QuestionsTopicId).FirstOrDefault());
+                            questions.Add(db.Questions.Where(x => x.RangsId > answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
                         }
                         else
                         {
-                            if (db.Questions.Where(x=>x.RangsId == answer.Key.RangId && x.QuestionTopcId == answer.Key.QuestionsTopicId).Any(x=>x.Id > answer.LastOrDefault().QuestionId))
+                            if (db.Questions.Any(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key))
                             {
-                                questions.Add(db.Questions.Where(x => x.Id > answer.LastOrDefault().QuestionId && x.QuestionTopcId == answer.Key.QuestionsTopicId && x.RangsId == answer.Key.RangId).FirstOrDefault());
+                                questions.Add(db.Questions.Where(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
                             }
                             else
                             {
-                                questions.Add(db.Questions.FirstOrDefault(x => x.Id == answer.FirstOrDefault().QuestionId));
+                                questions.Add(db.Questions.Where(x => x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
                             }
+                        }
+                    }
+                    else
+                    {
+                        if(db.Questions.Any(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key))
+                        {
+                            questions.Add(db.Questions.Where(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
+                        }
+                        else
+                        {
+                            questions.Add(db.Questions.Where(x => x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
                         }
                     }
                 }
@@ -114,9 +125,8 @@ namespace Sait2022.Controllers
             else
             {
                 db.Questions
-                    .Where(x => x.RangsId == 1).ToList()
-                    .GroupBy(x => x.QuestionTopcId).ToList()
-                    .ForEach(y => questions.Add(y.FirstOrDefault()));
+                    .Where(x => x.RangsId == 1 && x.NumberQuest == 1).ToList()
+                    .ForEach(y => questions.Add(y));
             }
 
             foreach (var quest in questions)
