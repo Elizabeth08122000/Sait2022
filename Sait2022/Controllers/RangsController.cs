@@ -30,7 +30,7 @@ namespace Sait2022.Controllers
         }
 
         // GET: Rangs/Details/5
-        public IActionResult Details(long? id)
+        public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
             {
