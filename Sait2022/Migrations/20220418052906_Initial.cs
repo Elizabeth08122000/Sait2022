@@ -32,8 +32,8 @@ namespace Sait2022.Migrations
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     Surname = table.Column<string>(type: "text", nullable: false),
                     Patronym = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
-                    Address = table.Column<string>(type: "text", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    Address = table.Column<string>(type: "text", nullable: true),
                     IsTeacher = table.Column<bool>(type: "boolean", nullable: false),
                     IsAdministrator = table.Column<bool>(type: "boolean", nullable: false),
                     TeacherId = table.Column<long>(type: "bigint", nullable: true)
@@ -138,10 +138,7 @@ namespace Sait2022.Migrations
                     QuestionTopcId = table.Column<long>(type: "bigint", nullable: false),
                     RangsId = table.Column<long>(type: "bigint", nullable: false),
                     NumberQuest = table.Column<int>(type: "integer", nullable: false),
-                    ValueQuest = table.Column<string>(type: "text", nullable: false),
-                    StudentAnswer = table.Column<string>(type: "text", nullable: false),
-                    CheckAnswer = table.Column<bool>(type: "boolean", nullable: true),
-                    IsUsed = table.Column<bool>(type: "boolean", nullable: false)
+                    ValueQuest = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -384,8 +381,7 @@ namespace Sait2022.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_TeacherId",
                 table: "Employees",
-                column: "TeacherId",
-                unique: true);
+                column: "TeacherId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LogsAnswers_UsersId",

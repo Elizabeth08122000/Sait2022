@@ -85,10 +85,10 @@ namespace Sait2022.Domain.DB
                     .IsRequired(false);
                 b.Property(x => x.PhoneNumber)
                     .HasColumnName("PhoneNumber")
-                    .IsRequired();
+                    .IsRequired(false);
                 b.Property(x => x.Address)
                     .HasColumnName("Address")
-                    .IsRequired();
+                    .IsRequired(false);
                 b.Ignore(x => x.FullName);
                 b.Property(x => x.IsTeacher)
                     .HasColumnName("IsTeacher");
@@ -97,7 +97,8 @@ namespace Sait2022.Domain.DB
                 b.HasOne(t => t.EmployeesNavig)
                     .WithMany(y => y.Employeess)
                     .HasForeignKey(t => t.TeacherId);
-                b.HasIndex("TeacherId").IsUnique(true);
+                b.Property(x => x.TeacherId)
+                    .HasColumnName("TeacherId");
             });
             #endregion
 
@@ -153,13 +154,6 @@ namespace Sait2022.Domain.DB
                     .IsRequired();
                 b.Property(x => x.ValueQuest)
                     .HasColumnName("ValueQuest")
-                    .IsRequired();
-                b.Property(x => x.StudentAnswer)
-                    .HasColumnName("StudentAnswer");
-                b.Property(x => x.CheckAnswer)
-                    .HasColumnName("CheckAnswer");
-                b.Property(x => x.IsUsed)
-                    .HasColumnName("IsUsed")
                     .IsRequired();
                 b.HasOne(u => u.Answers)
                     .WithOne(p => p.Questions)

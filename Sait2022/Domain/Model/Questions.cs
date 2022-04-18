@@ -35,22 +35,6 @@ namespace Sait2022.Domain.Model
 
         public Answers Answers { get; set; } //навигационное свойство
 
-        /// <summary>
-        /// Ответ ученика
-        /// </summary>
-        [Required(ErrorMessage = "Укажите ответ на вопрос")]
-        public string StudentAnswer { get; set; }
-
-        /// <summary>
-        /// Проверка ответа
-        /// </summary>
-        public bool? CheckAnswer { get; set; }
-
-        /// <summary>
-        /// Проверка на пройденность вопроса
-        /// </summary>
-        public bool IsUsed { get; set; } = false;
-
         public virtual ICollection<Users> Users { get; set; }
         public Questions()
         {

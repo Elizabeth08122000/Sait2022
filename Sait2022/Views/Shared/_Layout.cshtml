@@ -32,6 +32,9 @@
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="Index">Личный кабинет</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="QuestionsTopics" asp-action="QuestionsTopics">Темы вопросов</a>
                             </li>
                              <li class="nav-item">
@@ -40,7 +43,10 @@
                             
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Answers" asp-action="Index">Ответы</a>
-                            </li>           
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Rangs" asp-action="Index">Ранги</a>
+                            </li> 
                              @if (User.IsInRole("ADMIN"))
                              {
                             <li class="nav-item">

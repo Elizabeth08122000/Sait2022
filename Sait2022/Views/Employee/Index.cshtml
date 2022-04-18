@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Sait2022.Domain.Model.Employee>
+
+@{
+    ViewData["Title"] = "Личный кабинет";
+}
+
+ @using(Html.BeginForm())
+    {
+    @foreach(var item in Model)
+    {
+        <div>
+            <h6>Имя</h6>
+            @Html.DisplayFor(m => item.FirstName)
+        </div>
+        <div>
+            <h6>Фамилия</h6>
+            @Html.DisplayFor(m => item.Surname)
+        </div>
+        <div>
+            <h6>Отчество</h6>
+            @Html.DisplayFor(m => item.Patronym)
+        </div>
+        <div>
+            <h6>Телефон</h6>
+            @Html.DisplayFor(m => item.PhoneNumber)
+        </div>
+        <div>
+            <h6>Адрес</h6>
+            @Html.DisplayFor(m => item.Address)
+        </div>
+    }
+}

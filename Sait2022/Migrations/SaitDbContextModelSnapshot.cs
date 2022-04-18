@@ -201,7 +201,6 @@ namespace Sait2022.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("Address");
 
@@ -223,7 +222,6 @@ namespace Sait2022.Migrations
                         .HasColumnName("Patronym");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("PhoneNumber");
 
@@ -233,13 +231,13 @@ namespace Sait2022.Migrations
                         .HasColumnName("Surname");
 
                     b.Property<long?>("TeacherId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("TeacherId");
 
                     b.HasKey("Id")
                         .HasAnnotation("Npgsql:Serial", true);
 
-                    b.HasIndex("TeacherId")
-                        .IsUnique();
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Employees");
                 });
@@ -252,14 +250,6 @@ namespace Sait2022.Migrations
                         .HasColumnName("Id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<bool?>("CheckAnswer")
-                        .HasColumnType("boolean")
-                        .HasColumnName("CheckAnswer");
-
-                    b.Property<bool>("IsUsed")
-                        .HasColumnType("boolean")
-                        .HasColumnName("IsUsed");
-
                     b.Property<int>("NumberQuest")
                         .HasColumnType("integer")
                         .HasColumnName("NumberQuest");
@@ -270,11 +260,6 @@ namespace Sait2022.Migrations
 
                     b.Property<long>("RangsId")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("StudentAnswer")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("StudentAnswer");
 
                     b.Property<string>("ValueQuest")
                         .IsRequired()

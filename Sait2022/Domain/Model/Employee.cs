@@ -31,12 +31,12 @@ namespace Sait2022.Domain.Model
         /// <summary>
         /// Номер телефона пользователя
         /// </summary>
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         /// <summary>
         /// Адрес проживания пользователя
         /// </summary>
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
         /// <summary>
         /// Возвращает полное имя пользователя
