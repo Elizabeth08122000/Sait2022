@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Sait2022.Domain.DB;
 using Sait2022.Domain.Model;
+using Sait2022.ViewModels.Pages;
 using Sait2022.ViewModels.Question;
 using System;
 using System.Collections.Generic;
@@ -29,12 +30,16 @@ namespace Sait2022.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            
+
             QuestAnswersViewModel questAnswers = new QuestAnswersViewModel();
             if (questAnswers.QuestValues.Count == 0)
             {
                 UserId = db.Users.FirstOrDefault(x => x.Id == int.Parse(User.Identity.GetUserId())).EmployeeId;
                 GetQuestionsAnswers(questAnswers);
             }
+            
+            
 
             return View(questAnswers);
         }
@@ -47,6 +52,7 @@ namespace Sait2022.Controllers
             {
                 try
                 {
+
                     UserId = db.Users.FirstOrDefault(x => x.Id == int.Parse(User.Identity.GetUserId())).EmployeeId;
                     foreach (var studentAnswerValue in questAnswersViewModel.AnswerValues)
                     {
@@ -59,6 +65,7 @@ namespace Sait2022.Controllers
                             StudentId = UserId,
                             Answer = studentAnswerValue.Value
                         };
+                        
 
                         Answers answer = db.Answers.FirstOrDefault(x => x.QuestionId == quest.Id);
                         if (answer.ValueAnswer == studentAnswer.Answer)
@@ -78,8 +85,9 @@ namespace Sait2022.Controllers
             return RedirectToAction("Index");
         }
 
-        private void GetQuestionsAnswers(QuestAnswersViewModel model)
+        private void GetQuestionsAnswers(QuestAnswersViewModel model, int page = 1)
         {
+            int pageSize = 1;   // количество элементов на странице
             var studentAnswersDb = db.StudentAnswers
                 .Where(x => x.StudentId == UserId).ToList();
             List<Questions> questions = new List<Questions>();
@@ -125,14 +133,17 @@ namespace Sait2022.Controllers
             else
             {
                 db.Questions
-                    .Where(x => x.RangsId == 1 && x.NumberQuest == 1).ToList()
+                    .Where(x => x.RangsId == 2 && x.NumberQuest == 1).ToList()
                     .ForEach(y => questions.Add(y));
             }
-
-            foreach (var quest in questions)
+            var count = questions.Count();
+            var items = questions.ToList();
+            PagesViewModel pagesViewModel = new PagesViewModel(count, page, pageSize);
+            foreach (var quest in items)
             {
                 model.QuestValues.Add(quest.Id, quest.ValueQuest);
                 model.AnswerValues.Add(quest.Id, "");
+                model.PagesViewModel = pagesViewModel;
             }
         }
 

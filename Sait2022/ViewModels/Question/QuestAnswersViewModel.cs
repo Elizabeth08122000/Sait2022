@@ -1,4 +1,5 @@
 ﻿using Sait2022.Domain.Model;
+using Sait2022.ViewModels.Pages;
 using System.Collections.Generic;
 
 namespace Sait2022.ViewModels.Question
@@ -12,5 +13,7 @@ namespace Sait2022.ViewModels.Question
         }
         public Dictionary<long, string> QuestValues { get; set; }
         public Dictionary<long, string> AnswerValues { get; set; }
+
+        public PagesViewModel PagesViewModel { get; set; }
     }
 }
