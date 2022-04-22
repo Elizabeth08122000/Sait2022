@@ -137,9 +137,9 @@ namespace Sait2022.Controllers
                     .ForEach(y => questions.Add(y));
             }
             var count = questions.Count();
-            var items = questions.ToList();
+            var items = questions.Skip((page - 1) * pageSize).Take(pageSize).ToList();
             PagesViewModel pagesViewModel = new PagesViewModel(count, page, pageSize);
-            foreach (var quest in items)
+            foreach (var quest in questions)
             {
                 model.QuestValues.Add(quest.Id, quest.ValueQuest);
                 model.AnswerValues.Add(quest.Id, "");
