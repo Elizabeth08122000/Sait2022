@@ -19,10 +19,6 @@ namespace Sait2022.Controllers
             _context = context;
         }
 
-        public RangsController()
-        {
-        }
-
         // GET: Rangs
         public async Task<IActionResult> Index()
         {
@@ -44,7 +40,7 @@ namespace Sait2022.Controllers
                 return NotFound();
             }
 
-            return View("Details",rangs);
+            return View(rangs);
         }
 
         // GET: Rangs/Create
