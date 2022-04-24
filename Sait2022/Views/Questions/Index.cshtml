@@ -12,18 +12,17 @@
 </head>
  
 <body>
-    @using(Html.BeginForm())
+    @using(Ajax.BeginForm())
     {
-        @foreach(var kvpair in Model.QuestValues)
-        {
-            <div class="col-md-10">
-                @Html.DisplayFor(m=>m.QuestValues[kvpair.Key])
-                @Html.EditorFor(m=>m.AnswerValues[kvpair.Key])
-            </div>
-        }
+        <div class="col-md-10">
+                @Html.DisplayFor(m=>m.QuestValues.Value)
+                @Html.EditorFor(m=>m.AnswerValues.Value)
+        </div>
         <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
     }
+    <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.min.js"></script>
+    @RenderSection("Scripts");
 </body>
 </html>

@@ -21,6 +21,9 @@ namespace Sait2022.Controllers
         {
             db = context;
         }
+        private Dictionary<long, string> QuestinsValueDb { get; set; }
+        private Dictionary<long, string> AnswersValueDb { get; set; }
+        QuestAnswersViewModel questAnswers;
 
         /// <summary>
         /// Вывод вопросов
@@ -29,13 +32,13 @@ namespace Sait2022.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            QuestAnswersViewModel questAnswers = new QuestAnswersViewModel();
-            if (questAnswers.QuestValues.Count == 0)
+            questAnswers = new QuestAnswersViewModel();
+            if (QuestinsValueDb.Count == 0)
             {
                 UserId = db.Users.FirstOrDefault(x => x.Id == int.Parse(User.Identity.GetUserId())).EmployeeId;
-                GetQuestionsAnswers(questAnswers);
+                GetQuestionAnswer();
             }
-
+            
             return View(questAnswers);
         }
 
@@ -45,43 +48,67 @@ namespace Sait2022.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    UserId = db.Users.FirstOrDefault(x => x.Id == int.Parse(User.Identity.GetUserId())).EmployeeId;
-                    foreach (var studentAnswerValue in questAnswersViewModel.AnswerValues)
-                    {
-                        var quest = await db.Questions.FindAsync(studentAnswerValue.Key);
-                        var studentAnswer = new StudentAnswer()
-                        {
-                            QuestionId = quest.Id,
-                            QuestionsTopicId = quest.QuestionTopcId,
-                            RangId = quest.RangsId,
-                            StudentId = UserId,
-                            Answer = studentAnswerValue.Value
-                        };
+                //try
+                //{
+                //    UserId = db.Users.FirstOrDefault(x => x.Id == int.Parse(User.Identity.GetUserId())).EmployeeId;
+                //    foreach (var studentAnswerValue in questAnswersViewModel.AnswerValues)
+                //    {
+                //        var quest = await db.Questions.FindAsync(studentAnswerValue.Key);
+                //        var studentAnswer = new StudentAnswer()
+                //        {
+                //            QuestionId = quest.Id,
+                //            QuestionsTopicId = quest.QuestionTopcId,
+                //            RangId = quest.RangsId,
+                //            StudentId = UserId,
+                //            Answer = studentAnswerValue.Value
+                //        };
 
-                        Answers answer = db.Answers.FirstOrDefault(x => x.QuestionId == quest.Id);
-                        if (answer.ValueAnswer == studentAnswer.Answer)
-                            studentAnswer.IsCheck = true;
-                        else
-                            studentAnswer.IsCheck = false;
+                //        Answers answer = db.Answers.FirstOrDefault(x => x.QuestionId == quest.Id);
+                //        if (answer.ValueAnswer == studentAnswer.Answer)
+                //            studentAnswer.IsCheck = true;
+                //        else
+                //            studentAnswer.IsCheck = false;
 
-                        db.StudentAnswers.Add(studentAnswer);
-                    }
-                    await db.SaveChangesAsync();
-                }
-                catch(DbUpdateException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+                //        db.StudentAnswers.Add(studentAnswer);
+                //    }
+                //    await db.SaveChangesAsync();
+                //}
+                //catch(DbUpdateException ex)
+                //{
+                //    Console.WriteLine(ex.Message);
+                //}
             }
             return RedirectToAction("Index");
         }
 
-        private void GetQuestionsAnswers(QuestAnswersViewModel model)
+        [HttpGet]
+        public async Task<IActionResult> Quest(int page = 1)
+        {
+            int pageSize = 1;
+            int count = QuestinsValueDb.Count;
+            questAnswers.PageViewModel = new PageViewModel(count, page, pageSize);
+
+            questAnswers.QuestValues = QuestinsValueDb.Skip(page - 1).FirstOrDefault();
+            questAnswers.AnswerValues = AnswersValueDb.Skip(page - 1).FirstOrDefault();
+
+            return PartialView(questAnswers);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Quest(QuestAnswersViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                AnswersValueDb[model.QuestValues.Key] = model.AnswerValues.Value;
+            }
+            return PartialView("Quest",model);
+        }
+
+        private void GetQuestionAnswer()
         {
             var studentAnswersDb = db.StudentAnswers
-                .Where(x => x.StudentId == UserId).ToList();
+                    .Where(x => x.StudentId == UserId).ToList();
             List<Questions> questions = new List<Questions>();
             if(studentAnswersDb.Count > 0)
             {
@@ -89,11 +116,11 @@ namespace Sait2022.Controllers
                 .GroupBy(x => x.QuestionsTopicId)
                 .OrderBy(x => x.Key)
                 .ToList();
-                foreach (var answer in studentAnswers)
+                if (studentAnswersDb.Where(x => x.IsCheck).Count() > (0.9 * studentAnswersDb.Count))
                 {
-                    if(answer.LastOrDefault().IsCheck == true)
+                    foreach (var answer in studentAnswers)
                     {
-                        if(db.Questions.Any(x => x.RangsId > answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key))
+                        if (db.Questions.Any(x => x.RangsId > answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key))
                         {
                             questions.Add(db.Questions.Where(x => x.RangsId > answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
                         }
@@ -109,9 +136,12 @@ namespace Sait2022.Controllers
                             }
                         }
                     }
-                    else
+                }
+                else
+                {
+                    foreach (var answer in studentAnswers)
                     {
-                        if(db.Questions.Any(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key))
+                        if (db.Questions.Any(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key))
                         {
                             questions.Add(db.Questions.Where(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
                         }
@@ -131,8 +161,8 @@ namespace Sait2022.Controllers
 
             foreach (var quest in questions)
             {
-                model.QuestValues.Add(quest.Id, quest.ValueQuest);
-                model.AnswerValues.Add(quest.Id, "");
+                QuestinsValueDb.Add(quest.Id, quest.ValueQuest);
+                AnswersValueDb.Add(quest.Id, "");
             }
         }
 
