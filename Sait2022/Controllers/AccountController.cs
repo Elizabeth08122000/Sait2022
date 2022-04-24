@@ -211,7 +211,6 @@ namespace Sait2022.Controllers
             return View(model);
         }
 
-
         /// <summary>
         /// Возвращение страницы в случае блокировки пользователя
         /// </summary>

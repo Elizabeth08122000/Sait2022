@@ -10,7 +10,7 @@ using Sait2022.Domain.DB;
 namespace Sait2022.Migrations
 {
     [DbContext(typeof(SaitDbContext))]
-    [Migration("20220331120739_Initial")]
+    [Migration("20220410141103_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -330,6 +330,52 @@ namespace Sait2022.Migrations
                     b.ToTable("Rangs");
                 });
 
+            modelBuilder.Entity("Sait2022.Domain.Model.StudentAnswer", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Answer")
+                        .HasColumnType("text")
+                        .HasColumnName("Answer");
+
+                    b.Property<bool>("IsCheck")
+                        .HasColumnType("boolean")
+                        .HasColumnName("IsCheck");
+
+                    b.Property<long>("QuestionId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("QuestionId");
+
+                    b.Property<long>("QuestionsTopicId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("QuestionsTopicId");
+
+                    b.Property<long>("RangId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("RangId");
+
+                    b.Property<long>("StudentId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("StudentId");
+
+                    b.HasKey("Id")
+                        .HasAnnotation("Npgsql:Serial", true);
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("QuestionsTopicId");
+
+                    b.HasIndex("RangId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("StudentAnswers");
+                });
+
             modelBuilder.Entity("Sait2022.Domain.Model.Users", b =>
                 {
                     b.Property<int>("Id")
@@ -507,6 +553,41 @@ namespace Sait2022.Migrations
                     b.Navigation("Rangs");
                 });
 
+            modelBuilder.Entity("Sait2022.Domain.Model.StudentAnswer", b =>
+                {
+                    b.HasOne("Sait2022.Domain.Model.Questions", "Questions")
+                        .WithMany("StudentAnswers")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Sait2022.Domain.Model.QuestionsTopic", "QuestionsTopic")
+                        .WithMany("StudentAnswers")
+                        .HasForeignKey("QuestionsTopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Sait2022.Domain.Model.Rangs", "Rangs")
+                        .WithMany("StudentAnswers")
+                        .HasForeignKey("RangId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Sait2022.Domain.Model.Employee", "Student")
+                        .WithMany("StudentAnswers")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Questions");
+
+                    b.Navigation("QuestionsTopic");
+
+                    b.Navigation("Rangs");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("Sait2022.Domain.Model.Users", b =>
                 {
                     b.HasOne("Sait2022.Domain.Model.Employee", "Employee")
@@ -521,21 +602,29 @@ namespace Sait2022.Migrations
             modelBuilder.Entity("Sait2022.Domain.Model.Employee", b =>
                 {
                     b.Navigation("Employeess");
+
+                    b.Navigation("StudentAnswers");
                 });
 
             modelBuilder.Entity("Sait2022.Domain.Model.Questions", b =>
                 {
                     b.Navigation("Answers");
+
+                    b.Navigation("StudentAnswers");
                 });
 
             modelBuilder.Entity("Sait2022.Domain.Model.QuestionsTopic", b =>
                 {
                     b.Navigation("Questions");
+
+                    b.Navigation("StudentAnswers");
                 });
 
             modelBuilder.Entity("Sait2022.Domain.Model.Rangs", b =>
                 {
                     b.Navigation("Questions");
+
+                    b.Navigation("StudentAnswers");
                 });
 #pragma warning restore 612, 618
         }
