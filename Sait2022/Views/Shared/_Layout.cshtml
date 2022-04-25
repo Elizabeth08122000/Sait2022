@@ -34,19 +34,26 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="Index">Личный кабинет</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="QuestionsTopics" asp-action="QuestionsTopics">Темы вопросов</a>
-                            </li>
-                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Questions" asp-action="Index">Вопросы</a>
-                            </li>
                             
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Answers" asp-action="Index">Ответы</a>
+                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Questions" asp-action="Index">Тест</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Rangs" asp-action="Index">Ранги</a>
-                            </li> 
+                            @if(User.IsInRole("TEACHER") || User.IsInRole("ADMIN"))
+                                {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Question" asp-action="Index">Вопросы</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Answers" asp-action="Index">Ответы</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="QuestionsTopics" asp-action="Index">Темы вопросов</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Rangs" asp-action="Index">Ранги</a>
+                                </li> 
+                            }
+                           
                              @if (User.IsInRole("ADMIN"))
                              {
                             <li class="nav-item">

@@ -10,22 +10,23 @@ using Sait2022.Domain.Model;
 
 namespace Sait2022.Controllers
 {
-    public class QuestionsTopicsController : Controller
+    public class QuestionController : Controller
     {
         private readonly SaitDbContext _context;
 
-        public QuestionsTopicsController(SaitDbContext context)
+        public QuestionController(SaitDbContext context)
         {
             _context = context;
         }
 
-        // GET: QuestionsTopics
+        // GET: Question
         public async Task<IActionResult> Index()
         {
-            return View(await _context.QuestionsTopics.ToListAsync());
+            var saitDbContext = _context.Questions.Include(q => q.QuestionsTopic).Include(q => q.Rangs);
+            return View(await saitDbContext.ToListAsync());
         }
 
-        // GET: QuestionsTopics/Details/5
+        // GET: Question/Details/5
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -33,39 +34,45 @@ namespace Sait2022.Controllers
                 return NotFound();
             }
 
-            var questionsTopic = await _context.QuestionsTopics
+            var questions = await _context.Questions
+                .Include(q => q.QuestionsTopic)
+                .Include(q => q.Rangs)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (questionsTopic == null)
+            if (questions == null)
             {
                 return NotFound();
             }
 
-            return View(questionsTopic);
+            return View(questions);
         }
 
-        // GET: QuestionsTopics/Create
+        // GET: Question/Create
         public IActionResult Create()
         {
+            ViewData["QuestionTopcId"] = new SelectList(_context.QuestionsTopics, "Id", "Topic");
+            ViewData["RangsId"] = new SelectList(_context.Rangs, "Id", "Id");
             return View();
         }
 
-        // POST: QuestionsTopics/Create
+        // POST: Question/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Topic,Id")] QuestionsTopic questionsTopic)
+        public async Task<IActionResult> Create([Bind("QuestionTopcId,RangsId,NumberQuest,ValueQuest,Id")] Questions questions)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(questionsTopic);
+                _context.Add(questions);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(questionsTopic);
+            ViewData["QuestionTopcId"] = new SelectList(_context.QuestionsTopics, "Id", "Topic", questions.QuestionTopcId);
+            ViewData["RangsId"] = new SelectList(_context.Rangs, "Id", "Id", questions.RangsId);
+            return View(questions);
         }
 
-        // GET: QuestionsTopics/Edit/5
+        // GET: Question/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -73,22 +80,24 @@ namespace Sait2022.Controllers
                 return NotFound();
             }
 
-            var questionsTopic = await _context.QuestionsTopics.FindAsync(id);
-            if (questionsTopic == null)
+            var questions = await _context.Questions.FindAsync(id);
+            if (questions == null)
             {
                 return NotFound();
             }
-            return View(questionsTopic);
+            ViewData["QuestionTopcId"] = new SelectList(_context.QuestionsTopics, "Id", "Topic", questions.QuestionTopcId);
+            ViewData["RangsId"] = new SelectList(_context.Rangs, "Id", "Id", questions.RangsId);
+            return View(questions);
         }
 
-        // POST: QuestionsTopics/Edit/5
+        // POST: Question/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Topic,Id")] QuestionsTopic questionsTopic)
+        public async Task<IActionResult> Edit(long id, [Bind("QuestionTopcId,RangsId,NumberQuest,ValueQuest,Id")] Questions questions)
         {
-            if (id != questionsTopic.Id)
+            if (id != questions.Id)
             {
                 return NotFound();
             }
@@ -97,12 +106,12 @@ namespace Sait2022.Controllers
             {
                 try
                 {
-                    _context.Update(questionsTopic);
+                    _context.Update(questions);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!QuestionsTopicExists(questionsTopic.Id))
+                    if (!QuestionsExists(questions.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +122,12 @@ namespace Sait2022.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(questionsTopic);
+            ViewData["QuestionTopcId"] = new SelectList(_context.QuestionsTopics, "Id", "Topic", questions.QuestionTopcId);
+            ViewData["RangsId"] = new SelectList(_context.Rangs, "Id", "Id", questions.RangsId);
+            return View(questions);
         }
 
-        // GET: QuestionsTopics/Delete/5
+        // GET: Question/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -124,30 +135,32 @@ namespace Sait2022.Controllers
                 return NotFound();
             }
 
-            var questionsTopic = await _context.QuestionsTopics
+            var questions = await _context.Questions
+                .Include(q => q.QuestionsTopic)
+                .Include(q => q.Rangs)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (questionsTopic == null)
+            if (questions == null)
             {
                 return NotFound();
             }
 
-            return View(questionsTopic);
+            return View(questions);
         }
 
-        // POST: QuestionsTopics/Delete/5
+        // POST: Question/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var questionsTopic = await _context.QuestionsTopics.FindAsync(id);
-            _context.QuestionsTopics.Remove(questionsTopic);
+            var questions = await _context.Questions.FindAsync(id);
+            _context.Questions.Remove(questions);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool QuestionsTopicExists(long id)
+        private bool QuestionsExists(long id)
         {
-            return _context.QuestionsTopics.Any(e => e.Id == id);
+            return _context.Questions.Any(e => e.Id == id);
         }
     }
 }
