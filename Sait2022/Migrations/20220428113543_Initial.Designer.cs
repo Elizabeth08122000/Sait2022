@@ -10,11 +10,7 @@ using Sait2022.Domain.DB;
 namespace Sait2022.Migrations
 {
     [DbContext(typeof(SaitDbContext))]
-<<<<<<<< HEAD:Sait2022/Migrations/20220418114225_Initial.Designer.cs
-    [Migration("20220418114225_Initial")]
-========
-    [Migration("20220422062429_Initial")]
->>>>>>>> 5f46276877df183e3704943b2ca2565a5645d113:Sait2022/Migrations/20220422062429_Initial.Designer.cs
+    [Migration("20220428113543_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
