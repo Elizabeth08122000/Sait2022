@@ -12,10 +12,7 @@ namespace AccountTests
         [TestMethod]
         public void TestDetailsView()
         {
-            int id = 1;
-            var controller = new RangsController();
-            controller.Details(id);
-            Assert.IsNotNull(controller.Details(id));
+
         }
     }
 }
