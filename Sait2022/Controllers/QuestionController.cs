@@ -23,6 +23,7 @@ namespace Sait2022.Controllers
         public async Task<IActionResult> Index()
         {
             var saitDbContext = _context.Questions.Include(q => q.QuestionsTopic).Include(q => q.Rangs);
+
             return View(await saitDbContext.ToListAsync());
         }
 
@@ -50,7 +51,7 @@ namespace Sait2022.Controllers
         public IActionResult Create()
         {
             ViewData["QuestionTopcId"] = new SelectList(_context.QuestionsTopics, "Id", "Topic");
-            ViewData["RangsId"] = new SelectList(_context.Rangs, "Id", "Id");
+            ViewData["RangsId"] = new SelectList(_context.Rangs, "Id", "RangQuest");
             return View();
         }
 
@@ -68,7 +69,7 @@ namespace Sait2022.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["QuestionTopcId"] = new SelectList(_context.QuestionsTopics, "Id", "Topic", questions.QuestionTopcId);
-            ViewData["RangsId"] = new SelectList(_context.Rangs, "Id", "Id", questions.RangsId);
+            ViewData["RangsId"] = new SelectList(_context.Rangs, "Id", "RangQuest", questions.RangsId);
             return View(questions);
         }
 
@@ -86,7 +87,7 @@ namespace Sait2022.Controllers
                 return NotFound();
             }
             ViewData["QuestionTopcId"] = new SelectList(_context.QuestionsTopics, "Id", "Topic", questions.QuestionTopcId);
-            ViewData["RangsId"] = new SelectList(_context.Rangs, "Id", "Id", questions.RangsId);
+            ViewData["RangsId"] = new SelectList(_context.Rangs, "Id", "RangQuest", questions.RangsId);
             return View(questions);
         }
 
@@ -123,7 +124,7 @@ namespace Sait2022.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["QuestionTopcId"] = new SelectList(_context.QuestionsTopics, "Id", "Topic", questions.QuestionTopcId);
-            ViewData["RangsId"] = new SelectList(_context.Rangs, "Id", "Id", questions.RangsId);
+            ViewData["RangsId"] = new SelectList(_context.Rangs, "Id", "RangQuest", questions.RangsId);
             return View(questions);
         }
 

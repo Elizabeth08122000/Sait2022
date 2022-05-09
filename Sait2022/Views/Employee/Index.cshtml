@@ -1,32 +1,57 @@
-﻿@model IEnumerable<Sait2022.Domain.Model.Employee>
+﻿@using SignalRChat.Pages
+@model IEnumerable<Sait2022.Domain.Model.Employee>
 
 @{
     ViewData["Title"] = "Личный кабинет";
 }
 
+
+  <meta charset="utf-8">
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script src="~/js/site.js"></script>
+
+@if (User.IsInRole("TEACHER"))
+{
+   <h4><i>Учитель</i></h4>
+}
+@if (User.IsInRole("ADMIN"))
+{
+    <h4><i>Администратор</i></h4>
+}
+@if (User.IsInRole("STUDENT"))
+{
+    <h4><i>Ученик</i></h4>
+}
+
+
  @using(Html.BeginForm())
     {
     @foreach(var item in Model)
     {
+        <ul>
         <div>
             <h6>Имя</h6>
             @Html.DisplayFor(m => item.FirstName)
-        </div>
-        <div>
             <h6>Фамилия</h6>
             @Html.DisplayFor(m => item.Surname)
-        </div>
-        <div>
             <h6>Отчество</h6>
             @Html.DisplayFor(m => item.Patronym)
+            
         </div>
+
+        <div class="row onerow"></div>
+
         <div>
             <h6>Телефон</h6>
             @Html.DisplayFor(m => item.PhoneNumber)
-        </div>
-        <div>
-            <h6>Адрес</h6>
+           <h6>Адрес</h6>
             @Html.DisplayFor(m => item.Address)
         </div>
+        </ul>
+
+
+        //создать гиперцссылку на проект чата
+        <a href="/Home/Index">Чат</a>
     }
+    
 }

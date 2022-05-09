@@ -12,6 +12,7 @@ using Sait2022.Security;
 using Sait2022.Infrastructure.Guarantors;
 using Sait2022.Infrastructure;
 using System;
+using SignalRChat.Hubs;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -52,6 +53,8 @@ namespace Sait2022
                 opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
                 opts.Lockout.MaxFailedAccessAttempts = 3;
             });
+
+            services.AddSignalR();
 
             var serviceProvider = services.BuildServiceProvider();
             var guarantor = new SeedDataGuarantor(serviceProvider);

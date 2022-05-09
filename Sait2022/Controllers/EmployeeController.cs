@@ -7,6 +7,7 @@ using Sait2022.ViewModels.Account;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SignalRChat.Hubs;
 
 namespace Sait2022.Controllers
 {
@@ -19,6 +20,12 @@ namespace Sait2022.Controllers
             db = context;
 
         }
+
+        public IActionResult Chat()
+        {
+            return RedirectToAction("");
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> Index()

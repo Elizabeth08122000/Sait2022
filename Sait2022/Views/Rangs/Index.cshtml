@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<Sait2022.Domain.Model.Rangs>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Ранги";
 }
 
-<h1>Index</h1>
+<h1>Список рангов</h1>
 @if (User.IsInRole("TEACHER") || User.IsInRole("ADMIN"))
 {
     <p>
-        <a asp-action="Create">Create New</a>
+        <a asp-action="Create">Добавить ранг</a>
     </p>
 }
 
@@ -16,7 +16,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.RangQuest)
+                <h5>Ранги</h5>
             </th>
             <th></th>
         </tr>

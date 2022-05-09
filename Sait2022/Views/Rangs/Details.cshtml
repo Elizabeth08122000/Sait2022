@@ -4,15 +4,12 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Подробности</h1>
 
 <div>
-    <h4>Rangs</h4>
+    <h4>Ранги</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RangQuest)
-        </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.RangQuest)
         </dd>
@@ -21,7 +18,7 @@
 <div>
     @if (User.IsInRole("TEACHER") || User.IsInRole("ADMIN"))
     {
-        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+        <a asp-action="Edit" asp-route-id="@Model.Id">Редакт</a>
     }
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Вернутся обратно</a>
 </div>
