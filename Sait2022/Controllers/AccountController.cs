@@ -31,9 +31,19 @@ namespace Sait2022.Controllers
             _saitDbContext = saitDbContext ?? throw new ArgumentNullException(nameof(_saitDbContext));
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Index(string searchString)
         {
-            return View(_userManager.Users.Skip(1).ToList());
+            ViewData["CurrentFilter"] = searchString;
+
+            var user = _userManager.Users.Skip(1);
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                user = user.Where(s => s.UserName.Contains(searchString));
+            }
+
+            return View(user.ToList());
         }
 
         /// <summary>
@@ -75,7 +85,7 @@ namespace Sait2022.Controllers
                 var result = await signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: true);
 
                 if (result.Succeeded)
-                    await Authenticate(model.Login); // аутентификация
+                    //await Authenticate(model.Login); // аутентификация
                     return RedirectToAction("Index", "Home");
 
                 if (result.IsLockedOut)

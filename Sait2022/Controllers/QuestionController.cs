@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Sait2022.Domain.DB;
 using Sait2022.Domain.Model;
+using Sait2022.ViewModels.Page;
+using Sait2022.ViewModels.Question;
 
 namespace Sait2022.Controllers
 {
@@ -25,11 +27,40 @@ namespace Sait2022.Controllers
         }
 
         // GET: Question
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, string currentFilter, int page=1)
         {
+            int pageSize = 10;   // количество элементов на странице
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
             var saitDbContext = _context.Questions.Include(q => q.QuestionsTopic).Include(q => q.Rangs).OrderBy(x => x.Id);
 
-            return View(await saitDbContext.ToListAsync());
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                saitDbContext = (IOrderedQueryable<Questions>)saitDbContext.Where(s => s.ValueQuest.Contains(searchString));
+            }
+
+            var count = await saitDbContext.CountAsync();
+            var items = await saitDbContext.Skip((int)((page - 1) * pageSize)).Take(pageSize).ToListAsync();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+
+            QuestionsViewModel viewModel = new QuestionsViewModel
+            {
+                PageViewModel = pageViewModel,
+                Questions = items
+            };
+
+            return View(viewModel);
         }
 
         // GET: Question/Details/5

@@ -43,6 +43,7 @@ namespace Sait2022.Domain.Model
         public string ValueAnswer { get; set; }
 
         public virtual ICollection<Users> Users { get; set; }
+
         public Questions()
         {
             Users = new List<Users>();
