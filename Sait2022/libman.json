@@ -10,5 +10,42 @@
         "dist/browser/signalr.min.js"
       ]
     }
+  ,
+{
+  "provider": "unpkg",
+  "library": "@microsoft/signalr@latest",
+  "destination": "wwwroot/js/signlar",
+  "files": [
+    "dist/browser/signalr.min.js"
   ]
+}
+,
+{
+  "provider": "unpkg",
+  "library": "jquery@3.6.0",
+  "destination": "wwwroot/js/jquery/",
+  "files": [
+    "dist/jquery.js",
+    "dist/jquery.min.js"
+  ]
+}
+,
+{
+  "provider": "unpkg",
+  "library": "jquery@3.6.0",
+  "destination": "wwwroot/js/jquery/",
+  "files": [
+    "dist/jquery.min.js"
+  ]
+}
+,
+{
+  "provider": "unpkg",
+  "library": "signalr@2.4.3",
+  "destination": "wwwroot/js/signalr/",
+  "files": [
+    "jquery.signalR.min.js"
+  ]
+}
+]
 }

@@ -17,6 +17,9 @@ namespace Sait2022.Domain.Model
         public long QuestionTopcId { get; set; }
         public QuestionsTopic QuestionsTopic { get; set; } // навигационное свойство
 
+        public string? Name { get; set; }
+        public string? Path { get; set; }
+
         /// <summary>
         /// Внешний ключ
         /// </summary>
@@ -33,7 +36,11 @@ namespace Sait2022.Domain.Model
         /// </summary>
         public string ValueQuest { get; set; }
 
-        public Answers Answers { get; set; } //навигационное свойство
+        /// <summary>
+        /// Сам ответ
+        /// </summary>
+        [Required]
+        public string ValueAnswer { get; set; }
 
         public virtual ICollection<Users> Users { get; set; }
         public Questions()

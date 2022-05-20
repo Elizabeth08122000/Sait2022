@@ -1,47 +1,49 @@
 ﻿@model Sait2022.Domain.Model.Questions
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редактировать";
 }
 
-<h1>Edit</h1>
+<h1>Редактирование вопросов</h1>
 
-<h4>Questions</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="QuestionTopcId" class="control-label"></label>
+                <h5>Тема вопроса</h5>
                 <select asp-for="QuestionTopcId" class="form-control" asp-items="ViewBag.QuestionTopcId"></select>
                 <span asp-validation-for="QuestionTopcId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RangsId" class="control-label"></label>
+                <h5>Ранг</h5>
                 <select asp-for="RangsId" class="form-control" asp-items="ViewBag.RangsId"></select>
                 <span asp-validation-for="RangsId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NumberQuest" class="control-label"></label>
-                <input asp-for="NumberQuest" class="form-control" />
-                <span asp-validation-for="NumberQuest" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ValueQuest" class="control-label"></label>
+                <h5>Вопрос</h5>
                 <input asp-for="ValueQuest" class="form-control" />
                 <span asp-validation-for="ValueQuest" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <h5>Ответ</h5>
+                <input asp-for="ValueAnswer" class="form-control" />
+                <span asp-validation-for="ValueAnswer" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input name="uploadedFile" type="file" class="form-control" />
+            </div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Вернутся обратно</a>
 </div>
 
 @section Scripts {

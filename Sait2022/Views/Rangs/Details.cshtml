@@ -1,15 +1,17 @@
 ﻿@model Sait2022.Domain.Model.Rangs
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Подробности";
 }
 
 <h1>Подробности</h1>
 
 <div>
-    <h4>Ранги</h4>
     <hr />
     <dl class="row">
+        <dt class = "col-sm-2">
+            <h5>Ранг вопроса</h5>
+        </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.RangQuest)
         </dd>

@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Sait2022.Domain.Model.StudentAnswer>
+
+@{
+    ViewData["Title"] = "Результат";
+}
+
+<h1>Результат</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <h6>Ранг вопроса</h6>
+            </th>
+            <th>
+                <h6>Вопрос</h6>
+            </th>
+            <th>
+               <h6>Ответ ученика</h6>
+            </th>
+            <th>
+                <h6>Правильный ответ</h6>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rangs.RangQuest)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Questions.ValueQuest)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Answer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Questions.ValueAnswer)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<h3>Итог: @ViewBag.Message %</h3>
+
+<h4>@ViewBag.Answer</h4>

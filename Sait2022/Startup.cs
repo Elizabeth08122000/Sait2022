@@ -12,10 +12,12 @@ using Sait2022.Security;
 using Sait2022.Infrastructure.Guarantors;
 using Sait2022.Infrastructure;
 using System;
-using SignalRChat.Hubs;
+using Sait2022.Hubs;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Sait2022
 {
@@ -31,6 +33,13 @@ namespace Sait2022
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // установка конфигурации подключения
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(options => //CookieAuthenticationOptions
+                    {
+                        options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                    });
+
             services.AddControllersWithViews();
 
             services.AddDbContext<SaitDbContext>(options =>
@@ -55,6 +64,7 @@ namespace Sait2022
             });
 
             services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
             var serviceProvider = services.BuildServiceProvider();
             var guarantor = new SeedDataGuarantor(serviceProvider);
@@ -104,6 +114,7 @@ namespace Sait2022
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapHub<ChatH>("/chat");
             });
         }
     }

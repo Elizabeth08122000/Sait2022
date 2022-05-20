@@ -1,45 +1,50 @@
 ﻿@model Sait2022.Domain.Model.Questions
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Удаление";
 }
 
-<h1>Delete</h1>
+<h1>Удаление</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Вы действительно хотите удалить вопрос?</h3>
 <div>
-    <h4>Questions</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.QuestionsTopic)
+            <h5>Тема вопроса</h5>
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.QuestionsTopic.Topic)
-        </dd class>
+        </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Rangs)
+            <h5>Ранг</h5>
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Rangs.Id)
-        </dd class>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NumberQuest)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NumberQuest)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ValueQuest)
+            <h5>Вопрос</h5>
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ValueQuest)
         </dd>
+        <dt class = "col-sm-2">
+            <h5>Ответ</h5>
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ValueAnswer)
+        </dd>
+        <dt class = "col-sm-2">
+            <h5>Excel</h5>
+        </dt>
+        <dt>
+            <a href="@Html.DisplayFor(model => model.Path)" target="_blank">@Html.DisplayFor(modelItem => modelItem.Name)</a>
+        </dt>
     </dl>
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Удалить" class="btn btn-danger" /> |
+        <a asp-action="Index">Вернутся обратно</a>
     </form>
 </div>

@@ -1,28 +1,31 @@
 ﻿@model IEnumerable<Sait2022.Domain.Model.Questions>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Вопросы и ответы";
 }
 
-<h1>Index</h1>
+<h1>Вопросы и ответы</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Добавить</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.QuestionsTopic)
+                <h5>Тема вопроса</h5>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Rangs)
+                <h5>Ранг</h5>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NumberQuest)
+                <h5>Вопрос</h5>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ValueQuest)
+                <h5>Ответ</h5>
+            </th>
+            <th>
+                <h5>Файл</h5>
             </th>
             <th></th>
         </tr>
@@ -34,18 +37,21 @@
                 @Html.DisplayFor(modelItem => item.QuestionsTopic.Topic)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Rangs.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumberQuest)
+                @Html.DisplayFor(modelItem => item.Rangs.RangQuest)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ValueQuest)
             </td>
+             <td>
+                @Html.DisplayFor(modelItem => item.ValueAnswer)
+            </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a href="@item.Path" target="_blank">@item.Name</a>
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Подробности</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
             </td>
         </tr>
 }

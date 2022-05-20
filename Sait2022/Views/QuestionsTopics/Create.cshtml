@@ -1,31 +1,30 @@
 ﻿@model Sait2022.Domain.Model.QuestionsTopic
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Создать тему вопроса";
 }
 
-<h1>Create</h1>
+<h1>Создать тему вопроса</h1>
 
-<h4>QuestionsTopic</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Topic" class="control-label"></label>
+                <h5>Тема вопроса</h5>
                 <input asp-for="Topic" class="form-control" />
                 <span asp-validation-for="Topic" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Вернутся обратно</a>
 </div>
 
 @section Scripts {

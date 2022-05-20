@@ -4,7 +4,7 @@
     ViewData["Title"] = "Ранги";
 }
 
-<h1>Список рангов</h1>
+<h1>Ранги</h1>
 @if (User.IsInRole("TEACHER") || User.IsInRole("ADMIN"))
 {
     <p>
@@ -28,13 +28,9 @@
                 @Html.DisplayFor(modelItem => item.RangQuest)
             </td>
             <td>
-                    @if (User.IsInRole("TEACHER") || User.IsInRole("ADMIN"))
-                    {
-                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    }
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                
+                <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Подробности</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>               
             </td>
         </tr>
 }

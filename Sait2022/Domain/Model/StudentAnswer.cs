@@ -37,5 +37,10 @@ namespace Sait2022.Domain.Model
         /// Проверка ответа
         /// </summary>
         public bool IsCheck { get; set; }
+
+        /// <summary>
+        /// Результат теста
+        /// </summary>
+        public int? Result { get; set; }
     }
 }

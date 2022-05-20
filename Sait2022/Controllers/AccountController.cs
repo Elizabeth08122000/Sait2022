@@ -9,6 +9,9 @@ using Sait2022.Domain.DB;
 using Sait2022.ViewModels.Account;
 using Sait2022.Security;
 using Sait2022.Domain.Model;
+using System.Security.Claims;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Sait2022.Controllers
 {
@@ -30,7 +33,7 @@ namespace Sait2022.Controllers
 
         public IActionResult Index()
         {
-            return View(_userManager.Users.ToList());
+            return View(_userManager.Users.Skip(1).ToList());
         }
 
         /// <summary>
@@ -42,7 +45,7 @@ namespace Sait2022.Controllers
         public async Task<IActionResult> Login(string returnUrl = null)
         {
             // Очистить существующие куки для корректного логина
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+         //   await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             ViewData["ReturnUrl"] = returnUrl;
             return View();
@@ -62,28 +65,44 @@ namespace Sait2022.Controllers
             if (ModelState.IsValid)
             {
                 var user = _userManager.FindByNameAsync(model.Login).Result;
-                if (user == null)
-                {
-                    ModelState.AddModelError(string.Empty, "Проверьте имя пользователя и пароль");
-                    return View(model);
-                }
+
+                  if (user == null)
+                  {
+                      ModelState.AddModelError(string.Empty, "Проверьте имя пользователя и пароль");
+                      return View(model);
+                  }
 
                 var result = await signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: true);
 
                 if (result.Succeeded)
+                    await Authenticate(model.Login); // аутентификация
                     return RedirectToAction("Index", "Home");
 
                 if (result.IsLockedOut)
                     {
                         ModelState.AddModelError(string.Empty, "Ваш аккаунт заблокирован. Подождите минуту для разблокировки или обратитесь к администратору.");
                         return View(model);
-                    }   
+                    }
 
+      
                 ModelState.AddModelError(string.Empty, "Неверный логин или пароль");
                 return View(model);
             }
 
             return View(model);
+        }
+
+        private async Task Authenticate(string userName)
+        {
+            // создаем один claim
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+            };
+            // создаем объект ClaimsIdentity
+            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            // установка аутентификационных куки
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
 
 
@@ -166,6 +185,7 @@ namespace Sait2022.Controllers
         [HttpGet]
         public async Task<IActionResult> Logout([FromServices] SignInManager<Users> signInManager)
         {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             await signInManager.SignOutAsync();
 
 

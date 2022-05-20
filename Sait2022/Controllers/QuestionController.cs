@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,15 +17,17 @@ namespace Sait2022.Controllers
     {
         private readonly SaitDbContext _context;
 
-        public QuestionController(SaitDbContext context)
+        IWebHostEnvironment _appEnvironment;
+        public QuestionController(SaitDbContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            _appEnvironment = appEnvironment;
         }
 
         // GET: Question
         public async Task<IActionResult> Index()
         {
-            var saitDbContext = _context.Questions.Include(q => q.QuestionsTopic).Include(q => q.Rangs);
+            var saitDbContext = _context.Questions.Include(q => q.QuestionsTopic).Include(q => q.Rangs).OrderBy(x => x.Id);
 
             return View(await saitDbContext.ToListAsync());
         }
@@ -60,10 +65,40 @@ namespace Sait2022.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("QuestionTopcId,RangsId,NumberQuest,ValueQuest,Id")] Questions questions)
+        public async Task<IActionResult> Create([Bind("QuestionTopcId,RangsId,AnswerId,Name,Path,NumberQuest,ValueAnswer,ValueQuest,Id")] Questions questions, [FromForm] IFormFile uploadedFile)
         {
             if (ModelState.IsValid)
             {
+                var quest = _context.Questions.OrderBy(x => x.Id).Where(x => x.QuestionTopcId == questions.QuestionTopcId & x.RangsId == questions.RangsId).LastOrDefault();
+                if (quest == null)
+                {
+                    questions.NumberQuest = 1;
+                }
+                else
+                {
+                    if (quest.QuestionTopcId.Equals(questions.QuestionTopcId) & quest.RangsId.Equals(questions.RangsId))
+                    {
+                        questions.NumberQuest = quest.NumberQuest + 1;
+                    }
+                    else
+                    {
+                        questions.NumberQuest = 1;
+                    }
+
+                }
+                if (uploadedFile != null)
+                {
+                    // путь к папке Files
+                    string path = "/Files/" + uploadedFile.FileName;
+                    // сохраняем файл в папку Files в каталоге wwwroot
+                    using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                    {
+                        await uploadedFile.CopyToAsync(fileStream);
+                    }
+                    questions.Name = uploadedFile.FileName;
+                    questions.Path = path;
+                }
+
                 _context.Add(questions);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -96,7 +131,7 @@ namespace Sait2022.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("QuestionTopcId,RangsId,NumberQuest,ValueQuest,Id")] Questions questions)
+        public async Task<IActionResult> Edit(long id, [Bind("QuestionTopcId,RangsId,AnswerId,Name,Path,NumberQuest,ValueAnswer,ValueQuest,Id")] Questions questions, [FromForm] IFormFile uploadedFile)
         {
             if (id != questions.Id)
             {
@@ -107,6 +142,81 @@ namespace Sait2022.Controllers
             {
                 try
                 {
+                    if (uploadedFile != null)
+                    {
+                        // путь к папке Files
+                        string path = "/Files/" + uploadedFile.FileName;
+                        // сохраняем файл в папку Files в каталоге wwwroot
+                        using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                        {
+                            await uploadedFile.CopyToAsync(fileStream);
+                        }
+                        questions.Name = uploadedFile.FileName;
+                        questions.Path = path;
+                    }
+                    _context.Update(questions);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!QuestionsExists(questions.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["QuestionTopcId"] = new SelectList(_context.QuestionsTopics, "Id", "Topic", questions.QuestionTopcId);
+            ViewData["RangsId"] = new SelectList(_context.Rangs, "Id", "RangQuest", questions.RangsId);
+            return View(questions);
+        }
+
+        public async Task<IActionResult> EditFile(long? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var questions = await _context.Questions.FindAsync(id);
+            if (questions == null)
+            {
+                return NotFound();
+            }
+            ViewData["QuestionTopcId"] = new SelectList(_context.QuestionsTopics, "Id", "Topic", questions.QuestionTopcId);
+            ViewData["RangsId"] = new SelectList(_context.Rangs, "Id", "RangQuest", questions.RangsId);
+            return View(questions);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditFile(long id, [Bind("QuestionTopcId,RangsId,AnswerId,Name,Path,NumberQuest,ValueAnswer,ValueQuest,Id")] Questions questions, [FromForm] IFormFile uploadedFile)
+        {
+            if (id != questions.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (uploadedFile != null)
+                    {
+                        // путь к папке Files
+                        string path = "/Files/" + uploadedFile.FileName;
+                        // сохраняем файл в папку Files в каталоге wwwroot
+                        using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                        {
+                            await uploadedFile.CopyToAsync(fileStream);
+                        }
+                        questions.Name = uploadedFile.FileName;
+                        questions.Path = path;
+                    }
                     _context.Update(questions);
                     await _context.SaveChangesAsync();
                 }

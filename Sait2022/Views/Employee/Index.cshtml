@@ -1,5 +1,5 @@
 ﻿@using SignalRChat.Pages
-@model IEnumerable<Sait2022.Domain.Model.Employee>
+@model IEnumerable<Sait2022.Domain.Model.Users>
 
 @{
     ViewData["Title"] = "Личный кабинет";
@@ -24,18 +24,19 @@
 }
 
 
- @using(Html.BeginForm())
+ @using(Html.BeginForm()){
+    @foreach (var item in Model)
     {
-    @foreach(var item in Model)
-    {
-        <ul>
         <div>
-            <h6>Имя</h6>
-            @Html.DisplayFor(m => item.FirstName)
             <h6>Фамилия</h6>
-            @Html.DisplayFor(m => item.Surname)
+            @Html.DisplayFor(m => item.Employee.Surname)
+            <p></p>
+            <h6>Имя</h6>
+            @Html.DisplayFor(m => item.Employee.FirstName)
+            <p></p>          
+            <p></p>
             <h6>Отчество</h6>
-            @Html.DisplayFor(m => item.Patronym)
+            @Html.DisplayFor(m => item.Employee.Patronym)
             
         </div>
 
@@ -44,14 +45,51 @@
         <div>
             <h6>Телефон</h6>
             @Html.DisplayFor(m => item.PhoneNumber)
+            <p></p>
            <h6>Адрес</h6>
-            @Html.DisplayFor(m => item.Address)
+            @Html.DisplayFor(m => item.Employee.Address)
         </div>
-        </ul>
+
+        <div>
+            <h6>Email</h6>
+            @Html.DisplayFor(m => item.Email)
+            <p></p>
+            <h6>Логин</h6>
+            @Html.DisplayFor(m => item.UserName)
+            <p></p>
+        </div>
 
 
-        //создать гиперцссылку на проект чата
-        <a href="/Home/Index">Чат</a>
-    }
+        @*<div>
+            <h6> <a href="/Employee/Chat"> Общий чат </a></h6>
+        </div>*@
+
+       @* <div>
+            @if (User.IsInRole("STUDENT"))
+                {
+                 <h6>Учитель</h6>
+                 <a href="/Employee/Chat"> @Html.DisplayFor(m => item.Employee.EmployeesNavig.FullName)</a>
+                }
+        </div>
+
+        <div>
+                @if (User.IsInRole("TEACHER"))
+                {
+                    <h6>
+                        <a href="/Employee/Index2"> Ученики </a>
+                    </h6>
+                }
+            </div>
+
+            <div>
+                @if (User.IsInRole("ADMIN"))
+                {
+                    <h6>
+                        <a href="/Employee/Index3"> Пользователи </a>
+                    </h6>
+                }
+            </div>*@
+   
+    }  
     
 }

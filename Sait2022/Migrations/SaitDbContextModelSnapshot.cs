@@ -163,35 +163,6 @@ namespace Sait2022.Migrations
                     b.ToTable("LogsAnswers");
                 });
 
-            modelBuilder.Entity("Sait2022.Domain.Model.Answers", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("Id")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("NumberAnswer")
-                        .HasColumnType("integer")
-                        .HasColumnName("NumberAnswer");
-
-                    b.Property<long>("QuestionId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("ValueAnswer")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("ValueAnswer");
-
-                    b.HasKey("Id")
-                        .HasAnnotation("Npgsql:Serial", true);
-
-                    b.HasIndex("QuestionId")
-                        .IsUnique();
-
-                    b.ToTable("Answers");
-                });
-
             modelBuilder.Entity("Sait2022.Domain.Model.Employee", b =>
                 {
                     b.Property<long>("Id")
@@ -250,9 +221,17 @@ namespace Sait2022.Migrations
                         .HasColumnName("Id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<string>("Name")
+                        .HasColumnType("text")
+                        .HasColumnName("Name");
+
                     b.Property<int>("NumberQuest")
                         .HasColumnType("integer")
                         .HasColumnName("NumberQuest");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("text")
+                        .HasColumnName("Path");
 
                     b.Property<long>("QuestionTopcId")
                         .ValueGeneratedOnAdd()
@@ -260,6 +239,11 @@ namespace Sait2022.Migrations
 
                     b.Property<long>("RangsId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("ValueAnswer")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("ValueAnswer");
 
                     b.Property<string>("ValueQuest")
                         .IsRequired()
@@ -303,8 +287,10 @@ namespace Sait2022.Migrations
                         .HasColumnName("Id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<char>("RangQuest")
-                        .HasColumnType("character(1)")
+                    b.Property<string>("RangQuest")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("character varying(2)")
                         .HasColumnName("RangQuest");
 
                     b.HasKey("Id")
@@ -340,6 +326,10 @@ namespace Sait2022.Migrations
                     b.Property<long>("RangId")
                         .HasColumnType("bigint")
                         .HasColumnName("RangId");
+
+                    b.Property<int?>("Result")
+                        .HasColumnType("integer")
+                        .HasColumnName("Result");
 
                     b.Property<long>("StudentId")
                         .HasColumnType("bigint")
@@ -497,17 +487,6 @@ namespace Sait2022.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Sait2022.Domain.Model.Answers", b =>
-                {
-                    b.HasOne("Sait2022.Domain.Model.Questions", "Questions")
-                        .WithOne("Answers")
-                        .HasForeignKey("Sait2022.Domain.Model.Answers", "QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Questions");
-                });
-
             modelBuilder.Entity("Sait2022.Domain.Model.Employee", b =>
                 {
                     b.HasOne("Sait2022.Domain.Model.Employee", "EmployeesNavig")
@@ -591,8 +570,6 @@ namespace Sait2022.Migrations
 
             modelBuilder.Entity("Sait2022.Domain.Model.Questions", b =>
                 {
-                    b.Navigation("Answers");
-
                     b.Navigation("StudentAnswers");
                 });
 

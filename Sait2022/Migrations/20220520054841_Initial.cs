@@ -68,7 +68,7 @@ namespace Sait2022.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RangQuest = table.Column<char>(type: "character(1)", nullable: false)
+                    RangQuest = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -136,9 +136,12 @@ namespace Sait2022.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     QuestionTopcId = table.Column<long>(type: "bigint", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Path = table.Column<string>(type: "text", nullable: true),
                     RangsId = table.Column<long>(type: "bigint", nullable: false),
                     NumberQuest = table.Column<int>(type: "integer", nullable: false),
-                    ValueQuest = table.Column<string>(type: "text", nullable: false)
+                    ValueQuest = table.Column<string>(type: "text", nullable: false),
+                    ValueAnswer = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -243,27 +246,6 @@ namespace Sait2022.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Answers",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    NumberAnswer = table.Column<int>(type: "integer", nullable: false),
-                    ValueAnswer = table.Column<string>(type: "text", nullable: false),
-                    QuestionId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Answers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Answers_Questions_QuestionId",
-                        column: x => x.QuestionId,
-                        principalTable: "Questions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "LogsAnswers",
                 columns: table => new
                 {
@@ -298,7 +280,8 @@ namespace Sait2022.Migrations
                     RangId = table.Column<long>(type: "bigint", nullable: false),
                     QuestionsTopicId = table.Column<long>(type: "bigint", nullable: false),
                     Answer = table.Column<string>(type: "text", nullable: true),
-                    IsCheck = table.Column<bool>(type: "boolean", nullable: false)
+                    IsCheck = table.Column<bool>(type: "boolean", nullable: false),
+                    Result = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -328,12 +311,6 @@ namespace Sait2022.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Answers_QuestionId",
-                table: "Answers",
-                column: "QuestionId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -421,9 +398,6 @@ namespace Sait2022.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Answers");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 

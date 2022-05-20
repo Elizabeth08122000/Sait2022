@@ -7,10 +7,12 @@ using Sait2022.ViewModels.Account;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SignalRChat.Hubs;
+using Sait2022.Hubs;
+using Microsoft.AspNetCore.SignalR;
+using Sait2022.ViewModels.Employee;
 
 namespace Sait2022.Controllers
-{
+{   
     public class EmployeeController:Controller
     {
         private readonly SaitDbContext db;
@@ -23,7 +25,7 @@ namespace Sait2022.Controllers
 
         public IActionResult Chat()
         {
-            return RedirectToAction("");
+            return View();
         }
 
 
@@ -31,74 +33,23 @@ namespace Sait2022.Controllers
         public async Task<IActionResult> Index()
         {
             UserId = db.Users.FirstOrDefault(x => x.Id == int.Parse(User.Identity.GetUserId())).EmployeeId;
-            var employee = db.Employees.Where(x => x.Id == UserId).Join(db.Users,
-                                            e => e.Id,
-                                            u => u.EmployeeId,
-                                            (e, u) => new
-                                            {
-                                                Name = e.FirstName,
-                                                Surname = e.Surname,
-                                                Patronym = e.Patronym,
-                                                Phone = e.PhoneNumber,
-                                                Address = e.Address,
-                                                Email = u.Email,
-                                                Login = u.UserName
-                                            });
 
-            List<Employee> listEmployee = new List<Employee>();
-            List<Users> listUsers = new List<Users>();
-            foreach (var empl in employee)
-            {
-                Users users = new Users();
-                Employee employees = new Employee();
-                employees.FirstName = empl.Name;
-                employees.Surname = empl.Surname;
-                employees.Patronym = empl.Patronym;
-                employees.PhoneNumber = empl.Phone;
-                employees.Address = empl.Address;
-                users.Email = empl.Email;
-                users.UserName = empl.Login;
-                listEmployee.Add(employees);
-                listUsers.Add(users);
-                //listEmployee.AddRange((IEnumerable<Employee>)listUsers);
-            }
-            return View(listEmployee);
+            var empl = db.Users.Where(x => x.Id == UserId & x.Employee.EmployeesNavig.Id == x.Employee.TeacherId)
+                               .Include(a => a.Employee).Include(e => e.Employee.EmployeesNavig);
+
+            return View(await empl.ToListAsync());
         }
 
-        private IActionResult GetEmployee()
+        public async Task<IActionResult> Index2()
         {
-            var employee = db.Employees.Where(x => x.Id == UserId).Join(db.Users,
-                                            e => e.Id,
-                                            u => u.EmployeeId,
-                                            (e,u)=> new
-                                            {
-                                                Name = e.FirstName,
-                                                Surname = e.Surname,
-                                                Patronym = e.Patronym,
-                                                Phone = e.PhoneNumber,
-                                                Address = e.Address,
-                                                Email = u.Email,
-                                                Login = u.UserName
-                                            });
+            UserId = db.Users.FirstOrDefault(x => x.Id == int.Parse(User.Identity.GetUserId())).EmployeeId;
 
-            List<Employee> listEmployee = new List<Employee>();
-            List<Users> listUsers = new List<Users>();
-            foreach (var empl in employee)
-            {
-                Users users = new Users();
-                Employee employees = new Employee();
-                employees.FirstName = empl.Name;
-                employees.Surname = empl.Surname;
-                employees.Patronym = empl.Patronym;
-                employees.PhoneNumber = empl.Phone;
-                employees.Address = empl.Address;
-                users.Email = empl.Email;
-                users.UserName = empl.Login;
-                listEmployee.Add(employees);
-                listUsers.Add(users);
-                listEmployee.AddRange((IEnumerable<Employee>)listUsers);
-            }
-            return View(listEmployee);
+            return View(await db.Employees.Where(x => x.TeacherId==UserId).ToListAsync());
+        }
+
+        public async Task<IActionResult> Index3()
+        {
+            return View(await db.Employees.Where(x => x.Id != 1).ToListAsync());
         }
     }
 }

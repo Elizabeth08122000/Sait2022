@@ -45,11 +45,6 @@ namespace Sait2022.Domain.DB
         public DbSet<Questions> Questions { get; set; }
 
         /// <summary>
-        /// База ответов
-        /// </summary>
-        public DbSet<Answers> Answers { get; set; }
-
-        /// <summary>
         /// База ответов студентов
         /// </summary>
         public DbSet<StudentAnswer> StudentAnswers { get; set; }
@@ -120,20 +115,7 @@ namespace Sait2022.Domain.DB
                 EntityId(b);
                 b.Property(x => x.RangQuest)
                     .HasColumnName("RangQuest")
-                    .IsRequired();
-            });
-            #endregion
-
-            #region Answers
-            builder.Entity<Answers>(b =>
-            {
-                b.ToTable("Answers");
-                EntityId(b);
-                b.Property(x => x.NumberAnswer)
-                    .HasColumnName("NumberAnswer")
-                    .IsRequired();
-                b.Property(x => x.ValueAnswer)
-                    .HasColumnName("ValueAnswer")
+                    .HasMaxLength(2)
                     .IsRequired();
             });
             #endregion
@@ -155,9 +137,15 @@ namespace Sait2022.Domain.DB
                 b.Property(x => x.ValueQuest)
                     .HasColumnName("ValueQuest")
                     .IsRequired();
-                b.HasOne(u => u.Answers)
-                    .WithOne(p => p.Questions)
-                    .HasForeignKey<Answers>(p => p.QuestionId);
+                b.Property(x => x.ValueAnswer)
+                    .HasColumnName("ValueAnswer")
+                    .IsRequired();
+                b.Property(x => x.Name)
+                    .HasColumnName("Name")
+                    .IsRequired(false);
+                b.Property(x => x.Path)
+                    .HasColumnName("Path")
+                    .IsRequired(false);
                 b.HasMany(b => b.Users)
                     .WithMany(b => b.Questions)
                     .UsingEntity(j => j.ToTable("LogsAnswers")); //настроена промежуточная таблица
@@ -198,6 +186,9 @@ namespace Sait2022.Domain.DB
                 b.Property(x => x.IsCheck)
                     .HasColumnName("IsCheck")
                     .IsRequired();
+                b.Property(x => x.Result)
+                    .HasColumnName("Result")
+                    .IsRequired(false);
             });
             #endregion
 
