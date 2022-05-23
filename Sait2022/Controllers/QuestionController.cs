@@ -148,6 +148,7 @@ namespace Sait2022.Controllers
             }
 
             var questions = await _context.Questions.FindAsync(id);
+            
             if (questions == null)
             {
                 return NotFound();
@@ -185,6 +186,36 @@ namespace Sait2022.Controllers
                         questions.Name = uploadedFile.FileName;
                         questions.Path = path;
                     }
+
+                    var quest = _context.Questions.OrderBy(x => x.Id).Where(x => x.Id == questions.Id & x.RangsId == questions.RangsId).AsNoTracking().LastOrDefault();
+                    var questR = _context.Questions.OrderBy(x => x.Id).Where(x => x.RangsId == questions.RangsId & x.QuestionTopcId == questions.QuestionTopcId).AsNoTracking().LastOrDefault();
+
+                    if (questR == null)
+                    {
+                        questions.NumberQuest = 0;
+                    }
+                    if (quest == null)
+                    {
+                        questions.NumberQuest = 1;
+                    }
+                    else
+                    {
+                        if (!quest.RangsId.Equals(questions.RangsId))
+                        {
+                            questions.NumberQuest = questR.NumberQuest + 1;
+                        }
+                        if (!quest.QuestionTopcId.Equals(questions.QuestionTopcId))
+                        {
+                            questions.NumberQuest = quest.NumberQuest + 1;
+                        }
+                        else
+                        {
+                            questions.NumberQuest = quest.NumberQuest;
+                        }
+                    }
+
+                    
+
                     _context.Update(questions);
                     await _context.SaveChangesAsync();
                 }

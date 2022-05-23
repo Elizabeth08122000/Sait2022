@@ -22,6 +22,11 @@
                 <span asp-validation-for="RangsId" class="text-danger"></span>
             </div>
             <div class="form-group">
+                @*<h5>Номер вопроса</h5>*@
+                <input asp-for="NumberQuest" class="form-control" />
+                <span asp-validation-for="NumberQuest" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <h5>Вопрос</h5>
                 <input asp-for="ValueQuest" class="form-control" />
                 <span asp-validation-for="ValueQuest" class="text-danger"></span>

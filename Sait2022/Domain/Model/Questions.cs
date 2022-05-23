@@ -1,4 +1,5 @@
-﻿using Sait2022.Domain.Model.Common;
+﻿using Microsoft.AspNetCore.Mvc;
+using Sait2022.Domain.Model.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -29,6 +30,7 @@ namespace Sait2022.Domain.Model
         /// <summary>
         /// Внутренний ключ вопроса среди одного ранга
         /// </summary>
+        [HiddenInput(DisplayValue = false)]
         public int NumberQuest { get; set; }
 
         /// <summary>
