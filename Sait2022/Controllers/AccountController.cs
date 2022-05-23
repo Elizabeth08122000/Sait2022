@@ -12,6 +12,8 @@ using Sait2022.Domain.Model;
 using System.Security.Claims;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Sait2022.Controllers
 {
@@ -46,6 +48,58 @@ namespace Sait2022.Controllers
             return View(user.ToList());
         }
 
+        public async Task<IActionResult> Edit(long? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var users = await _saitDbContext.Employees.FindAsync(id);
+            if (users == null)
+            {
+                return NotFound();
+            }
+            ViewData["TeacherId"] = new SelectList(_saitDbContext.Employees.Where(x => x.IsTeacher==true), "Id", "FullName", users.TeacherId);
+            return View(users);
+        }
+
+        // POST: Question/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(long id, [Bind("FirstName,Surname,Patronym,PhoneNumber, Address,TeacherId,Id")] Employee employee)
+        {
+            if (id != employee.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _saitDbContext.Update(employee);
+                    await _saitDbContext.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!EmployeeExists(employee.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["TeacherId"] = new SelectList(_saitDbContext.Employees.Where(x => x.IsTeacher == true), "Id", "FullName", employee.TeacherId);
+            return View(employee);
+        }
+
         /// <summary>
         /// Форма входа в систему
         /// </summary>
@@ -54,8 +108,6 @@ namespace Sait2022.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
-            // Очистить существующие куки для корректного логина
-         //   await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             ViewData["ReturnUrl"] = returnUrl;
             return View();
@@ -341,5 +393,12 @@ namespace Sait2022.Controllers
         }
 
         #endregion
+
+        private bool EmployeeExists(long id)
+        {
+            return _saitDbContext.Employees.Any(e => e.Id == id);
+        }
     }
+
+   
 }

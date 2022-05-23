@@ -206,69 +206,6 @@ namespace Sait2022.Controllers
             return View(questions);
         }
 
-        public async Task<IActionResult> EditFile(long? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var questions = await _context.Questions.FindAsync(id);
-            if (questions == null)
-            {
-                return NotFound();
-            }
-            ViewData["QuestionTopcId"] = new SelectList(_context.QuestionsTopics, "Id", "Topic", questions.QuestionTopcId);
-            ViewData["RangsId"] = new SelectList(_context.Rangs, "Id", "RangQuest", questions.RangsId);
-            return View(questions);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditFile(long id, [Bind("QuestionTopcId,RangsId,AnswerId,Name,Path,NumberQuest,ValueAnswer,ValueQuest,Id")] Questions questions, [FromForm] IFormFile uploadedFile)
-        {
-            if (id != questions.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    if (uploadedFile != null)
-                    {
-                        // путь к папке Files
-                        string path = "/Files/" + uploadedFile.FileName;
-                        // сохраняем файл в папку Files в каталоге wwwroot
-                        using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
-                        {
-                            await uploadedFile.CopyToAsync(fileStream);
-                        }
-                        questions.Name = uploadedFile.FileName;
-                        questions.Path = path;
-                    }
-                    _context.Update(questions);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!QuestionsExists(questions.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["QuestionTopcId"] = new SelectList(_context.QuestionsTopics, "Id", "Topic", questions.QuestionTopcId);
-            ViewData["RangsId"] = new SelectList(_context.Rangs, "Id", "RangQuest", questions.RangsId);
-            return View(questions);
-        }
-
         // GET: Question/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {

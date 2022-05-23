@@ -35,26 +35,29 @@ namespace Sait2022.ViewModels.Account
         /// Логин
         /// </summary>
         [Required]
-        [Display(Name = "Имя пользователя")]
+        [Display(Name = "Логин")]
         public string UserName { get; set; }
 
         /// <summary>
         /// Имя
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "Не указано имя")]
+        [RegularExpression(@"^[А-Яа-я]+$", ErrorMessage = "Некорректное имя. Введите имя кириллицей")]
         [Display(Name = "Имя")]
         public string FirstName { get; set; }
 
         /// <summary>
         /// Фамилия
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "Не указана фамилия")]
+        [RegularExpression(@"^[А-Яа-я]+$", ErrorMessage = "Некорректная фамилия. Введите фамилию кириллицей")]
         [Display(Name = "Фамилия")]
         public string Surname { get; set; }
 
         /// <summary>
         /// Отчество
         /// </summary>
+        [RegularExpression(@"^[А-Яа-я]+$", ErrorMessage = "Некорректное отчество. Введите отчество кириллицей")]
         [Display(Name = "Отчество")]
         public string Patronym { get; set; }
 

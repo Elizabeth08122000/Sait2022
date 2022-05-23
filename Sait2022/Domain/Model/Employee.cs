@@ -16,16 +16,21 @@ namespace Sait2022.Domain.Model
         /// <summary>
         /// Имя пользователя
         /// </summary>
+        [Required(ErrorMessage = "Не указано имя")]
+        [RegularExpression(@"[\p{IsCyrillic}]", ErrorMessage = "Некорректное имя")]
         public string FirstName { get; set; }
 
         /// <summary>
         /// Фамилия пользователя
         /// </summary>
+        [Required(ErrorMessage = "Не указана фамилия")]
+        [RegularExpression(@"[\p{IsCyrillic}]", ErrorMessage = "Некорректная фамилия")]
         public string Surname { get; set; }
 
         /// <summary>
         /// Отчество пользователя
         /// </summary>
+        [RegularExpression(@"[\p{IsCyrillic}]", ErrorMessage = "Некорректное отчество")]
         public string? Patronym { get; set; }
 
         /// <summary>
