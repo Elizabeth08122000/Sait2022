@@ -35,6 +35,7 @@ namespace Sait2022.Controllers
             QuestAnswersViewModel questAnswers = new QuestAnswersViewModel();
             if (questAnswers.QuestValues.Count == 0)
             {
+                int proc = 0;
                 UserId = db.Users.FirstOrDefault(x => x.Id == int.Parse(User.Identity.GetUserId())).EmployeeId;
                 var studentAnswersDb = db.StudentAnswers
                 .Where(x => x.StudentId == UserId).ToList();
@@ -87,7 +88,7 @@ namespace Sait2022.Controllers
                 var count = questions.Count();
                 var items = questions.Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
-                foreach (var quest in items)
+                foreach (var quest in questions)
                 {
                     questAnswers.QuestValues.Add(quest.Id, quest.ValueQuest);
                     questAnswers.AnswerValues.Add(quest.Id, "");
@@ -102,6 +103,7 @@ namespace Sait2022.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(QuestAnswersViewModel questAnswersViewModel)
         {
+
             if (ModelState.IsValid)
             {
                 try
@@ -126,15 +128,27 @@ namespace Sait2022.Controllers
                             studentAnswer.IsCheck = false;
 
                         db.StudentAnswers.Add(studentAnswer);
+                        
+                        
                     }
                     await db.SaveChangesAsync();
+                    
+ 
                 }
                 catch(DbUpdateException ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Assessment", "Questions");
+        }
+
+        [Route("Questions/Assessment")]
+        public IActionResult Assessment(QuestAnswersViewModel questAnswersViewModel)
+        {
+            UserId = db.Users.FirstOrDefault(x => x.Id == int.Parse(User.Identity.GetUserId())).EmployeeId;
+
+            return View();
         }
 
         private void GetQuestionsAnswers(QuestAnswersViewModel model)

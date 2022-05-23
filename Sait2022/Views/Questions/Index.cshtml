@@ -1,4 +1,5 @@
-﻿@model Sait2022.ViewModels.Question.QuestAnswersViewModel
+﻿@using System.Web.Mvc.Ajax
+@model Sait2022.ViewModels.Question.QuestAnswersViewModel
 
 @{
     ViewData["Title"] = "Вопросы";
@@ -6,9 +7,11 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
     <meta name="viewport" content="width=device-width"/>
     <title>Вариант 1</title>
+
 </head>
 
  <style>
@@ -38,6 +41,7 @@
             content: "\f053";
         }
     </style>
+
  
 <body>
     @using(Html.BeginForm())
@@ -53,23 +57,6 @@
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
     }
-@if (Model.PageViewModel.HasPreviousPage)
-{
-    <a asp-action="Index"
-       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-       class="btn btn-outline-dark">
-        <i class="glyphicon glyphicon-chevron-left"></i>
-        Назад
-    </a>
-}
-@if (Model.PageViewModel.HasNextPage)
-{
-    <a asp-action="Index"
-       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-       class="btn btn-outline-dark">
-        Вперед
-        <i class="glyphicon glyphicon-chevron-right"></i>
-    </a>
-}
+
 </body>
 </html>
