@@ -54,10 +54,11 @@ namespace Sait2022.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Topic,Id")] QuestionsTopic questionsTopic)
+        public async Task<IActionResult> Create([Bind("Topic,IsUsedNow,Id")] QuestionsTopic questionsTopic)
         {
             if (ModelState.IsValid)
             {
+                questionsTopic.IsUsedNow = false;
                 _context.Add(questionsTopic);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,7 +87,7 @@ namespace Sait2022.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Topic,Id")] QuestionsTopic questionsTopic)
+        public async Task<IActionResult> Edit(long id, [Bind("Topic,IsUsedNow,Id")] QuestionsTopic questionsTopic)
         {
             if (id != questionsTopic.Id)
             {
@@ -97,6 +98,7 @@ namespace Sait2022.Controllers
             {
                 try
                 {
+                    questionsTopic.IsUsedNow = false;
                     _context.Update(questionsTopic);
                     await _context.SaveChangesAsync();
                 }

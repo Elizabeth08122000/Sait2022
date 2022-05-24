@@ -49,6 +49,11 @@ namespace Sait2022.Domain.DB
         /// </summary>
         public DbSet<StudentAnswer> StudentAnswers { get; set; }
 
+        /// <summary>
+        /// База выбранных тем вопросов учителем
+        /// </summary>
+        public DbSet<TeacherTopic> TeacherTopics { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -105,6 +110,9 @@ namespace Sait2022.Domain.DB
                 b.Property(x => x.Topic)
                     .HasColumnName("Topic")
                     .IsRequired();
+                b.Property(x => x.IsUsedNow)
+                    .HasColumnName("IsUsedNow")
+                    .IsRequired(false);
             });
             #endregion
 
@@ -157,6 +165,9 @@ namespace Sait2022.Domain.DB
             {
                 b.ToTable("StudentAnswers");
                 EntityId(b);
+                b.HasOne(u => u.TeacherTopic)
+                    .WithMany(r => r.StudentAnswers)
+                    .HasForeignKey(y => y.TeacherTopicId);
                 b.HasOne(u => u.Student)
                     .WithMany(x => x.StudentAnswers)
                     .HasForeignKey(y => y.StudentId);
@@ -171,6 +182,9 @@ namespace Sait2022.Domain.DB
                     .HasForeignKey(x => x.RangId);
                 b.Property(x => x.StudentId)
                     .HasColumnName("StudentId")
+                    .IsRequired();
+                b.Property(x => x.TeacherTopicId)
+                    .HasColumnName("TeacherTopicId")
                     .IsRequired();
                 b.Property(x => x.QuestionId)
                     .HasColumnName("QuestionId")
@@ -189,6 +203,24 @@ namespace Sait2022.Domain.DB
                 b.Property(x => x.Result)
                     .HasColumnName("Result")
                     .IsRequired(false);
+            });
+            #endregion
+
+            #region TeacherTopic
+            builder.Entity<TeacherTopic>(b =>
+            {
+                b.ToTable("TeacherTopic");
+                EntityId(b);
+                b.Property(x => x.IsUsedNow)
+                    .HasColumnName("IsUsedNow")
+                    .IsRequired(false);
+                b.HasOne(u => u.QuestionsTopic)
+                    .WithMany(x => x.TeacherTopics)
+                    .HasForeignKey(y => y.QuestionsTopicId);
+                b.HasOne(u => u.Student)
+                    .WithMany(x => x.TeacherTopics)
+                    .HasForeignKey(y => y.StudentId);
+
             });
             #endregion
 

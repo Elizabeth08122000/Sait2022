@@ -10,7 +10,7 @@ using Sait2022.Domain.DB;
 namespace Sait2022.Migrations
 {
     [DbContext(typeof(SaitDbContext))]
-    [Migration("20220520054841_Initial")]
+    [Migration("20220524162758_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -270,6 +270,10 @@ namespace Sait2022.Migrations
                         .HasColumnName("Id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<bool?>("IsUsedNow")
+                        .HasColumnType("boolean")
+                        .HasColumnName("IsUsedNow");
+
                     b.Property<string>("Topic")
                         .IsRequired()
                         .HasColumnType("text")
@@ -337,6 +341,10 @@ namespace Sait2022.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("StudentId");
 
+                    b.Property<long>("TeacherTopicId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("TeacherTopicId");
+
                     b.HasKey("Id")
                         .HasAnnotation("Npgsql:Serial", true);
 
@@ -348,7 +356,37 @@ namespace Sait2022.Migrations
 
                     b.HasIndex("StudentId");
 
+                    b.HasIndex("TeacherTopicId");
+
                     b.ToTable("StudentAnswers");
+                });
+
+            modelBuilder.Entity("Sait2022.Domain.Model.TeacherTopic", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<bool?>("IsUsedNow")
+                        .HasColumnType("boolean")
+                        .HasColumnName("IsUsedNow");
+
+                    b.Property<long>("QuestionsTopicId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("StudentId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id")
+                        .HasAnnotation("Npgsql:Serial", true);
+
+                    b.HasIndex("QuestionsTopicId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("TeacherTopic");
                 });
 
             modelBuilder.Entity("Sait2022.Domain.Model.Users", b =>
@@ -543,11 +581,38 @@ namespace Sait2022.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Sait2022.Domain.Model.TeacherTopic", "TeacherTopic")
+                        .WithMany("StudentAnswers")
+                        .HasForeignKey("TeacherTopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Questions");
 
                     b.Navigation("QuestionsTopic");
 
                     b.Navigation("Rangs");
+
+                    b.Navigation("Student");
+
+                    b.Navigation("TeacherTopic");
+                });
+
+            modelBuilder.Entity("Sait2022.Domain.Model.TeacherTopic", b =>
+                {
+                    b.HasOne("Sait2022.Domain.Model.QuestionsTopic", "QuestionsTopic")
+                        .WithMany("TeacherTopics")
+                        .HasForeignKey("QuestionsTopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Sait2022.Domain.Model.Employee", "Student")
+                        .WithMany("TeacherTopics")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("QuestionsTopic");
 
                     b.Navigation("Student");
                 });
@@ -568,6 +633,8 @@ namespace Sait2022.Migrations
                     b.Navigation("Employeess");
 
                     b.Navigation("StudentAnswers");
+
+                    b.Navigation("TeacherTopics");
                 });
 
             modelBuilder.Entity("Sait2022.Domain.Model.Questions", b =>
@@ -580,12 +647,19 @@ namespace Sait2022.Migrations
                     b.Navigation("Questions");
 
                     b.Navigation("StudentAnswers");
+
+                    b.Navigation("TeacherTopics");
                 });
 
             modelBuilder.Entity("Sait2022.Domain.Model.Rangs", b =>
                 {
                     b.Navigation("Questions");
 
+                    b.Navigation("StudentAnswers");
+                });
+
+            modelBuilder.Entity("Sait2022.Domain.Model.TeacherTopic", b =>
+                {
                     b.Navigation("StudentAnswers");
                 });
 #pragma warning restore 612, 618

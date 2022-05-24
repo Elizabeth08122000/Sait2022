@@ -11,6 +11,12 @@ namespace Sait2022.Domain.Model
         public Employee Student { get; set; }
 
         /// <summary>
+        /// Внешний ключ тем учителя
+        /// </summary>
+        public long TeacherTopicId { get; set; }
+        public TeacherTopic TeacherTopic { get; set; }
+
+        /// <summary>
         /// Внешний ключ вопроса
         /// </summary>
         public long QuestionId { get; set; }

@@ -55,7 +55,8 @@ namespace Sait2022.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Topic = table.Column<string>(type: "text", nullable: false)
+                    Topic = table.Column<string>(type: "text", nullable: false),
+                    IsUsedNow = table.Column<bool>(type: "boolean", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -125,6 +126,33 @@ namespace Sait2022.Migrations
                         name: "FK_AspNetUsers_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TeacherTopic",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    IsUsedNow = table.Column<bool>(type: "boolean", nullable: true),
+                    QuestionsTopicId = table.Column<long>(type: "bigint", nullable: false),
+                    StudentId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeacherTopic", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TeacherTopic_Employees_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TeacherTopic_QuestionsTopic_QuestionsTopicId",
+                        column: x => x.QuestionsTopicId,
+                        principalTable: "QuestionsTopic",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -276,6 +304,7 @@ namespace Sait2022.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     StudentId = table.Column<long>(type: "bigint", nullable: false),
+                    TeacherTopicId = table.Column<long>(type: "bigint", nullable: false),
                     QuestionId = table.Column<long>(type: "bigint", nullable: false),
                     RangId = table.Column<long>(type: "bigint", nullable: false),
                     QuestionsTopicId = table.Column<long>(type: "bigint", nullable: false),
@@ -308,6 +337,12 @@ namespace Sait2022.Migrations
                         name: "FK_StudentAnswers_Rangs_RangId",
                         column: x => x.RangId,
                         principalTable: "Rangs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentAnswers_TeacherTopic_TeacherTopicId",
+                        column: x => x.TeacherTopicId,
+                        principalTable: "TeacherTopic",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -394,6 +429,21 @@ namespace Sait2022.Migrations
                 name: "IX_StudentAnswers_StudentId",
                 table: "StudentAnswers",
                 column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentAnswers_TeacherTopicId",
+                table: "StudentAnswers",
+                column: "TeacherTopicId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeacherTopic_QuestionsTopicId",
+                table: "TeacherTopic",
+                column: "QuestionsTopicId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeacherTopic_StudentId",
+                table: "TeacherTopic",
+                column: "StudentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -429,13 +479,16 @@ namespace Sait2022.Migrations
                 name: "Questions");
 
             migrationBuilder.DropTable(
+                name: "TeacherTopic");
+
+            migrationBuilder.DropTable(
+                name: "Rangs");
+
+            migrationBuilder.DropTable(
                 name: "Employees");
 
             migrationBuilder.DropTable(
                 name: "QuestionsTopic");
-
-            migrationBuilder.DropTable(
-                name: "Rangs");
         }
     }
 }

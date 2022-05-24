@@ -60,10 +60,13 @@ namespace Sait2022.Domain.Model
 
         public ICollection<Employee> Employeess { get; set; }
         public ICollection<StudentAnswer> StudentAnswers { get; set; }
+
+        public ICollection<TeacherTopic> TeacherTopics { get; set; }
         public Employee()
         {
             Employeess = new List <Employee>();
             StudentAnswers = new List <StudentAnswer>();
+            TeacherTopics = new List <TeacherTopic>();
         }
         
     }
