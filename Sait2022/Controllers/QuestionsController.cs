@@ -43,7 +43,7 @@ namespace Sait2022.Controllers
                     var teacherTopic = db.TeacherTopics
                                    .Where(x => x.StudentId == UserId)
                                    .OrderByDescending(x => x.Id)
-                                   .Take(2)
+                                   .Take(3)
                                    .ToList();
 
                     if (studentAnswersDb.Count > 0)
@@ -378,15 +378,16 @@ namespace Sait2022.Controllers
         [HttpGet]
         public async Task<IActionResult> Result()
         {
-            var answ = db.StudentAnswers.Include("Rangs").Include("Questions").OrderByDescending(x => x.Id).Take(2).OrderBy(x => x.Id);
+            var count = db.TeacherTopics.OrderByDescending(x => x.Id).Take(3).Where(x => x.IsUsedNow==true).Count();
+            var answ = db.StudentAnswers.Include("Rangs").Include("Questions").OrderByDescending(x => x.Id).Take(count).OrderBy(x => x.Id);
             var result = db.StudentAnswers.OrderByDescending(x => x.Id)
-                                          .Take(2)
+                                          .Take(count)
                                           .GroupBy(x => x.Result)
                                           .Select(g => new { Result = g.Key });
             foreach(var r in result)
             {
                 ViewBag.Message = r.Result.ToString();
-                if(r.Result > 60)
+                if(r.Result >= 60)
                 {
                     ViewBag.Answer = "Молодец! У вас осталось немного до идеального результата!";
                 }
@@ -394,7 +395,7 @@ namespace Sait2022.Controllers
                 {
                     ViewBag.Answer = "Идеальный результат! Вы гений! Так держать!";
                 }
-                else
+                if(r.Result < 60)
                 {
                     ViewBag.Answer = "К сожалению, Вы провалили тест. Попробуйте еще раз!";
                 }

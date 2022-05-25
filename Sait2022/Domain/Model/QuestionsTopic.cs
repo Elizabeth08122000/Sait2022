@@ -1,6 +1,7 @@
 ﻿using Sait2022.Domain.Model.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace Sait2022.Domain.Model
         /// <summary>
         /// Тема вопроса
         /// </summary>
+        [Required(ErrorMessage = "Не указана тема вопроса")]
         public string Topic { get; set; }
 
         public bool IsUsedNow { get; set; }

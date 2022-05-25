@@ -18,7 +18,7 @@ namespace Sait2022.ViewModels.Account
         /// <summary>
         /// Пароль
         /// </summary>
-        [Required(ErrorMessage ="Пароль должен иметь от 6 символов, минимум одно число и символы в верхнем и нижнем регистрах")]
+        [Required(ErrorMessage ="Пароль должен иметь от 6 символов, минимум одну цифру и символы в верхнем и нижнем регистрах")]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
         public string Password { get; set; }
