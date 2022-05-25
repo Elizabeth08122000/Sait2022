@@ -56,7 +56,7 @@ namespace Sait2022.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Topic = table.Column<string>(type: "text", nullable: false),
-                    IsUsedNow = table.Column<bool>(type: "boolean", nullable: true)
+                    IsUsedNow = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -136,8 +136,8 @@ namespace Sait2022.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    IsUsedNow = table.Column<bool>(type: "boolean", nullable: true),
-                    QuestionsTopicId = table.Column<long>(type: "bigint", nullable: false),
+                    IsUsedNow = table.Column<bool>(type: "boolean", nullable: false),
+                    QuestionsTopicId = table.Column<long>(type: "bigint", nullable: true),
                     StudentId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
@@ -154,7 +154,7 @@ namespace Sait2022.Migrations
                         column: x => x.QuestionsTopicId,
                         principalTable: "QuestionsTopic",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -307,7 +307,7 @@ namespace Sait2022.Migrations
                     TeacherTopicId = table.Column<long>(type: "bigint", nullable: false),
                     QuestionId = table.Column<long>(type: "bigint", nullable: false),
                     RangId = table.Column<long>(type: "bigint", nullable: false),
-                    QuestionsTopicId = table.Column<long>(type: "bigint", nullable: false),
+                    QuestionsTopicId = table.Column<long>(type: "bigint", nullable: true),
                     Answer = table.Column<string>(type: "text", nullable: true),
                     IsCheck = table.Column<bool>(type: "boolean", nullable: false),
                     Result = table.Column<int>(type: "integer", nullable: true)
@@ -332,7 +332,7 @@ namespace Sait2022.Migrations
                         column: x => x.QuestionsTopicId,
                         principalTable: "QuestionsTopic",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_StudentAnswers_Rangs_RangId",
                         column: x => x.RangId,

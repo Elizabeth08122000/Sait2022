@@ -33,123 +33,171 @@ namespace Sait2022.Controllers
             if (questAnswers.QuestValues.Count == 0)
             {
                 UserId = db.Users.FirstOrDefault(x => x.Id == int.Parse(User.Identity.GetUserId())).EmployeeId;
-                var TopicUsed = db.TeacherTopics.Where(x => x.StudentId == UserId).LastOrDefault();
-
-                List<Questions> questions = new List<Questions>();
-
-                if ((bool)TopicUsed.IsUsedNow)
-                {
-                    var studentAnswersDb = db.StudentAnswers
-                        .Where(x => x.StudentId == UserId & x.TeacherTopic.IsUsedNow == true).ToList();
-                    
-                    if (studentAnswersDb.Count > 0)
-                    {
-                        var studentAnswers = studentAnswersDb
-                        .Where(x => x.TeacherTopic.IsUsedNow == true)
-                        .GroupBy(x => x.QuestionsTopicId)
-                        .OrderBy(x => x.Key)
-                        .ToList();
-                        foreach (var answer in studentAnswers)
-                        {
-                            if (answer.LastOrDefault().Result >= 60)
-                            {
-                                if (db.Questions.Any(x => x.RangsId > answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key))
-                                {
-                                    questions.Add(db.Questions.Where(x => x.RangsId > answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
-                                }
-                                else
-                                {
-                                    if (db.Questions.Any(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key))
-                                    {
-                                        questions.Add(db.Questions.Where(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
-                                    }
-                                    else
-                                    {
-                                        questions.Add(db.Questions.Where(x => x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (db.Questions.Any(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key))
-                                {
-                                    questions.Add(db.Questions.Where(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
-                                }
-                                else
-                                {
-                                    questions.Add(db.Questions.Where(x => x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        db.Questions
-                            .Where(x => x.RangsId == 1 && x.NumberQuest == 1 && x.QuestionTopcId == TopicUsed.QuestionsTopicId).ToList()
-                            .ForEach(y => questions.Add(y));
-                    }
-                }
-                else
-                {
-                    var studentAnswersDb = db.StudentAnswers
-                        .Where(x => x.StudentId == UserId).ToList();
-
-                    if (studentAnswersDb.Count > 0)
-                    {
-                        var studentAnswers = studentAnswersDb
-                        .GroupBy(x => x.QuestionsTopicId)
-                        .OrderBy(x => x.Key)
-                        .ToList();
-                        foreach (var answer in studentAnswers)
-                        {
-                            if (answer.LastOrDefault().Result >= 60)
-                            {
-                                if (db.Questions.Any(x => x.RangsId > answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key))
-                                {
-                                    questions.Add(db.Questions.Where(x => x.RangsId > answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
-                                }
-                                else
-                                {
-                                    if (db.Questions.Any(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key))
-                                    {
-                                        questions.Add(db.Questions.Where(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
-                                    }
-                                    else
-                                    {
-                                        questions.Add(db.Questions.Where(x => x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (db.Questions.Any(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key))
-                                {
-                                    questions.Add(db.Questions.Where(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
-                                }
-                                else
-                                {
-                                    questions.Add(db.Questions.Where(x => x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        db.Questions
-                            .Where(x => x.RangsId == 1 && x.NumberQuest == 1).ToList()
-                            .ForEach(y => questions.Add(y));
-                    }
-                }
-
                 
 
-                foreach (var quest in questions)
+                List<Questions> questions = new List<Questions>();
+                try
                 {
-                    questAnswers.QuestValues.Add(quest.Id, quest.ValueQuest);
-                    questAnswers.AnswerValues.Add(quest.Id, "");
-                    questAnswers.FilesNameValue.Add(quest.Id, quest.Name);
-                    questAnswers.FilesPathValue.Add(quest.Id, quest.Path);
+                    var studentAnswersDb = db.StudentAnswers
+                            .Where(x => x.StudentId == UserId).ToList();
+                    var teacherTopic = db.TeacherTopics
+                                   .Where(x => x.StudentId == UserId)
+                                   .OrderByDescending(x => x.Id)
+                                   .Take(2)
+                                   .ToList();
+
+                    if (studentAnswersDb.Count > 0)
+                        {
+                            var studentAnswers = studentAnswersDb
+                            .GroupBy(x => x.QuestionsTopicId)
+                            .OrderBy(x => x.Key)
+                            .ToList();
+                        int k = 0;
+                        
+                        foreach (var answer in studentAnswers)
+                            { 
+                                k++;
+                               
+                            if (k == 1)
+                            {
+                                foreach (var answ in teacherTopic)
+                                {
+                                    if (answer.LastOrDefault().Result >= 60)
+                                    {
+                                        if (answ.QuestionsTopicId != null)
+                                        {
+                                            if (db.Questions.Any(x => x.RangsId > answer.LastOrDefault().RangId && x.QuestionTopcId == answ.QuestionsTopicId))
+                                            {
+                                                questions.Add(db.Questions.Where(x => x.RangsId > answer.LastOrDefault().RangId && x.QuestionTopcId == answ.QuestionsTopicId).FirstOrDefault());
+                                            }
+                                            else
+                                            {
+                                                if (db.Questions.Any(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answ.QuestionsTopicId))
+                                                {
+                                                    questions.Add(db.Questions.Where(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answ.QuestionsTopicId).FirstOrDefault());
+                                                }
+                                                else
+                                                {
+                                                    questions.Add(db.Questions.Where(x => x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answ.QuestionsTopicId).FirstOrDefault());
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+
+                                        }
+
+                                    }
+
+                                    else
+                                    {
+                                        if (answ.QuestionsTopicId != null)
+                                        {
+                                            if (db.Questions.Any(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answ.QuestionsTopicId))
+                                            {
+                                                questions.Add(db.Questions.Where(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answ.QuestionsTopicId).FirstOrDefault());
+                                            }
+                                            else
+                                            {
+                                                questions.Add(db.Questions.Where(x => x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answ.QuestionsTopicId).FirstOrDefault());
+                                            }
+                                        }
+                                        else
+                                        {
+
+                                        }
+
+                                    }
+                                }
+                            }
+                            else
+                            {
+
+                            } 
+
+                            
+                            }
+                        }
+                        else
+                        {
+                            foreach (var answ in teacherTopic)
+                            {
+                                if (answ.QuestionsTopicId != null)
+                                {
+                                    questions.Add(db.Questions.Where(x => x.RangsId == 1 & x.NumberQuest == 1 & x.QuestionTopcId == answ.QuestionsTopicId).FirstOrDefault());
+                                }
+                                
+                            }
+                                                       
+                        }
+
+                    foreach (var quest in questions)
+                    {
+                        questAnswers.QuestValues.Add(quest.Id, quest.ValueQuest);
+                        questAnswers.AnswerValues.Add(quest.Id, "");
+                        questAnswers.FilesNameValue.Add(quest.Id, quest.Name);
+                        questAnswers.FilesPathValue.Add(quest.Id, quest.Path);
+                    }
                 }
+                catch (Exception ex)
+                {
+                        var studentAnswersDb = db.StudentAnswers
+                            .Where(x => x.StudentId == UserId).ToList();
+
+                        if (studentAnswersDb.Count > 0)
+                        {
+                            var studentAnswers = studentAnswersDb
+                            .GroupBy(x => x.QuestionsTopicId)
+                            .OrderBy(x => x.Key)
+                            .ToList();
+                            foreach (var answer in studentAnswers)
+                            {
+                                if (answer.LastOrDefault().Result >= 60)
+                                {
+                                    if (db.Questions.Any(x => x.RangsId > answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key))
+                                    {
+                                        questions.Add(db.Questions.Where(x => x.RangsId > answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
+                                    }
+                                    else
+                                    {
+                                        if (db.Questions.Any(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key))
+                                        {
+                                            questions.Add(db.Questions.Where(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
+                                        }
+                                        else
+                                        {
+                                            questions.Add(db.Questions.Where(x => x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (db.Questions.Any(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key))
+                                    {
+                                        questions.Add(db.Questions.Where(x => x.Id > answer.LastOrDefault().QuestionId && x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
+                                    }
+                                    else
+                                    {
+                                        questions.Add(db.Questions.Where(x => x.RangsId == answer.LastOrDefault().RangId && x.QuestionTopcId == answer.Key).FirstOrDefault());
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            db.Questions
+                                .Where(x => x.RangsId == 1 && x.NumberQuest == 1).ToList()
+                                .ForEach(y => questions.Add(y));
+                        }
+
+                    foreach (var quest in questions)
+                    {
+                        questAnswers.QuestValues.Add(quest.Id, quest.ValueQuest);
+                        questAnswers.AnswerValues.Add(quest.Id, "");
+                        questAnswers.FilesNameValue.Add(quest.Id, quest.Name);
+                        questAnswers.FilesPathValue.Add(quest.Id, quest.Path);
+                    }
+                }                
             }
 
             return View(questAnswers);
@@ -171,14 +219,23 @@ namespace Sait2022.Controllers
                     foreach (var studentAnswerValue in questAnswersViewModel.AnswerValues)
                     {
                         var quest = await db.Questions.FindAsync(studentAnswerValue.Key);
+                        var questTopic = await db.TeacherTopics.Where(x => x.QuestionsTopicId == quest.QuestionTopcId).OrderBy(x => x.Id).LastAsync();
                         var studentAnswer = new StudentAnswer()
                         {
                             QuestionId = quest.Id,
-                            QuestionsTopicId = quest.QuestionTopcId,
+                            QuestionsTopicId = (long)questTopic.QuestionsTopicId,
                             RangId = quest.RangsId,
                             StudentId = UserId,
                             Answer = studentAnswerValue.Value
                         };
+                        if (questTopic.IsUsedNow)
+                        {
+                            studentAnswer.TeacherTopicId = questTopic.Id;
+                        }
+                        else
+                        {
+                            studentAnswer.TeacherTopicId = default;
+                        }
 
                         if (quest.ValueAnswer == studentAnswer.Answer)
                         {
@@ -204,14 +261,23 @@ namespace Sait2022.Controllers
                     foreach (var studAnswerValue in questAnswersViewModel.AnswerValues)
                     {
                         var ques = await db.Questions.FindAsync(studAnswerValue.Key);
+                        var questTopic = await db.TeacherTopics.Where(x => x.QuestionsTopicId == ques.QuestionTopcId).OrderBy(x => x.Id).LastAsync();
                         var studAnswer = new StudentAnswer()
                         {
                             QuestionId = ques.Id,
-                            QuestionsTopicId = ques.QuestionTopcId,
+                            QuestionsTopicId = (long)questTopic.QuestionsTopicId,
                             RangId = ques.RangsId,
                             StudentId = UserId,
                             Answer = studAnswerValue.Value
                         };
+                        if (questTopic.IsUsedNow)
+                        {
+                            studAnswer.TeacherTopicId = questTopic.Id;
+                        }
+                        else
+                        {
+                            studAnswer.TeacherTopicId = default;
+                        }
 
                         if (ques.ValueAnswer == studAnswer.Answer)
                         {
@@ -242,54 +308,63 @@ namespace Sait2022.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateTest()
         {
-            return View(await db.QuestionsTopics.ToListAsync());
+            var topicQ = (from q in db.Questions
+                          orderby q.QuestionTopcId
+                          join qt in db.QuestionsTopics
+                                on q.QuestionTopcId equals qt.Id
+                          group new { q, qt } by new { q.QuestionTopcId, qt.Topic, qt.IsUsedNow }
+                          into qqt
+                          select new
+                          {
+                              qqt.Key.QuestionTopcId,
+                              qqt.Key.Topic,
+                              qqt.Key.IsUsedNow
+                          });
 
-            //var topicQ = (from q in db.Questions
-            //              join qt in db.QuestionsTopics
-            //                    on q.QuestionTopcId equals qt.Id
-            //              group new { q, qt } by new { q.QuestionTopcId, qt.Topic }
-            //              into qqt
-            //              select new
-            //              {
-            //                  qqt.Key.QuestionTopcId,
-            //                  qqt.Key.Topic
-            //              });
+            QuestQTopicViewModel quest = new QuestQTopicViewModel();
 
-            //QuestQTopicViewModel quest = new QuestQTopicViewModel();
+            foreach (var r in topicQ)
+            {
+                quest.QuestionsTopic.Add(r.QuestionTopcId, r.Topic);
+                quest.IsUsedNowDict.Add(r.QuestionTopcId, r.IsUsedNow);
+            }
 
-            //foreach (var r in topicQ)
-            //{
-            //    quest.QuestionsId.Add(r.QuestionTopcId, r.QuestionTopcId.ToString());
-            //    quest.QuestionsTopic.Add(r.QuestionTopcId, r.Topic);
-            //}
-
-            //return View(quest);
+            return View(quest);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateTest([Bind("Topic,IsUsedNow,Id")] QuestionsTopic questionsTopics,TeacherTopic teacherTopic)
+        public async Task<IActionResult> CreateTest(QuestQTopicViewModel questionsTopics)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    //var teacherTopic = new TeacherTopic();
                     UserId = db.Users.FirstOrDefault(x => x.Id == int.Parse(User.Identity.GetUserId())).EmployeeId;
-                    if ((bool)questionsTopics.IsUsedNow)
+                    List<QuestionsTopic> listIsUsedNow = new List<QuestionsTopic>();
+                    foreach (var topic in questionsTopics.IsUsedNowDict)
                     {
-                        teacherTopic.IsUsedNow = true;
-                        teacherTopic.Student.Id = UserId;
-                        teacherTopic.QuestionsTopicId = teacherTopic.QuestionsTopicId;
-                        db.TeacherTopics.Add(teacherTopic);
-                    }
-                    else
-                    {
-                        teacherTopic.IsUsedNow = false;
-                        teacherTopic.Student.Id = UserId;
-                        teacherTopic.QuestionsTopicId = teacherTopic.QuestionsTopicId;
-                        db.TeacherTopics.Add(teacherTopic);
-                    }
+                        var quest = await db.QuestionsTopics.FindAsync(topic.Key);
 
+                        var teachetTopic = new TeacherTopic()
+                        {
+
+                            StudentId = UserId,
+                            IsUsedNow = topic.Value
+                        };
+                        if (teachetTopic.IsUsedNow)
+                        {
+                            teachetTopic.QuestionsTopicId = topic.Key;
+                        }
+                        else
+                        {
+                            teachetTopic.QuestionsTopicId = default;
+                        }
+
+                        db.TeacherTopics.Add(teachetTopic);
+                    }
+       
                     await db.SaveChangesAsync();
                 }
                 catch (DbUpdateException ex)
@@ -303,9 +378,9 @@ namespace Sait2022.Controllers
         [HttpGet]
         public async Task<IActionResult> Result()
         {
-            var answ = db.StudentAnswers.Include("Rangs").Include("Questions").OrderByDescending(x => x.Id).Take(3).OrderBy(x => x.Id);
+            var answ = db.StudentAnswers.Include("Rangs").Include("Questions").OrderByDescending(x => x.Id).Take(2).OrderBy(x => x.Id);
             var result = db.StudentAnswers.OrderByDescending(x => x.Id)
-                                          .Take(3)
+                                          .Take(2)
                                           .GroupBy(x => x.Result)
                                           .Select(g => new { Result = g.Key });
             foreach(var r in result)

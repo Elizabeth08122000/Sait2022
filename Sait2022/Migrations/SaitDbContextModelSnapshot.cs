@@ -268,7 +268,7 @@ namespace Sait2022.Migrations
                         .HasColumnName("Id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<bool?>("IsUsedNow")
+                    b.Property<bool>("IsUsedNow")
                         .HasColumnType("boolean")
                         .HasColumnName("IsUsedNow");
 
@@ -323,7 +323,7 @@ namespace Sait2022.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("QuestionId");
 
-                    b.Property<long>("QuestionsTopicId")
+                    b.Property<long?>("QuestionsTopicId")
                         .HasColumnType("bigint")
                         .HasColumnName("QuestionsTopicId");
 
@@ -367,15 +367,17 @@ namespace Sait2022.Migrations
                         .HasColumnName("Id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<bool?>("IsUsedNow")
+                    b.Property<bool>("IsUsedNow")
                         .HasColumnType("boolean")
                         .HasColumnName("IsUsedNow");
 
-                    b.Property<long>("QuestionsTopicId")
-                        .HasColumnType("bigint");
+                    b.Property<long?>("QuestionsTopicId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("QuestionsTopicId");
 
                     b.Property<long>("StudentId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("StudentId");
 
                     b.HasKey("Id")
                         .HasAnnotation("Npgsql:Serial", true);
@@ -563,9 +565,7 @@ namespace Sait2022.Migrations
 
                     b.HasOne("Sait2022.Domain.Model.QuestionsTopic", "QuestionsTopic")
                         .WithMany("StudentAnswers")
-                        .HasForeignKey("QuestionsTopicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("QuestionsTopicId");
 
                     b.HasOne("Sait2022.Domain.Model.Rangs", "Rangs")
                         .WithMany("StudentAnswers")
@@ -600,9 +600,7 @@ namespace Sait2022.Migrations
                 {
                     b.HasOne("Sait2022.Domain.Model.QuestionsTopic", "QuestionsTopic")
                         .WithMany("TeacherTopics")
-                        .HasForeignKey("QuestionsTopicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("QuestionsTopicId");
 
                     b.HasOne("Sait2022.Domain.Model.Employee", "Student")
                         .WithMany("TeacherTopics")

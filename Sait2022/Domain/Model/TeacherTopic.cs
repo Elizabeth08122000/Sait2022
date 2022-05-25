@@ -5,9 +5,9 @@ namespace Sait2022.Domain.Model
 {
     public class TeacherTopic:Entity
     {
-        public bool? IsUsedNow { get; set; }
+        public bool IsUsedNow { get; set; }
 
-        public long QuestionsTopicId { get; set; }
+        public long? QuestionsTopicId { get; set; }
         public QuestionsTopic QuestionsTopic { get; set; }
 
         public long StudentId { get; set; }
@@ -18,5 +18,6 @@ namespace Sait2022.Domain.Model
             StudentAnswers = new List<StudentAnswer>();
         }
         public ICollection<StudentAnswer> StudentAnswers { get; set; }
+
     }
 }

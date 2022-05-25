@@ -9,13 +9,13 @@ namespace Sait2022.ViewModels.Question
         {
             QuestionsId = new Dictionary<long, string>();
             QuestionsTopic = new Dictionary<long, string>();
-            IsUsedNow = new Dictionary<long, bool>();
+            IsUsedNowDict = new Dictionary<long, bool>();
         }
         public Dictionary<long, string> QuestionsId { get; set; }
 
         public Dictionary<long, string> QuestionsTopic { get; set; }
 
-        public Dictionary<long, bool> IsUsedNow { get; set; }
+        public Dictionary<long, bool> IsUsedNowDict { get; set; }
 
     }
 }

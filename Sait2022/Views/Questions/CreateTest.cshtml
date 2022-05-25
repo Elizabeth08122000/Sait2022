@@ -1,60 +1,22 @@
-﻿@model IEnumerable<Sait2022.Domain.Model.QuestionsTopic>
+﻿@model Sait2022.ViewModels.Question.QuestQTopicViewModel
 
-
-@using(Html.BeginForm("CreateTest", "Questions", FormMethod.Post))
-{
-    @foreach(var item in Model)
+ @using(Html.BeginForm("CreateTest", "Questions", FormMethod.Post))
     {
-        <div class="form-group bmd-form-group">
-            @*@Html.CheckBoxFor(x => (bool)item.IsUsedNow)*@
-            <input checked="checked" data-val="true" id="@item.IsUsedNow" name="@item.IsUsedNow" type="checkbox" value="true" />
-            <input name="@item.IsUsedNow" type="hidden" value="false" />
-        </div>
-        <div class="col-md-10">
-            @Html.DisplayFor(m => item.Topic)
-            <p></p>
-        </div>
-        <input type="hidden" asp-for="@item.Id" />
-    }
-    
-    <div class="form-group">
-        <input type="submit" value="Сохранить" class="btn btn-primary" />
-    </div>
-}
-
-
-@* @using(Html.BeginForm())
-    {
-        @foreach(var kvpair in Model.QuestionsId)
+        @foreach(var kvpair in Model.QuestionsTopic)
         {
-            <div class="form-group bmd-form-group">
-                @Html.CheckBoxFor(x => x.IsUsedNow[kvpair.Key])
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.QuestionsTopic[kvpair.Key])
+                <p></p>
             </div>
             <div class="col-md-10">
-                @Html.DisplayFor(m=>m.QuestionsTopic[kvpair.Key])
-               <p></p>
+                <input type="checkbox" asp-for="@Model.IsUsedNowDict[kvpair.Key]" class="form-control">
+                <span asp-validation-for="@Model.IsUsedNowDict[kvpair.Key]" class="text-danger"></span>
             </div>
         }
-        <div class="form-group">
-            <input type="submit" value="Сохранить" class="btn btn-primary" />
-        </div>
-    }*@
-
-@*<form asp-action="CreateTest" method="post">
-    <div class="card-body">
-        <div asp-validation-summary="All" class="text-danger"></div>
-
-        <div class="form-group bmd-form-group">
-            <label asp-for="IsUsedNow" class="bmd-label-floating">@Model.QuestionsTopic.Topic</label>
-            <input type="checkbox" asp-for="IsUsedNow" class="form-control">
-            <span asp-validation-for="IsUsedNow" class="text-danger"></span>
-        </div>
-    </div>
-
     <div class="card-footer justify-content-center">
         <button type="submit" class="btn btn-primary btn-fill btn-lg">Добавить</button>
     </div>
-</form>*@
+    }
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")

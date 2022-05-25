@@ -112,7 +112,7 @@ namespace Sait2022.Domain.DB
                     .IsRequired();
                 b.Property(x => x.IsUsedNow)
                     .HasColumnName("IsUsedNow")
-                    .IsRequired(false);
+                    .IsRequired();
             });
             #endregion
 
@@ -191,7 +191,7 @@ namespace Sait2022.Domain.DB
                     .IsRequired();
                 b.Property(x => x.QuestionsTopicId)
                     .HasColumnName("QuestionsTopicId")
-                    .IsRequired();
+                    .IsRequired(false);
                 b.Property(x => x.RangId)
                     .HasColumnName("RangId")
                     .IsRequired();
@@ -213,13 +213,19 @@ namespace Sait2022.Domain.DB
                 EntityId(b);
                 b.Property(x => x.IsUsedNow)
                     .HasColumnName("IsUsedNow")
-                    .IsRequired(false);
+                    .IsRequired();
                 b.HasOne(u => u.QuestionsTopic)
                     .WithMany(x => x.TeacherTopics)
                     .HasForeignKey(y => y.QuestionsTopicId);
+                b.Property(x => x.QuestionsTopicId)
+                    .HasColumnName("QuestionsTopicId")
+                    .IsRequired(false);
                 b.HasOne(u => u.Student)
                     .WithMany(x => x.TeacherTopics)
                     .HasForeignKey(y => y.StudentId);
+                b.Property(x => x.StudentId)
+                    .HasColumnName("StudentId")
+                    .IsRequired();
 
             });
             #endregion

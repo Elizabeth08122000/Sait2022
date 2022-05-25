@@ -13,7 +13,7 @@ namespace Sait2022.Domain.Model
         /// </summary>
         public string Topic { get; set; }
 
-        public bool? IsUsedNow { get; set; }
+        public bool IsUsedNow { get; set; }
 
         public ICollection<TeacherTopic> TeacherTopics { get; set; }
         public ICollection<Questions> Questions { get; set; }

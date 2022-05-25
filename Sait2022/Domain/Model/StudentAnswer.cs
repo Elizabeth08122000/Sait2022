@@ -31,7 +31,7 @@ namespace Sait2022.Domain.Model
         /// <summary>
         /// Внешний ключ темы
         /// </summary>
-        public long QuestionsTopicId { get; set; }
+        public long? QuestionsTopicId { get; set; }
         public QuestionsTopic QuestionsTopic { get; set; }
 
         /// <summary>
