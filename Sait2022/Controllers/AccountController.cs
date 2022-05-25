@@ -60,7 +60,7 @@ namespace Sait2022.Controllers
             {
                 return NotFound();
             }
-            ViewData["TeacherId"] = new SelectList(_saitDbContext.Employees.Where(x => x.IsTeacher==true), "Id", "FullName", users.TeacherId);
+         //   ViewData["TeacherId"] = new SelectList(_saitDbContext.Employees.Where(x => x.IsTeacher==true), "Id", "FullName", users.TeacherId);
             return View(users);
         }
 
@@ -96,7 +96,7 @@ namespace Sait2022.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TeacherId"] = new SelectList(_saitDbContext.Employees.Where(x => x.IsTeacher == true), "Id", "FullName", employee.TeacherId);
+          //  ViewData["TeacherId"] = new SelectList(_saitDbContext.Employees.Where(x => x.IsTeacher == true), "Id", "FullName", employee.TeacherId);
             return View(employee);
         }
 
@@ -154,19 +154,6 @@ namespace Sait2022.Controllers
             return View(model);
         }
 
-        private async Task Authenticate(string userName)
-        {
-            // создаем один claim
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
-            };
-            // создаем объект ClaimsIdentity
-            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            // установка аутентификационных куки
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
-        }
-
 
         /// <summary>
         /// Регистрация нового пользователя
@@ -174,6 +161,7 @@ namespace Sait2022.Controllers
         [HttpGet]
         public IActionResult RegistrationNewUser()
         {
+            ViewData["TeacherId"] = new SelectList(_saitDbContext.Employees.Where(x => x.IsTeacher == true), "Id", "FullName");
             return View();
         }
 
@@ -204,10 +192,22 @@ namespace Sait2022.Controllers
                 Patronym = model.Patronym,
                 PhoneNumber = model.PhoneNumber,
                 Address = model.Address,
-                TeacherId = model.TeacherId,
                 IsAdministrator = model.IsAdministrator,
                 IsTeacher = model.IsTeacher
             };
+
+            if (profile.IsTeacher)
+            {
+                profile.TeacherId = default;
+            }
+            if (profile.IsAdministrator)
+            {
+                profile.TeacherId = default;
+            }
+            if (!profile.IsAdministrator & !profile.IsTeacher)
+            {
+                profile.TeacherId = model.TeacherId;
+            }
 
             var user = new Users
             {
@@ -237,6 +237,7 @@ namespace Sait2022.Controllers
             }
             _saitDbContext.SaveChanges();
 
+            ViewData["TeacherId"] = new SelectList(_saitDbContext.Employees.Where(x => x.IsTeacher == true), "Id", "FullName", model.TeacherId);
             return RedirectToAction("Index", "Home");
         }
 
