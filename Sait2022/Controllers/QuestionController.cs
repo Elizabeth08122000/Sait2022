@@ -46,7 +46,15 @@ namespace Sait2022.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                saitDbContext = (IOrderedQueryable<Questions>)saitDbContext.Where(s => s.ValueQuest.Contains(searchString));
+                if(long.TryParse(searchString, out var number))
+                {
+                    saitDbContext = (IOrderedQueryable<Questions>)saitDbContext.Where(s => s.Id.Equals(long.Parse(searchString)));
+                }
+                else
+                {
+                    saitDbContext = (IOrderedQueryable<Questions>)saitDbContext.Where(s => s.ValueQuest.Contains(searchString));
+                }
+                
             }
 
             var count = await saitDbContext.CountAsync();
