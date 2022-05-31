@@ -10,6 +10,9 @@
     <thead>
         <tr>
             <th>
+                <h6>Номер вопроса</h6>
+            </th>
+            <th>
                 <h6>Ранг вопроса</h6>
             </th>
             <th>
@@ -27,6 +30,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuestionId)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Rangs.RangQuest)
             </td>

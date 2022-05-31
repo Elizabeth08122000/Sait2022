@@ -137,6 +137,7 @@ namespace Sait2022.Controllers
                         questAnswers.AnswerValues.Add(quest.Id, "");
                         questAnswers.FilesNameValue.Add(quest.Id, quest.Name);
                         questAnswers.FilesPathValue.Add(quest.Id, quest.Path);
+                        questAnswers.QuestionsId.Add(quest.Id, quest.Id);
                     }
                 }
                 catch (Exception ex)

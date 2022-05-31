@@ -11,6 +11,7 @@ namespace Sait2022.ViewModels.Question
             AnswerValues = new Dictionary<long, string>();
             FilesNameValue = new Dictionary<long, string>();
             FilesPathValue = new Dictionary<long, string>();
+            QuestionsId = new Dictionary<long, long>();
         }
         public Dictionary<long, string> QuestValues { get; set; }
         public Dictionary<long, string> AnswerValues { get; set; }
@@ -18,5 +19,7 @@ namespace Sait2022.ViewModels.Question
         public Dictionary<long, string> FilesNameValue { get; set; }
 
         public Dictionary<long, string> FilesPathValue { get; set; }
+
+        public Dictionary<long, long> QuestionsId { get; set; }
     }
 }
