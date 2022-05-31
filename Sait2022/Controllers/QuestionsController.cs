@@ -126,10 +126,14 @@ namespace Sait2022.Controllers
                                 {
                                     questions.Add(db.Questions.Where(x => x.RangsId == 1 & x.NumberQuest == 1 & x.QuestionTopcId == answ.QuestionsTopicId).FirstOrDefault());
                                 }
-                                
+                                                                
                             }
                                                        
                         }
+                    //if (teacherTopic == 3)
+                    //{
+                    //    ViewBag.QuestTopic = "Введите ответы в поле ответов через запятую без пробелов.";
+                    //}
 
                     foreach (var quest in questions)
                     {
