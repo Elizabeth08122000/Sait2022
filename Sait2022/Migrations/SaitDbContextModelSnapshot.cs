@@ -205,6 +205,10 @@ namespace Sait2022.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("TeacherId");
 
+                    b.Property<string>("pathZoom")
+                        .HasColumnType("text")
+                        .HasColumnName("pathZoom");
+
                     b.HasKey("Id")
                         .HasAnnotation("Npgsql:Serial", true);
 
@@ -225,6 +229,10 @@ namespace Sait2022.Migrations
                         .HasColumnType("text")
                         .HasColumnName("Name");
 
+                    b.Property<string>("NamePict")
+                        .HasColumnType("text")
+                        .HasColumnName("NamePict");
+
                     b.Property<int>("NumberQuest")
                         .HasColumnType("integer")
                         .HasColumnName("NumberQuest");
@@ -232,6 +240,10 @@ namespace Sait2022.Migrations
                     b.Property<string>("Path")
                         .HasColumnType("text")
                         .HasColumnName("Path");
+
+                    b.Property<string>("PathPict")
+                        .HasColumnType("text")
+                        .HasColumnName("PathPict");
 
                     b.Property<long>("QuestionTopcId")
                         .ValueGeneratedOnAdd()

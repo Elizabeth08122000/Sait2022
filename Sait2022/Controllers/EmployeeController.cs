@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Sait2022.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Sait2022.ViewModels.Employee;
+using System.Security.Claims;
 
 namespace Sait2022.Controllers
 {   
@@ -37,6 +38,8 @@ namespace Sait2022.Controllers
             var empl = db.Users.Where(x => x.Id == UserId & x.Employee.EmployeesNavig.Id == x.Employee.TeacherId)
                                .Include(a => a.Employee).Include(e => e.Employee.EmployeesNavig);
 
+            ViewBag.Admin = db.Users.Where(x => x.Id == UserId);
+
             return View(await empl.ToListAsync());
         }
 
@@ -46,10 +49,12 @@ namespace Sait2022.Controllers
 
             return View(await db.Employees.Where(x => x.TeacherId==UserId).ToListAsync());
         }
-
         public async Task<IActionResult> Index3()
         {
-            return View(await db.Employees.Where(x => x.Id != 1).ToListAsync());
+            var userId = long.Parse(this.User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            return View(await db.Employees.Where(x => x.Id != userId).ToListAsync());
         }
+
     }
 }

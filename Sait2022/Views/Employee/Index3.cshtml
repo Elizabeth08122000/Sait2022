@@ -6,22 +6,18 @@
 }
 
 
-  <meta charset="utf-8">
+<meta charset="utf-8">
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script src="~/js/site.js"></script>
 <h6>Пользователи</h6>
 
  @using(Html.BeginForm()){
     @foreach (var item in Model)
-    {
-            
+    {          
         <div>    
-            <a href="/Employee/Chat"> @Html.DisplayFor(m => item.FullName)</a>
+            <a href="@Html.DisplayFor(m => item.pathZoom)"> @Html.DisplayFor(m => item.FullName)</a>
             <p></p>
         </div>   
-
-
-
-}  
+    }  
     
 }

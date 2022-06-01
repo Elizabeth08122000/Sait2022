@@ -58,6 +58,11 @@ namespace Sait2022.Domain.Model
         public long? TeacherId { get; set; } //внешний ключ справочника Пользователей
         public Employee EmployeesNavig { get; set; } //навигационное свойство
 
+        /// <summary>
+        /// Ссылка на Zoom
+        /// </summary>
+        public string? pathZoom { get; set; }
+
         public ICollection<Employee> Employeess { get; set; }
         public ICollection<StudentAnswer> StudentAnswers { get; set; }
 

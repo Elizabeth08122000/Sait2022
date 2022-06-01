@@ -40,7 +40,8 @@ namespace Sait2022.Infrastructure.Guarantors
                 var profile = new Employee
                 {
                     FirstName = SecurityConstants.AdminFirstName,
-                    Surname = SecurityConstants.AdminSurName
+                    Surname = SecurityConstants.AdminSurName,
+                    IsAdministrator = true
                 };
 
                 adminUser = new Users

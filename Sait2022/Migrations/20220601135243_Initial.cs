@@ -36,7 +36,8 @@ namespace Sait2022.Migrations
                     Address = table.Column<string>(type: "text", nullable: true),
                     IsTeacher = table.Column<bool>(type: "boolean", nullable: false),
                     IsAdministrator = table.Column<bool>(type: "boolean", nullable: false),
-                    TeacherId = table.Column<long>(type: "bigint", nullable: true)
+                    TeacherId = table.Column<long>(type: "bigint", nullable: true),
+                    pathZoom = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -166,6 +167,8 @@ namespace Sait2022.Migrations
                     QuestionTopcId = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Path = table.Column<string>(type: "text", nullable: true),
+                    NamePict = table.Column<string>(type: "text", nullable: true),
+                    PathPict = table.Column<string>(type: "text", nullable: true),
                     RangsId = table.Column<long>(type: "bigint", nullable: false),
                     NumberQuest = table.Column<int>(type: "integer", nullable: false),
                     ValueQuest = table.Column<string>(type: "text", nullable: false),

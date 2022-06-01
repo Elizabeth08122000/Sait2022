@@ -17,12 +17,16 @@
         @foreach(var kvpair in Model.QuestValues)
         {
             <div class="col-md-10">
-                @Html.DisplayFor(m=>m.QuestionsId[kvpair.Key])
+               <p> № @Html.DisplayFor(m=>m.QuestionsId[kvpair.Key])</p> 
                <p></p>
             </div>
             <div class="col-md-10">
-                @Html.DisplayFor(m=>m.QuestValues[kvpair.Key])
+               @Html.DisplayFor(m=>m.QuestValues[kvpair.Key])
                <p></p>
+            </div>
+            <div class="col-md-10">
+               <img src= @Html.DisplayFor(model => model.PictPathValue[kvpair.Key])>
+                <p></p>
             </div>
             <div class="col-md-10">
                 <a href="@Html.DisplayFor(model => model.FilesPathValue[kvpair.Key])" target="_blank">@Html.DisplayFor(model => model.FilesNameValue[kvpair.Key])</a>

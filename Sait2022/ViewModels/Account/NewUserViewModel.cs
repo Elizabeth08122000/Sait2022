@@ -90,5 +90,11 @@ namespace Sait2022.ViewModels.Account
         /// </summary>
         [Display(Name = "Учитель")]
         public long? TeacherId { get; set; }
+
+        /// <summary>
+        /// Пароль пользователя
+        /// </summary>
+        [Display(Name = "Zoom")]
+        public string? PathZoom { get; set; }
     }
 }

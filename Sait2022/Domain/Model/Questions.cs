@@ -21,6 +21,9 @@ namespace Sait2022.Domain.Model
         public string? Name { get; set; }
         public string? Path { get; set; }
 
+        public string? NamePict { get; set; }
+        public string? PathPict { get; set; }
+
         /// <summary>
         /// Внешний ключ
         /// </summary>

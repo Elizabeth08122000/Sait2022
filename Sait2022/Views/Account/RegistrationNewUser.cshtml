@@ -65,6 +65,11 @@
             <select asp-for="TeacherId" class="form-control" asp-items="ViewBag.TeacherId" placeholder="Учитель"></select>
             <span asp-validation-for="TeacherId" class="text-danger"></span>
         </div>
+        <div class="form-group bmd-form-group">
+            <label asp-for="PathZoom" class="bmd-label-floating"></label>
+            <input asp-for="PathZoom" class="form-control" placeholder="Zoom">
+            <span asp-validation-for="PathZoom" class="text-danger"></span>
+        </div>
         @if(User.IsInRole("ADMIN"))
         {
              <div class="form-group bmd-form-group">

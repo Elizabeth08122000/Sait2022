@@ -34,34 +34,25 @@ namespace Sait2022.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(string searchString)
+        public async Task<IActionResult> Index(string searchString)
         {
-            //ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentFilter"] = searchString;
 
-            var users = _saitDbContext.Employees.Include(x => x.EmployeesNavig)
-                                                .Where(x => x.IsTeacher == true | x.IsAdministrator == true
-                                                            | x.IsTeacher == false | x.IsAdministrator == false);
+            var userId = long.Parse(this.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            if (User.IsInRole("ADMIN"))
+            var users = _saitDbContext.Users.Include(x => x.Employee).Where(x => x.Id != userId);
+
+            if (User.IsInRole("TEACHER"))
             {
-                users = _saitDbContext.Employees.Include(x => x.EmployeesNavig).Where(x => x.IsAdministrator == false);
+                users = _saitDbContext.Users.Include(x => x.Employee).Where(x => x.Id != userId & x.Employee.TeacherId == userId);
             }
-            if(User.IsInRole("TEACHER"))
+
+            if (!String.IsNullOrEmpty(searchString))
             {
-                users = _saitDbContext.Employees.Include(x => x.EmployeesNavig).Where(x => x.IsTeacher == false & x.IsAdministrator == false);
+                users = users.Where(s => s.Employee.Surname.Contains(searchString));
             }
-   
-            //if (!String.IsNullOrEmpty(searchString))
-            //{
-            //    users = users.Include(x => x.EmployeesNavig).Where(s => s.FullName.Contains(searchString));
-            //}
 
-            //if (!String.IsNullOrEmpty(searchString))
-            //{
-            //    users = users.Where(s => s.UserName.Contains(searchString));
-            //}
-
-            return View(users.ToList());
+            return View(await users.ToListAsync());
         }
 
         public async Task<IActionResult> Edit(long? id)
@@ -85,7 +76,7 @@ namespace Sait2022.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("FirstName,Surname,Patronym,PhoneNumber,TeacherId,Address,TeacherId,Id")] Employee employee)
+        public async Task<IActionResult> Edit(long id, [Bind("FirstName,Surname,Patronym,PhoneNumber,TeacherId,Address,pathZoom,TeacherId,Id")] Employee employee)
         {
             if (id != employee.Id)
             {
@@ -96,7 +87,6 @@ namespace Sait2022.Controllers
             {
                 try
                 {
-                   // var user = await _saitDbContext.Employees.FindAsync(employee.Id);
                     var user = _saitDbContext.Employees.OrderBy(x => x.Id).Where(x => x.Id == employee.Id).AsNoTracking().LastOrDefault();
                     employee.TeacherId = user.TeacherId;
                     employee.IsAdministrator = user.IsAdministrator;
@@ -215,7 +205,8 @@ namespace Sait2022.Controllers
                 PhoneNumber = model.PhoneNumber,
                 Address = model.Address,
                 IsAdministrator = model.IsAdministrator,
-                IsTeacher = model.IsTeacher
+                IsTeacher = model.IsTeacher,
+                pathZoom = model.PathZoom
             };
 
             if (profile.IsTeacher)
@@ -392,6 +383,7 @@ namespace Sait2022.Controllers
             }
             return View(model);
         }
+
 
         #region Helpers
 

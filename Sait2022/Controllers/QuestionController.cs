@@ -104,7 +104,7 @@ namespace Sait2022.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("QuestionTopcId,RangsId,AnswerId,Name,Path,NumberQuest,ValueAnswer,ValueQuest,Id")] Questions questions, [FromForm] IFormFile uploadedFile)
+        public async Task<IActionResult> Create([Bind("QuestionTopcId,RangsId,AnswerId,Name,Path,NamePict,PathPict,NumberQuest,ValueAnswer,ValueQuest,Id")] Questions questions, [FromForm] IFormFile uploadedFile, [FromForm] IFormFile uploadedFile2)
         {
             if (ModelState.IsValid)
             {
@@ -136,6 +136,18 @@ namespace Sait2022.Controllers
                     }
                     questions.Name = uploadedFile.FileName;
                     questions.Path = path;
+                }
+                if (uploadedFile2 != null)
+                {
+                    // путь к папке Pictures
+                    string path2 = "/Pictures/" + uploadedFile2.FileName;
+                    // сохраняем файл в папку Pictures в каталоге wwwroot
+                    using (var fileStream2 = new FileStream(_appEnvironment.WebRootPath + path2, FileMode.Create))
+                    {
+                        await uploadedFile2.CopyToAsync(fileStream2);
+                    }
+                    questions.NamePict = uploadedFile2.FileName;
+                    questions.PathPict = path2;
                 }
 
                 _context.Add(questions);
@@ -171,7 +183,7 @@ namespace Sait2022.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("QuestionTopcId,RangsId,AnswerId,Name,Path,NumberQuest,ValueAnswer,ValueQuest,Id")] Questions questions, [FromForm] IFormFile uploadedFile)
+        public async Task<IActionResult> Edit(long id, [Bind("QuestionTopcId,RangsId,AnswerId,Name,Path,NamePict,PathPict,NumberQuest,ValueAnswer,ValueQuest,Id")] Questions questions, [FromForm] IFormFile uploadedFile, [FromForm] IFormFile uploadedFile2)
         {
             if (id != questions.Id)
             {
@@ -182,6 +194,8 @@ namespace Sait2022.Controllers
             {
                 try
                 {
+                    var filesLast = _context.Questions.OrderBy(x => x.Id).Where(x => x.Id == questions.Id).AsNoTracking().LastOrDefault();
+                                        
                     if (uploadedFile != null)
                     {
                         // путь к папке Files
@@ -194,7 +208,28 @@ namespace Sait2022.Controllers
                         questions.Name = uploadedFile.FileName;
                         questions.Path = path;
                     }
-
+                    else
+                    {
+                        questions.Path = filesLast.Path;
+                        questions.Name = filesLast.Name;
+                    }
+                    if (uploadedFile2 != null)
+                    {
+                        // путь к папке Pictures
+                        string path2 = "/Pictures/" + uploadedFile2.FileName;
+                        // сохраняем файл в папку Pictures в каталоге wwwroot
+                        using (var fileStream2 = new FileStream(_appEnvironment.WebRootPath + path2, FileMode.Create))
+                        {
+                            await uploadedFile2.CopyToAsync(fileStream2);
+                        }
+                        questions.NamePict = uploadedFile2.FileName;
+                        questions.PathPict = path2;
+                    }
+                    else
+                    {
+                        questions.PathPict = filesLast.PathPict;
+                        questions.NamePict = filesLast.NamePict;
+                    }
                     var quest = _context.Questions.OrderBy(x => x.Id).Where(x => x.Id == questions.Id & x.RangsId == questions.RangsId).AsNoTracking().LastOrDefault();
                     var questR = _context.Questions.OrderBy(x => x.Id).Where(x => x.RangsId == questions.RangsId & x.QuestionTopcId == questions.QuestionTopcId).AsNoTracking().LastOrDefault();
 
@@ -221,8 +256,6 @@ namespace Sait2022.Controllers
                             questions.NumberQuest = quest.NumberQuest;
                         }
                     }
-
-                    
 
                     _context.Update(questions);
                     await _context.SaveChangesAsync();

@@ -108,6 +108,10 @@ namespace Sait2022.Controllers
                                         }
 
                                     }
+                                    if (answ.QuestionsTopicId == 1)
+                                    {
+                                        ViewBag.QuestTopic = "Введите ответы в поле ответов через запятую без пробелов.";
+                                    }
                                 }
                             }
                             else
@@ -126,14 +130,15 @@ namespace Sait2022.Controllers
                                 {
                                     questions.Add(db.Questions.Where(x => x.RangsId == 1 & x.NumberQuest == 1 & x.QuestionTopcId == answ.QuestionsTopicId).FirstOrDefault());
                                 }
+
+                                if(answ.QuestionsTopicId == 1)
+                                {
+                                    ViewBag.QuestTopic = "Введите ответы в поле ответов через запятую без пробелов.";
+                                }
                                                                 
                             }
                                                        
                         }
-                    //if (teacherTopic == 3)
-                    //{
-                    //    ViewBag.QuestTopic = "Введите ответы в поле ответов через запятую без пробелов.";
-                    //}
 
                     foreach (var quest in questions)
                     {
@@ -141,6 +146,8 @@ namespace Sait2022.Controllers
                         questAnswers.AnswerValues.Add(quest.Id, "");
                         questAnswers.FilesNameValue.Add(quest.Id, quest.Name);
                         questAnswers.FilesPathValue.Add(quest.Id, quest.Path);
+                        questAnswers.PictNameValue.Add(quest.Id, quest.NamePict);
+                        questAnswers.PictPathValue.Add(quest.Id, quest.PathPict);
                         questAnswers.QuestionsId.Add(quest.Id, quest.Id);
                     }
                 }

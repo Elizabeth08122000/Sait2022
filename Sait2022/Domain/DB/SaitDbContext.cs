@@ -99,6 +99,9 @@ namespace Sait2022.Domain.DB
                     .HasForeignKey(t => t.TeacherId);
                 b.Property(x => x.TeacherId)
                     .HasColumnName("TeacherId");
+                b.Property(x => x.pathZoom)
+                    .HasColumnName("pathZoom")
+                    .IsRequired(false);
             });
             #endregion
 
@@ -153,6 +156,12 @@ namespace Sait2022.Domain.DB
                     .IsRequired(false);
                 b.Property(x => x.Path)
                     .HasColumnName("Path")
+                    .IsRequired(false);
+                b.Property(x => x.NamePict)
+                    .HasColumnName("NamePict")
+                    .IsRequired(false);
+                b.Property(x => x.PathPict)
+                    .HasColumnName("PathPict")
                     .IsRequired(false);
                 b.HasMany(b => b.Users)
                     .WithMany(b => b.Questions)

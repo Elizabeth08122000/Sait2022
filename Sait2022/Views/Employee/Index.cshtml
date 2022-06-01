@@ -59,16 +59,19 @@
             <p></p>
         </div>
 
+        @*<div>
+            <a href="@Html.DisplayFor(m => item.Employee.pathZoom)">Zoom</a>
+        </div>*@
 
         @*<div>
             <h6> <a href="/Employee/Chat"> Общий чат </a></h6>
         </div>*@
 
-       @* <div>
+        <div>
             @if (User.IsInRole("STUDENT"))
                 {
                  <h6>Учитель</h6>
-                 <a href="/Employee/Chat"> @Html.DisplayFor(m => item.Employee.EmployeesNavig.FullName)</a>
+                 <a href="@Html.DisplayFor(m => item.Employee.pathZoom)"> @Html.DisplayFor(m => item.Employee.EmployeesNavig.FullName)</a>
                 }
         </div>
 
@@ -77,6 +80,10 @@
                 {
                     <h6>
                         <a href="/Employee/Index2"> Ученики </a>
+                    </h6>
+
+                    <h6>
+                        <a href="@Html.DisplayFor(m => item.Employee.pathZoom)">Администратор</a>
                     </h6>
                 }
             </div>
@@ -88,7 +95,7 @@
                         <a href="/Employee/Index3"> Пользователи </a>
                     </h6>
                 }
-            </div>*@
+            </div>
    
     }  
     

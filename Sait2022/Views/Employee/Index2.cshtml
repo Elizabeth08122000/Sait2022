@@ -16,12 +16,9 @@
     @foreach (var item in Model)
     {           
         <div>    
-            <a href="/Employee/Chat"> @Html.DisplayFor(m => item.FullName)</a>
+            <a href="@Html.DisplayFor(m => item.pathZoom)"> @Html.DisplayFor(m => item.FullName)</a>
             <p></p>
         </div>   
-
-
-
-}  
+    }  
     
 }
