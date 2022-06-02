@@ -36,6 +36,7 @@ namespace Sait2022.Domain.Model
         /// <summary>
         /// Номер телефона пользователя
         /// </summary>
+        [RegularExpression(@"^[0-9]+$", ErrorMessage = "Некорректный телефон. Введите телефон цифрами")]
         public string? PhoneNumber { get; set; }
 
         /// <summary>

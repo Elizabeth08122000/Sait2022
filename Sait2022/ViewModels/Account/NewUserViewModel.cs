@@ -66,6 +66,7 @@ namespace Sait2022.ViewModels.Account
         /// Отчество
         /// </summary>
         [Display(Name = "Телефон")]
+        [RegularExpression(@"^[0-9]+$", ErrorMessage = "Некорректный телефон. Введите телефон цифрами")]
         public string PhoneNumber { get; set; }
 
         /// <summary>
