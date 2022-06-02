@@ -10,7 +10,7 @@ namespace Sait2022.ViewModels.Account
         /// <summary>
         /// Почта
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "Введите Email")]
         [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}", ErrorMessage = "Некорректный адрес")]
         [Display(Name = "Email")]
         public string Email { get; set; }
@@ -26,6 +26,7 @@ namespace Sait2022.ViewModels.Account
         /// <summary>
         /// Повторение пароля
         /// </summary>
+        [Required(ErrorMessage = "Повторите пароль")]
         [DataType(DataType.Password)]
         [Display(Name = "Подтверждение пароля")]
         [Compare("Password", ErrorMessage = "Пароли не совпадают!")]
@@ -34,7 +35,7 @@ namespace Sait2022.ViewModels.Account
         /// <summary>
         /// Логин
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "Введите логин")]
         [Display(Name = "Логин")]
         public string UserName { get; set; }
 

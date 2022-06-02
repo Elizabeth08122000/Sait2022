@@ -13,6 +13,7 @@ namespace Sait2022.Domain.Model
         /// Тема вопроса
         /// </summary>
         [Required(ErrorMessage = "Не указана тема вопроса")]
+        [RegularExpression(@"^[А-Яа-я]+$", ErrorMessage = "Некорректная тема вопроса. Введите тему кириллицей")]
         public string Topic { get; set; }
 
         public bool IsUsedNow { get; set; }

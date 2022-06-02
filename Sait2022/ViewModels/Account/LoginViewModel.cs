@@ -10,14 +10,14 @@ namespace Sait2022.ViewModels.Account
         /// <summary>
         /// Логин
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "Введите логин")]
         [Display(Name = "Логин")]
         public string Login { get; set; }
 
         /// <summary>
         /// Пароль пользователя
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "Пароль должен иметь от 6 символов, минимум одну цифру и символы в верхнем и нижнем регистрах")]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
         public string Password { get; set; }

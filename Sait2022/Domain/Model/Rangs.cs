@@ -14,6 +14,7 @@ namespace Sait2022.Domain.Model
         /// </summary>
         [Required(ErrorMessage = "Не указан Ранг")]
         [StringLength(2, MinimumLength = 1, ErrorMessage = "Ранг должен быть от 1 до 2 символов")]
+        [RegularExpression(@"^[A-Z]+$", ErrorMessage = "Некорректный ранг. Введите ранг заглавными латинскими буквами")]
         public string RangQuest { get; set; }
 
         public ICollection<Questions> Questions { get; set; }
