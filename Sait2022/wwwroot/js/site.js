@@ -3,7 +3,15 @@
 
 // Write your JavaScript code.
 $(document).ready(function () {
-    $('.onerow')
-        .append('<div></div>')
-    addClass('abc');
+
+    if (performance.navigation.type == 1) {
+        console.log("Страница перезагружена");
+        $(document).ready(setInterval
+            (function () {
+                /*$('.onerow').append('<div></div>');*/
+                $('.onerow').before('<div></div>');
+            }, 6000));
+    }
+    
 });
+

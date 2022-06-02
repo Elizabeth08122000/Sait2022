@@ -27,36 +27,53 @@
  @using(Html.BeginForm()){
     @foreach (var item in Model)
     {
-        <div>
-            <h6>Фамилия</h6>
-            @Html.DisplayFor(m => item.Employee.Surname)
-            <p></p>
-            <h6>Имя</h6>
-            @Html.DisplayFor(m => item.Employee.FirstName)
-            <p></p>          
-            <p></p>
-            <h6>Отчество</h6>
-            @Html.DisplayFor(m => item.Employee.Patronym)
-            
+        <div class="row onerow">
+            <div>
+                <h6>Фамилия</h6>
+                @Html.DisplayFor(m => item.Employee.Surname) 
+            </div>
+        </div>
+        <div class="row onerow">
+            <div>
+                <h6>Имя</h6>
+                @Html.DisplayFor(m => item.Employee.FirstName)
+                <p></p>          
+             </div>
+        </div>
+        <div class="row onerow">
+            <div>         
+                <p></p>
+                <h6>Отчество</h6>
+                @Html.DisplayFor(m => item.Employee.Patronym)    
+            </div>
         </div>
 
         <div class="row onerow">
             <div>
-            <h6>Телефон</h6>
-            @Html.DisplayFor(m => item.PhoneNumber)
-            <p></p>
-           <h6>Адрес</h6>
-            @Html.DisplayFor(m => item.Employee.Address)
+                <h6>Телефон</h6>
+                @Html.DisplayFor(m => item.PhoneNumber)
+                <p></p>
+            </div>
         </div>
-
-        <div>
-            <h6>Email</h6>
-            @Html.DisplayFor(m => item.Email)
-            <p></p>
-            <h6>Логин</h6>
-            @Html.DisplayFor(m => item.UserName)
-            <p></p>
+        <div class="row onerow">
+            <div>
+               <h6>Адрес</h6>
+                @Html.DisplayFor(m => item.Employee.Address)
+            </div>
         </div>
+         <div class="row onerow">
+            <div>
+                <h6>Email</h6>
+                @Html.DisplayFor(m => item.Email)
+                <p></p>
+            </div>
+        </div>
+        <div class="row onerow">
+            <div>
+                <h6>Логин</h6>
+                @Html.DisplayFor(m => item.UserName)
+                <p></p>
+            </div>
         </div>
 
         
