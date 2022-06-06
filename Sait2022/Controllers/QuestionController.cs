@@ -42,7 +42,7 @@ namespace Sait2022.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var saitDbContext = _context.Questions.Include(q => q.QuestionsTopic).Include(q => q.Rangs).OrderBy(x => x.Id);
+            var saitDbContext = _context.Questions.Include(q => q.QuestionsTopic).Include(q => q.Rangs).OrderBy(x => x.QuestionTopcId);
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -230,31 +230,13 @@ namespace Sait2022.Controllers
                         questions.PathPict = filesLast.PathPict;
                         questions.NamePict = filesLast.NamePict;
                     }
-                    var quest = _context.Questions.OrderBy(x => x.Id).Where(x => x.Id == questions.Id & x.RangsId == questions.RangsId).AsNoTracking().LastOrDefault();
-                    var questR = _context.Questions.OrderBy(x => x.Id).Where(x => x.RangsId == questions.RangsId & x.QuestionTopcId == questions.QuestionTopcId).AsNoTracking().LastOrDefault();
 
-                    if (questR == null)
-                    {
-                        questions.NumberQuest = 0;
-                    }
+                    var quest = _context.Questions.OrderBy(x => x.Id).Where(x => x.Id == questions.Id & x.RangsId == questions.RangsId & x.QuestionTopcId == questions.QuestionTopcId).AsNoTracking().LastOrDefault();
+                    var questR = _context.Questions.OrderBy(x => x.NumberQuest).Where(x => x.RangsId == questions.RangsId & x.QuestionTopcId == questions.QuestionTopcId).AsNoTracking().LastOrDefault();
+
                     if (quest == null)
                     {
-                        questions.NumberQuest = 1;
-                    }
-                    else
-                    {
-                        if (!quest.RangsId.Equals(questions.RangsId))
-                        {
-                            questions.NumberQuest = questR.NumberQuest + 1;
-                        }
-                        if (!quest.QuestionTopcId.Equals(questions.QuestionTopcId))
-                        {
-                            questions.NumberQuest = quest.NumberQuest + 1;
-                        }
-                        else
-                        {
-                            questions.NumberQuest = quest.NumberQuest;
-                        }
+                        questions.NumberQuest = questR.NumberQuest + 1;
                     }
 
                     _context.Update(questions);

@@ -14,6 +14,7 @@ namespace Sait2022.ViewModels.Question
             PictNameValue = new Dictionary<long, string>();
             PictPathValue = new Dictionary<long, string>();
             QuestionsId = new Dictionary<long, long>();
+            NumberTopic = new Dictionary<long, long>();
         }
         public Dictionary<long, string> QuestValues { get; set; }
         public Dictionary<long, string> AnswerValues { get; set; }
@@ -27,5 +28,7 @@ namespace Sait2022.ViewModels.Question
         public Dictionary<long, string> PictPathValue { get; set; }
 
         public Dictionary<long, long> QuestionsId { get; set; }
+
+        public Dictionary<long, long> NumberTopic { get; set; }
     }
 }

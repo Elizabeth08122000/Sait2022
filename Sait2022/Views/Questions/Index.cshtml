@@ -17,8 +17,7 @@
         @foreach(var kvpair in Model.QuestValues)
         {
             <div class="col-md-10">
-               <p> № @Html.DisplayFor(m=>m.QuestionsId[kvpair.Key])</p> 
-               <p></p>
+               <p>Задание @Html.DisplayFor(m=>m.NumberTopic[kvpair.Key]) № @Html.DisplayFor(m=>m.QuestionsId[kvpair.Key])</p> 
             </div>
             <div class="col-md-10">
                @Html.DisplayFor(m=>m.QuestValues[kvpair.Key])

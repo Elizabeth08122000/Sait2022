@@ -40,20 +40,20 @@ namespace Sait2022.Controllers
 
             ViewBag.Admin = db.Users.Where(x => x.Id == UserId);
 
-            return View(await empl.ToListAsync());
+            return View(await empl.OrderBy(x => x.Id).ToListAsync());
         }
 
         public async Task<IActionResult> Index2()
         {
             UserId = db.Users.FirstOrDefault(x => x.Id == int.Parse(User.Identity.GetUserId())).EmployeeId;
 
-            return View(await db.Employees.Where(x => x.TeacherId==UserId).ToListAsync());
+            return View(await db.Employees.Where(x => x.TeacherId==UserId).OrderBy(x => x.Id).ToListAsync());
         }
         public async Task<IActionResult> Index3()
         {
             var userId = long.Parse(this.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            return View(await db.Employees.Where(x => x.Id != userId).ToListAsync());
+            return View(await db.Employees.Where(x => x.Id != userId).OrderBy(x => x.Id).ToListAsync());
         }
 
     }

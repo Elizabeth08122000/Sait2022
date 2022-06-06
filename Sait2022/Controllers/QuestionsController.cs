@@ -149,6 +149,7 @@ namespace Sait2022.Controllers
                         questAnswers.PictNameValue.Add(quest.Id, quest.NamePict);
                         questAnswers.PictPathValue.Add(quest.Id, quest.PathPict);
                         questAnswers.QuestionsId.Add(quest.Id, quest.Id);
+                        questAnswers.NumberTopic.Add(quest.Id,quest.QuestionTopcId);
                     }
                 }
                 catch (Exception ex)

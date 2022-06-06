@@ -22,7 +22,7 @@ namespace Sait2022.Controllers
         // GET: QuestionsTopics
         public async Task<IActionResult> Index()
         {
-            return View(await _context.QuestionsTopics.ToListAsync());
+            return View(await _context.QuestionsTopics.OrderBy(x => x.Id).ToListAsync());
         }
 
         // GET: QuestionsTopics/Details/5

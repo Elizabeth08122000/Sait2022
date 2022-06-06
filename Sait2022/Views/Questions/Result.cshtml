@@ -10,6 +10,9 @@
     <thead>
         <tr>
             <th>
+                <h6>Задание</h6>
+            </th>
+            <th>
                 <h6>Номер вопроса</h6>
             </th>
             <th>
@@ -30,6 +33,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuestionsTopicId)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.QuestionId)
             </td>

@@ -22,7 +22,7 @@ namespace Sait2022.Controllers
         // GET: Rangs
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Rangs.ToListAsync());
+            return View(await _context.Rangs.OrderBy(x => x.Id).ToListAsync());
         }
 
         // GET: Rangs/Details/5
