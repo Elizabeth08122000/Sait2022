@@ -35,7 +35,7 @@ namespace Sait2022.Controllers
         {
             UserId = db.Users.FirstOrDefault(x => x.Id == int.Parse(User.Identity.GetUserId())).EmployeeId;
 
-            var empl = db.Users.Where(x => x.Id == UserId & x.Employee.EmployeesNavig.Id == x.Employee.TeacherId)
+            var empl = db.Users.OrderBy(x => x.Id).Where(x => x.Id == UserId & x.Employee.EmployeesNavig.Id == x.Employee.TeacherId)
                                .Include(a => a.Employee).Include(e => e.Employee.EmployeesNavig);
 
             ViewBag.Admin = db.Users.Where(x => x.Id == UserId);

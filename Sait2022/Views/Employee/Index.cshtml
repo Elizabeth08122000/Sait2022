@@ -9,20 +9,22 @@
   <meta charset="utf-8">
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script src="~/js/site.js"></script>
-
-@if (User.IsInRole("TEACHER"))
-{
-   <h4><i>Учитель</i></h4>
-}
-@if (User.IsInRole("ADMIN"))
-{
-    <h4><i>Администратор</i></h4>
-}
-@if (User.IsInRole("STUDENT"))
-{
-    <h4><i>Ученик</i></h4>
-}
-
+<div class="row onerow">
+    <div>
+        @if (User.IsInRole("TEACHER"))
+        {
+           <h4><i>Учитель</i></h4>
+        }
+        @if (User.IsInRole("ADMIN"))
+        {
+            <h4><i>Администратор</i></h4>
+        }
+        @if (User.IsInRole("STUDENT"))
+        {
+            <h4><i>Ученик</i></h4>
+        }
+    </div>
+</div>
 
  @using(Html.BeginForm()){
     @foreach (var item in Model)
@@ -85,34 +87,44 @@
         @*<div>
             <h6> <a href="/Employee/Chat"> Общий чат </a></h6>
         </div>*@
-
-        <div>
-            @if (User.IsInRole("STUDENT"))
-                {
-                 <h6>Учитель</h6>
-                 <a href="@Html.DisplayFor(m => item.Employee.pathZoom)"> @Html.DisplayFor(m => item.Employee.EmployeesNavig.FullName)</a>
-                }
-        </div>
+        
+            <div>
+                @if (User.IsInRole("STUDENT"))
+                    {
+                     <div class="row onerow">
+                        <h6>Учитель</h6>
+                     </div>
+                     <div class="row onerow">
+                        <a href="@Html.DisplayFor(m => item.Employee.pathZoom)"> @Html.DisplayFor(m => item.Employee.EmployeesNavig.FullName)</a>
+                     </div>
+                    }
+            </div>
+        
 
         <div>
                 @if (User.IsInRole("TEACHER"))
                 {
-                    <h6>
-                        <a href="/Employee/Index2"> Ученики </a>
-                    </h6>
-
-                    <h6>
-                        <a href="@Html.DisplayFor(m => item.Employee.pathZoom)">Администратор</a>
-                    </h6>
+                    <div class="row onerow">
+                        <h6>
+                            <a href="/Employee/Index2"> Ученики </a>
+                        </h6>
+                    </div>
+                    <div class="row onerow">
+                        <h6>
+                            <a href="@Html.DisplayFor(m => item.Employee.pathZoom)">Администратор</a>
+                        </h6>
+                    </div>
                 }
             </div>
 
             <div>
                 @if (User.IsInRole("ADMIN"))
                 {
-                    <h6>
-                        <a href="/Employee/Index3"> Пользователи </a>
-                    </h6>
+                    <div class="row onerow">
+                        <h6>
+                            <a href="/Employee/Index3"> Пользователи </a>
+                        </h6>
+                    </div>
                 }
             </div>
    
