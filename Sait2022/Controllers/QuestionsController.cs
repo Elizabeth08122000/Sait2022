@@ -43,7 +43,7 @@ namespace Sait2022.Controllers
                     var teacherTopic = db.TeacherTopics
                                    .Where(x => x.StudentId == UserId)
                                    .OrderByDescending(x => x.Id)
-                                   .Take(3)
+                                   .Take(27)
                                    .ToList();
 
                     if (studentAnswersDb.Count > 0)
@@ -209,6 +209,10 @@ namespace Sait2022.Controllers
                         questAnswers.AnswerValues.Add(quest.Id, "");
                         questAnswers.FilesNameValue.Add(quest.Id, quest.Name);
                         questAnswers.FilesPathValue.Add(quest.Id, quest.Path);
+                        questAnswers.PictNameValue.Add(quest.Id, quest.NamePict);
+                        questAnswers.PictPathValue.Add(quest.Id, quest.PathPict);
+                        questAnswers.QuestionsId.Add(quest.Id, quest.Id);
+                        questAnswers.NumberTopic.Add(quest.Id, quest.QuestionTopcId);
                     }
                 }                
             }
@@ -265,7 +269,7 @@ namespace Sait2022.Controllers
                         
                         studentAnswer.Result = Math.Abs((kol * 100) / count);
 
-                        if (studentAnswer.Result >= 60)
+                        if (studentAnswer.Result >= 90)
                             result = (int)studentAnswer.Result;
                         else
                             result = (int)studentAnswer.Result;
@@ -353,7 +357,6 @@ namespace Sait2022.Controllers
             {
                 try
                 {
-                    //var teacherTopic = new TeacherTopic();
                     UserId = db.Users.FirstOrDefault(x => x.Id == int.Parse(User.Identity.GetUserId())).EmployeeId;
                     List<QuestionsTopic> listIsUsedNow = new List<QuestionsTopic>();
                     foreach (var topic in questionsTopics.IsUsedNowDict)
@@ -391,7 +394,7 @@ namespace Sait2022.Controllers
         [HttpGet]
         public async Task<IActionResult> Result()
         {
-            var count = db.TeacherTopics.OrderByDescending(x => x.Id).Take(3).Where(x => x.IsUsedNow==true).Count();
+            var count = db.TeacherTopics.OrderByDescending(x => x.Id).Take(27).Where(x => x.IsUsedNow==true).Count();
             var answ = db.StudentAnswers.Include("Rangs").Include("Questions").OrderByDescending(x => x.Id).Take(count).OrderBy(x => x.Id);
             var result = db.StudentAnswers.OrderByDescending(x => x.Id)
                                           .Take(count)
@@ -400,7 +403,7 @@ namespace Sait2022.Controllers
             foreach(var r in result)
             {
                 ViewBag.Message = r.Result.ToString();
-                if(r.Result >= 60)
+                if(r.Result >= 90)
                 {
                     ViewBag.Answer = "Молодец! У вас осталось немного до идеального результата!";
                 }
@@ -408,7 +411,7 @@ namespace Sait2022.Controllers
                 {
                     ViewBag.Answer = "Идеальный результат! Вы гений! Так держать!";
                 }
-                if(r.Result < 60)
+                if(r.Result < 90)
                 {
                     ViewBag.Answer = "К сожалению, Вы провалили тест. Попробуйте еще раз!";
                 }
