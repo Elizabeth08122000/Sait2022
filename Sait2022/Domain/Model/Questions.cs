@@ -39,12 +39,13 @@ namespace Sait2022.Domain.Model
         /// <summary>
         /// Сам вопрос
         /// </summary>
+        [Required(ErrorMessage = "Не заполнен вопрос")]
         public string ValueQuest { get; set; }
 
         /// <summary>
         /// Сам ответ
         /// </summary>
-        [Required]
+        [Required(ErrorMessage ="Не заполнен ответ")]
         public string ValueAnswer { get; set; }
 
         public virtual ICollection<Users> Users { get; set; }
