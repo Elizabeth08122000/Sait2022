@@ -44,7 +44,7 @@ namespace Sait2022.Controllers
                     var teacherTopic = db.TeacherTopics
                                    .Where(x => x.StudentId == UserId)
                                    .OrderByDescending(x => x.Id)
-                                   .Take(27)
+                                   .Take(3)
                                    .ToList();
 
                     if (studentAnswersDb.Count > 0)
@@ -109,10 +109,10 @@ namespace Sait2022.Controllers
                                         }
 
                                     }
-                                    if (answ.QuestionsTopicId == 1)
-                                    {
-                                        ViewBag.QuestTopic = "Введите ответы в поле ответов через запятую без пробелов.";
-                                    }
+                                    //if (answ.QuestionsTopicId == 1)
+                                    //{
+                                    //    ViewBag.QuestTopic = "Введите ответы в поле ответов через запятую без пробелов.";
+                                    //}
                                 }
                             }
                             else
@@ -132,10 +132,10 @@ namespace Sait2022.Controllers
                                     questions.Add(db.Questions.Where(x => x.RangsId == 1 & x.NumberQuest == 1 & x.QuestionTopcId == answ.QuestionsTopicId).FirstOrDefault());
                                 }
 
-                                if(answ.QuestionsTopicId == 1)
-                                {
-                                    ViewBag.QuestTopic = "Введите ответы в поле ответов через запятую без пробелов.";
-                                }
+                                //if(answ.QuestionsTopicId == 1)
+                                //{
+                                //    ViewBag.QuestTopic = "Введите ответы в поле ответов через запятую без пробелов.";
+                                //}
                                                                 
                             }
                                                        
@@ -223,6 +223,7 @@ namespace Sait2022.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Test")]
         public async Task<IActionResult> Index(QuestAnswersViewModel questAnswersViewModel)
         {
             if (ModelState.IsValid)
@@ -270,7 +271,7 @@ namespace Sait2022.Controllers
                         
                         studentAnswer.Result = Math.Abs((kol * 100) / count);
 
-                        if (studentAnswer.Result >= 90)
+                        if (studentAnswer.Result >= 60)
                             result = (int)studentAnswer.Result;
                         else
                             result = (int)studentAnswer.Result;
@@ -353,6 +354,7 @@ namespace Sait2022.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("CreateTest")]
         public async Task<IActionResult> CreateTest(QuestQTopicViewModel questionsTopics)
         {
             if (ModelState.IsValid)
@@ -397,7 +399,7 @@ namespace Sait2022.Controllers
         [Route("Result")]
         public async Task<IActionResult> Result()
         {
-            var count = db.TeacherTopics.OrderByDescending(x => x.Id).Take(27).Where(x => x.IsUsedNow==true).Count();
+            var count = db.TeacherTopics.OrderByDescending(x => x.Id).Take(3).Where(x => x.IsUsedNow==true).Count();
             var answ = db.StudentAnswers.Include("Rangs").Include("Questions").OrderByDescending(x => x.Id).Take(count).OrderBy(x => x.Id);
             var result = db.StudentAnswers.OrderByDescending(x => x.Id)
                                           .Take(count)
@@ -406,7 +408,7 @@ namespace Sait2022.Controllers
             foreach(var r in result)
             {
                 ViewBag.Message = r.Result.ToString();
-                if(r.Result >= 90)
+                if(r.Result >= 60)
                 {
                     ViewBag.Answer = "Молодец! У вас осталось немного до идеального результата!";
                 }
@@ -414,7 +416,7 @@ namespace Sait2022.Controllers
                 {
                     ViewBag.Answer = "Идеальный результат! Вы гений! Так держать!";
                 }
-                if(r.Result < 90)
+                if(r.Result < 60)
                 {
                     ViewBag.Answer = "К сожалению, Вы провалили тест. Попробуйте еще раз!";
                 }
