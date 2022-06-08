@@ -27,6 +27,7 @@ namespace Sait2022.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Route("Test")]
         public async Task<IActionResult> Index()
         {
             QuestAnswersViewModel questAnswers = new QuestAnswersViewModel();
@@ -323,6 +324,7 @@ namespace Sait2022.Controllers
         }
 
         [HttpGet]
+        [Route("CreateTest")]
         public async Task<IActionResult> CreateTest()
         {
             var topicQ = (from q in db.Questions
@@ -392,6 +394,7 @@ namespace Sait2022.Controllers
         }
 
         [HttpGet]
+        [Route("Result")]
         public async Task<IActionResult> Result()
         {
             var count = db.TeacherTopics.OrderByDescending(x => x.Id).Take(27).Where(x => x.IsUsedNow==true).Count();

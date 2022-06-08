@@ -20,12 +20,12 @@ namespace Sait2022.Domain.DB
         }
 
         /// <summary>
-        /// Пользователи
+        /// Справочник пользователи
         /// </summary>
         public override DbSet<Users> Users { get; set; }
 
         /// <summary>
-        /// Сотрудники
+        /// Справочник сотрудники
         /// </summary>
         public DbSet<Employee> Employees { get; private set; }
 
@@ -40,17 +40,17 @@ namespace Sait2022.Domain.DB
         public DbSet<Rangs> Rangs { get; set; }
 
         /// <summary>
-        /// База вопросов
+        /// Справочник вопросов
         /// </summary>
         public DbSet<Questions> Questions { get; set; }
 
         /// <summary>
-        /// База ответов студентов
+        /// Справочник ответов студентов
         /// </summary>
         public DbSet<StudentAnswer> StudentAnswers { get; set; }
 
         /// <summary>
-        /// База выбранных тем вопросов учителем
+        /// Справочных выбранных тем вопросов 
         /// </summary>
         public DbSet<TeacherTopic> TeacherTopics { get; set; }
 
