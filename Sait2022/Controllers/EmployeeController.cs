@@ -43,13 +43,13 @@ namespace Sait2022.Controllers
             return View(await empl.OrderBy(x => x.Id).ToListAsync());
         }
 
-        public async Task<IActionResult> Index2()
+        public async Task<IActionResult> Students()
         {
             UserId = db.Users.FirstOrDefault(x => x.Id == int.Parse(User.Identity.GetUserId())).EmployeeId;
 
             return View(await db.Employees.Where(x => x.TeacherId==UserId).OrderBy(x => x.Id).ToListAsync());
         }
-        public async Task<IActionResult> Index3()
+        public async Task<IActionResult> Users()
         {
             var userId = long.Parse(this.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
