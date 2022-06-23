@@ -1,0 +1,26 @@
+﻿@model Sait2022.Domain.Model.Rangs
+
+@{
+    ViewData["Title"] = "Удаление ранга";
+}
+
+<h1>Удаление ранга</h1>
+
+<h3>Вы точно хотите удалить ранг вопроса?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            <h5>Ранг вопроса</h5>
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RangQuest)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Удалить" class="btn btn-danger" /> |
+        <a asp-action="Index">Вернутся обратно</a>
+    </form>
+</div>

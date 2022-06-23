@@ -1,0 +1,23 @@
+﻿@model Sait2022.ViewModels.Question.QuestQTopicViewModel
+
+ @using(Html.BeginForm("CreateTest", "Questions", FormMethod.Post))
+    {
+        @foreach(var kvpair in Model.QuestionsTopic)
+        {
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.QuestionsTopic[kvpair.Key])
+                <p></p>
+            </div>
+            <div class="col-md-10">
+                <input type="checkbox" asp-for="@Model.IsUsedNowDict[kvpair.Key]" class="form-control">
+                <span asp-validation-for="@Model.IsUsedNowDict[kvpair.Key]" class="text-danger"></span>
+            </div>
+        }
+    <div class="card-footer justify-content-center">
+        <button type="submit" class="btn btn-primary btn-fill btn-lg">Добавить</button>
+    </div>
+    }
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

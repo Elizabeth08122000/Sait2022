@@ -1,0 +1,133 @@
+﻿
+@model IEnumerable<Sait2022.Domain.Model.Users>
+
+@{
+    ViewData["Title"] = "Личный кабинет";
+}
+
+
+  <meta charset="utf-8">
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script src="~/js/site.js"></script>
+<div class="row onerow">
+    <div>
+        @if (User.IsInRole("TEACHER"))
+        {
+           <h4><i>Учитель</i></h4>
+        }
+        @if (User.IsInRole("ADMIN"))
+        {
+            <h4><i>Администратор</i></h4>
+        }
+        @if (User.IsInRole("STUDENT"))
+        {
+            <h4><i>Ученик</i></h4>
+        }
+    </div>
+</div>
+
+ @using(Html.BeginForm()){
+    @foreach (var item in Model)
+    {
+        <div class="row onerow">
+            <div>
+                <h6>Фамилия</h6>
+                @Html.DisplayFor(m => item.Employee.Surname) 
+            </div>
+        </div>
+        <div class="row onerow">
+            <div>
+                <h6>Имя</h6>
+                @Html.DisplayFor(m => item.Employee.FirstName)
+                <p></p>          
+             </div>
+        </div>
+        <div class="row onerow">
+            <div>         
+                <p></p>
+                <h6>Отчество</h6>
+                @Html.DisplayFor(m => item.Employee.Patronym)    
+            </div>
+        </div>
+
+        <div class="row onerow">
+            <div>
+                <h6>Телефон</h6>
+                @Html.DisplayFor(m => item.PhoneNumber)
+                <p></p>
+            </div>
+        </div>
+        <div class="row onerow">
+            <div>
+               <h6>Адрес</h6>
+                @Html.DisplayFor(m => item.Employee.Address)
+            </div>
+        </div>
+         <div class="row onerow">
+            <div>
+                <h6>Email</h6>
+                @Html.DisplayFor(m => item.Email)
+                <p></p>
+            </div>
+        </div>
+        <div class="row onerow">
+            <div>
+                <h6>Логин</h6>
+                @Html.DisplayFor(m => item.UserName)
+                <p></p>
+            </div>
+        </div>
+
+        
+
+        @*<div>
+            <a href="@Html.DisplayFor(m => item.Employee.pathZoom)">Zoom</a>
+        </div>*@
+
+        @*<div>
+            <h6> <a href="/Employee/Chat"> Общий чат </a></h6>
+        </div>*@
+        
+            <div>
+                @if (User.IsInRole("STUDENT"))
+                    {
+                     <div class="row onerow">
+                        <h6>Учитель</h6>
+                     </div>
+                     <div class="row onerow">
+                        <a href="@Html.DisplayFor(m => item.Employee.pathZoom)"> @Html.DisplayFor(m => item.Employee.EmployeesNavig.FullName)</a>
+                     </div>
+                    }
+            </div>
+        
+
+        <div>
+                @if (User.IsInRole("TEACHER"))
+                {
+                    <div class="row onerow">
+                        <h6>
+                            <a href="/Employee/Students"> Ученики </a>
+                        </h6>
+                    </div>
+                    <div class="row onerow">
+                        <h6>
+                            <a href="@Html.DisplayFor(m => item.Employee.pathZoom)">Администратор</a>
+                        </h6>
+                    </div>
+                }
+            </div>
+
+            <div>
+                @if (User.IsInRole("ADMIN"))
+                {
+                    <div class="row onerow">
+                        <h6>
+                            <a href="/Employee/Users"> Пользователи </a>
+                        </h6>
+                    </div>
+                }
+            </div>
+   
+    }  
+    
+}

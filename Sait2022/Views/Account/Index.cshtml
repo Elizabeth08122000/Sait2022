@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Sait2022.Domain.Model.Users>
+@{
+    ViewBag.Title = "Список пользователей";
+}
+
+<a asp-action="RegistrationNewUser">Добавить пользователя</a>
+<p></p>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Искать по фамилии: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Искать" class="btn btn-default" /> |
+            <a asp-action="Index">Вернутся к полному списку</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <tr>
+        <th>Логин</th>
+        <th>ФИО</th>
+        <th>Роль</th>        
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@user.UserName</td>
+            <td>@user.Employee.FullName</td>
+            <td>
+                @if (@user.Employee.IsAdministrator)
+                {
+                    <p>Администратор</p>
+                }
+                @if (@user.Employee.IsTeacher)
+                {
+                    <p>Учитель</p>
+                }
+                @if(!@user.Employee.IsAdministrator & !@user.Employee.IsTeacher)
+                {
+                    <p>Ученик</p>
+                }
+            </td>          
+            <td>
+                <a class="btn btn-sm btn-primary" asp-action="ChangePassword" asp-route-id="@user.Id">Сменить пароль</a>
+            </td>
+            @if(User.IsInRole("ADMIN"))
+            {
+                <td>
+                    <a class="btn btn-sm btn-primary" asp-action="SetLockout" asp-route-id="@user.Id">Заблокировать пользователя</a>
+                </td> 
+            }     
+            <td>
+                <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@user.Id">Редактировать</a>
+            </td> 
+            
+        </tr>
+    }
+</table>

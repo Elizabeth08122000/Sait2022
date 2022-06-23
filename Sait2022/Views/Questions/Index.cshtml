@@ -1,0 +1,53 @@
+﻿@model Sait2022.ViewModels.Question.QuestAnswersViewModel
+
+@{
+    ViewData["Title"] = "Вопросы";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width"/>
+    <title>Тест</title>
+</head>
+ 
+<body>
+    @using(Html.BeginForm())
+    {
+        @foreach(var kvpair in Model.QuestValues)
+        {
+            <div class="col-md-10">
+               <p>Задание @Html.DisplayFor(m=>m.NumberTopic[kvpair.Key]) № @Html.DisplayFor(m=>m.QuestionsId[kvpair.Key])</p> 
+            </div>
+            <div class="col-md-10">
+               @Html.DisplayFor(m=>m.QuestValues[kvpair.Key])
+               <p></p>
+            </div>
+            <div class="col-md-10">
+               <img src= @Html.DisplayFor(model => model.PictPathValue[kvpair.Key])>
+                <p></p>
+            </div>
+            <div class="col-md-10">
+                <a href="@Html.DisplayFor(model => model.FilesPathValue[kvpair.Key])" target="_blank">@Html.DisplayFor(model => model.FilesNameValue[kvpair.Key])</a>
+                <p></p>
+            </div>
+            <div class="col-md-10">
+                @Html.EditorFor(m=>m.AnswerValues[kvpair.Key])               
+                <p></p>
+            </div>
+            <div class="col-md-10">
+                <i>@ViewBag.QuestTopic </i>              
+                <p></p>
+            </div>
+           
+        }
+        <div class="form-group">
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
+            </div>
+    }
+</body>
+
+*Напоминание: базы вопросов и ответов взяты с ресурса: <a href="https://kpolyakov.spb.ru/school/ege.htm">ЕГЭ по информатике Ю.К.Полякова</a>
+<p></p>
+*Напоминание: базы вопросов и ответов взяты с ресурса: <a href="https://inf-ege.sdamgia.ru/">Решу ЕГЭ. Информатика</a>
+</html>

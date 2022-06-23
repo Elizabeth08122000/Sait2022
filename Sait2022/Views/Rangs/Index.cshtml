@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Sait2022.Domain.Model.Rangs>
+
+@{
+    ViewData["Title"] = "Ранги";
+}
+
+<h1>Ранги</h1>
+@if (User.IsInRole("TEACHER") || User.IsInRole("ADMIN"))
+{
+    <p>
+        <a asp-action="Create">Добавить ранг</a>
+    </p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <h5>Ранги</h5>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RangQuest)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Подробности</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>               
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

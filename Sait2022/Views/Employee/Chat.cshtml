@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Чат</title>
+</head>
+<body>
+
+   <p>Если хотите встретится лично, можете воспользоваться Zoom, который находится в <a href="/Employee/Index">Личном кабинете</a> </p> 
+
+
+    <div>
+        <h5> Добро пожаловать в чат, @User.Identity.Name </h5>
+    </div>
+
+    <div id="header"></div><br />
+ 
+    <div id="inputForm">
+        <input type="text" id="message" />
+        <input type="button" id="sendBtn" value="Отправить" />
+    </div>
+    <div id="chatroom"></div>
+ 
+    <script src="~/js/signlar/dist/browser/signalr.min.js"></script>
+    <script>
+        const hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl("/chat")
+            .build();
+        let userName = "@User.Identity.Name";
+        // получение сообщения от сервера
+        hubConnection.on("Receive", function (message, userName) {
+ 
+            // создаем элемент <b> для имени пользователя
+            let userNameElem = document.createElement("b");
+            userNameElem.appendChild(document.createTextNode(userName + ": "));
+ 
+            // создает элемент <p> для сообщения пользователя
+            let elem = document.createElement("p");
+            elem.appendChild(userNameElem);
+            elem.appendChild(document.createTextNode(message));
+ 
+            var firstElem = document.getElementById("chatroom").firstChild;
+            document.getElementById("chatroom").insertBefore(elem, firstElem);
+ 
+        });
+        // диагностическое сообщение
+        hubConnection.on("Notify", function (message) {
+ 
+            let elem = document.createElement("p");
+            elem.appendChild(document.createTextNode(message));
+ 
+            var firstElem = document.getElementById("chatroom").firstChild;
+            document.getElementById("chatroom").insertBefore(elem, firstElem);
+        });
+
+        // отправка сообщения на сервер
+        document.getElementById("sendBtn").addEventListener("click", function (e) {
+            let message = document.getElementById("message").value;
+            hubConnection.invoke("Send", message, userName);
+        });
+ 
+        hubConnection.start();
+    </script>
+</body>
+</html>

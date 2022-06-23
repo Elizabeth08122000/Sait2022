@@ -1,13 +1,23 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Sait2022.Domain.DB;
+using Sait2022.Domain.Model;
+using Sait2022.Security;
+using Sait2022.Infrastructure.Guarantors;
+using Sait2022.Infrastructure;
 using System;
+using Sait2022.Hubs;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Sait2022
 {
@@ -23,12 +33,64 @@ namespace Sait2022
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // установка конфигурации подключения
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(options => //CookieAuthenticationOptions
+                    {
+                        options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                    });
+
             services.AddControllersWithViews();
+
+            services.AddDbContext<SaitDbContext>(options =>
+                options.UseNpgsql("Username=postgres;Database=BOI;Password=Stellka1;Host=localhost"));
+
+            services.AddControllersWithViews();
+
+            services.AddIdentity<Users, IdentityRole<int>>(options =>
+            {
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 6;
+            }).AddEntityFrameworkStores<SaitDbContext>();
+
+            services.Configure<IdentityOptions>(opts =>
+            {
+                opts.Lockout.AllowedForNewUsers = true;
+                opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
+                opts.Lockout.MaxFailedAccessAttempts = 3;
+            });
+
+            services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
+
+            var serviceProvider = services.BuildServiceProvider();
+            var guarantor = new SeedDataGuarantor(serviceProvider);
+            guarantor.EnsureAsync();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var guarantors = scope.ServiceProvider.GetServices<IStartupPreConditionGuarantor>();
+                try
+                {
+                    Console.WriteLine("Startup guarantors started");
+                    foreach(var guarantor in guarantors)
+                        guarantor.Ensure(scope.ServiceProvider);
+                    Console.WriteLine("Startup guarantors executed successfuly");
+                }
+                catch (StartupPreConditionException)
+                {
+                    Console.WriteLine("Startup guarantors failed");
+                    throw;
+                }
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -44,6 +106,7 @@ namespace Sait2022
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -51,6 +114,7 @@ namespace Sait2022
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapHub<ChatH>("/chat");
             });
         }
     }

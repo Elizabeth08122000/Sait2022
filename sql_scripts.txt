@@ -1,0 +1,96 @@
+--последовательности и триггеры
+-- table QuestionsTopic
+create sequence seq1
+start with 1
+increment by 1
+maxvalue 999999;
+
+CREATE or REPLACE FUNCTION qTopics() RETURNS trigger AS $qTopics$
+	begin
+			INSERT INTO QuestionsTopic select SEQ1.nextval into NEW.id from dual;
+	end;
+$qTopics$ LANGUAGE plpgsql;
+
+-- table Rangs
+create sequence seq2
+start with 1
+increment by 1
+maxvalue 999999;
+
+CREATE or REPLACE FUNCTION qRangs() RETURNS trigger AS $qRangs$
+	begin
+			INSERT INTO Rangs select SEQ2.nextval into NEW.id from dual;
+	end;
+$qRangs$ LANGUAGE plpgsql;
+
+--table Answers
+create sequence seq3
+start with 1
+increment by 1
+maxvalue 999999;
+
+CREATE or REPLACE FUNCTION qAnswers() RETURNS trigger AS $qAnswers$
+	begin
+			INSERT INTO Answers select SEQ3.nextval into NEW.id from dual;
+	end;
+$qAnswers$ LANGUAGE plpgsql;
+
+--table Questions
+create sequence seq4
+start with 1
+increment by 1
+maxvalue 999999;
+
+CREATE or REPLACE FUNCTION Questions() RETURNS trigger AS $Questions$
+	begin
+			INSERT INTO Questions select SEQ4.nextval into NEW.id from dual;
+	end;
+$Questions$ LANGUAGE plpgsql;
+
+--table Employees
+create sequence seq5
+start with 1
+increment by 1
+maxvalue 999999;
+
+CREATE or REPLACE FUNCTION Employees() RETURNS trigger AS $Employees$
+	begin
+			INSERT INTO Employees select SEQ5.nextval into NEW.id from dual;
+	end;
+$Employees$ LANGUAGE plpgsql;
+
+--table LogsAnswers 
+create sequence seq6
+start with 1
+increment by 1
+maxvalue 999999;
+
+CREATE or REPLACE FUNCTION LogsAnswers() RETURNS trigger AS $LogsAnswers$
+	begin
+			INSERT INTO LogsAnswers select SEQ6.nextval into NEW.id from dual;
+	end;
+$LogsAnswers$ LANGUAGE plpgsql;
+
+--table Users
+create sequence seq7
+start with 1
+increment by 1
+maxvalue 999999;
+
+CREATE or REPLACE FUNCTION Users() RETURNS trigger AS $Users$
+	begin
+			INSERT INTO AspNetUsers select SEQ7.nextval into NEW.id from dual;
+	end;
+$Users$ LANGUAGE plpgsql;
+
+--table MainOut
+create sequence seq8
+start with 1
+increment by 1
+maxvalue 999999;
+
+CREATE or REPLACE FUNCTION MainOut() RETURNS trigger AS $MainOut$
+	begin
+			INSERT INTO MainOut select SEQ8.nextval into NEW.id from dual;
+	end;
+$MainOut$ LANGUAGE plpgsql;

@@ -1,0 +1,61 @@
+﻿@model Sait2022.Domain.Model.Questions
+
+@{
+    ViewData["Title"] = "Удаление";
+}
+
+<h1>Удаление</h1>
+
+<h3>Вы действительно хотите удалить вопрос?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            <h5>Тема вопроса</h5>
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.QuestionsTopic.Topic)
+        </dd>
+        <dt class = "col-sm-2">
+            <h5>Ранг</h5>
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Rangs.Id)
+        </dd>
+        <dt class = "col-sm-2">
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NumberQuest)
+        </dd>
+        <dt class = "col-sm-2">
+            <h5>Вопрос</h5>
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ValueQuest)
+        </dd>
+        <dt class = "col-sm-2">
+            <h5>Ответ</h5>
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ValueAnswer)
+        </dd>
+        <dt class = "col-sm-2">
+            <h5>Картинка</h5>
+        </dt>
+        <dd class = "col-sm-10">
+            <p><img src="@Html.DisplayFor(model => model.PathPict)"></p>
+        </dd>
+        <dt class = "col-sm-2">
+            <h5>Файл</h5>
+        </dt>
+        <dd class = "col-sm-10">
+            <a href="@Html.DisplayFor(model => model.Path)" target="_blank">@Html.DisplayFor(modelItem => modelItem.Name)</a>
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Удалить" class="btn btn-danger" /> |
+        <a asp-action="Index">Вернутся обратно</a>
+    </form>
+</div>
