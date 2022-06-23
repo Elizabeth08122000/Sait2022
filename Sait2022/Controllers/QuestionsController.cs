@@ -27,7 +27,7 @@ namespace Sait2022.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("Test")]
+        [Route("Questions/Test")]
         public async Task<IActionResult> Index()
         {
             QuestAnswersViewModel questAnswers = new QuestAnswersViewModel();
@@ -44,7 +44,7 @@ namespace Sait2022.Controllers
                     var teacherTopic = db.TeacherTopics
                                    .Where(x => x.StudentId == UserId)
                                    .OrderByDescending(x => x.Id)
-                                   .Take(3)
+                                   .Take(27)
                                    .ToList();
 
                     if (studentAnswersDb.Count > 0)
@@ -63,7 +63,7 @@ namespace Sait2022.Controllers
                             {
                                 foreach (var answ in teacherTopic)
                                 {
-                                    if (answer.LastOrDefault().Result >= 60)
+                                    if (answer.LastOrDefault().Result >= 90)
                                     {
                                         if (answ.QuestionsTopicId != null)
                                         {
@@ -109,10 +109,7 @@ namespace Sait2022.Controllers
                                         }
 
                                     }
-                                    //if (answ.QuestionsTopicId == 1)
-                                    //{
-                                    //    ViewBag.QuestTopic = "Введите ответы в поле ответов через запятую без пробелов.";
-                                    //}
+                                    ViewBag.QuestTopic = "При вводе нескольких ответов, вписывайте через запятую без пробелов.";
                                 }
                             }
                             else
@@ -129,15 +126,12 @@ namespace Sait2022.Controllers
                             {
                                 if (answ.QuestionsTopicId != null)
                                 {
-                                    questions.Add(db.Questions.Where(x => x.RangsId == 1 & x.NumberQuest == 1 & x.QuestionTopcId == answ.QuestionsTopicId).FirstOrDefault());
+                                    questions.Add(db.Questions.Where(x => x.RangsId == 1 & x.NumberQuest == 1 & x.QuestionTopcId == answ.QuestionsTopicId).OrderBy(x => x.QuestionTopcId).FirstOrDefault());
                                 }
 
-                                //if(answ.QuestionsTopicId == 1)
-                                //{
-                                //    ViewBag.QuestTopic = "Введите ответы в поле ответов через запятую без пробелов.";
-                                //}
-                                                                
-                            }
+                            ViewBag.QuestTopic = "При вводе нескольких ответов, вписывайте через запятую без пробелов.";
+
+                        }
                                                        
                         }
 
@@ -223,7 +217,7 @@ namespace Sait2022.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Test")]
+        [Route("Questions/Test")]
         public async Task<IActionResult> Index(QuestAnswersViewModel questAnswersViewModel)
         {
             if (ModelState.IsValid)
@@ -271,7 +265,7 @@ namespace Sait2022.Controllers
                         
                         studentAnswer.Result = Math.Abs((kol * 100) / count);
 
-                        if (studentAnswer.Result >= 60)
+                        if (studentAnswer.Result >= 90)
                             result = (int)studentAnswer.Result;
                         else
                             result = (int)studentAnswer.Result;
@@ -325,7 +319,7 @@ namespace Sait2022.Controllers
         }
 
         [HttpGet]
-        [Route("CreateTest")]
+        [Route("Questions/CreateTest")]
         public async Task<IActionResult> CreateTest()
         {
             var topicQ = (from q in db.Questions
@@ -354,7 +348,7 @@ namespace Sait2022.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("CreateTest")]
+        [Route("Questions/CreateTest")]
         public async Task<IActionResult> CreateTest(QuestQTopicViewModel questionsTopics)
         {
             if (ModelState.IsValid)
@@ -396,19 +390,22 @@ namespace Sait2022.Controllers
         }
 
         [HttpGet]
-        [Route("Result")]
         public async Task<IActionResult> Result()
         {
-            var count = db.TeacherTopics.OrderByDescending(x => x.Id).Take(3).Where(x => x.IsUsedNow==true).Count();
+            var count = db.TeacherTopics.OrderByDescending(x => x.Id).Take(27).Where(x => x.IsUsedNow==true).Count();
             var answ = db.StudentAnswers.Include("Rangs").Include("Questions").OrderByDescending(x => x.Id).Take(count).OrderBy(x => x.Id);
-            var result = db.StudentAnswers.OrderByDescending(x => x.Id)
+            var result = db.StudentAnswers.OrderByDescending(x => x.QuestionsTopicId)
                                           .Take(count)
                                           .GroupBy(x => x.Result)
                                           .Select(g => new { Result = g.Key });
             foreach(var r in result)
             {
                 ViewBag.Message = r.Result.ToString();
-                if(r.Result >= 60)
+                if (r.Result >= 60 & r.Result < 90)
+                {
+                    ViewBag.Answer = "Еще чуть-чуть! Постарайся лучше.";
+                }
+                if (r.Result >= 90)
                 {
                     ViewBag.Answer = "Молодец! У вас осталось немного до идеального результата!";
                 }
